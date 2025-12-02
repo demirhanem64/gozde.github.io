@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Araştırma Görevlisi Gözde EKŞİ</title>
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: url('https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?auto=format&fit=crop&w=1600&q=80') no-repeat center center/cover;
+      min-height: 100vh;
+      position: relative;
+    }
+
+    body::before {
+      content: '';
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 40, 80, 0.75);
+      z-index: -1;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 40px 20px;
+    }
+
+    /* Header Bölümü */
+    header {
+      text-align: center;
+      color: white;
+      margin-bottom: 50px;
+      padding: 30px 20px;
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(10px);
+      border-radius: 15px;
+      border: 2px solid rgba(255, 122, 0, 0.3);
+    }
+
+    header h1 {
+      font-size: 2.5em;
+      margin-bottom: 10px;
+      color: #ff7a00;
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+    }
+
+    header p {
+      font-size: 1.2em;
+      opacity: 0.9;
+    }
+
+    /* Profil Bölümü */
+    .profile-section {
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      padding: 40px;
+      margin-bottom: 40px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+      border: 3px solid #ff7a00;
+    }
+
+    .profile-content {
+      display: flex;
+      gap: 40px;
+      align-items: flex-start;
+      flex-wrap: wrap;
+    }
+
+    .profile-image {
+      flex-shrink: 0;
+    }
+
+    .profile-image img {
+      width: 200px;
+      height: 200px;
+      border-radius: 50%;
+      border: 5px solid #ff7a00;
+      box-shadow: 0 5px 15px rgba(255, 122, 0, 0.3);
+      object-fit: cover;
+    }
+
+    .profile-text {
+      flex: 1;
+      min-width: 300px;
+    }
+
+    .profile-text h2 {
+      color: #ff7a00;
+      font-size: 2em;
+      margin-bottom: 20px;
+    }
+
+    .profile-text p {
+      color: #333;
+      line-height: 1.8;
+      font-size: 1.05em;
+      margin-bottom: 20px;
+    }
+
+    .profile-link {
+      display: inline-block;
+      padding: 12px 25px;
+      background: #ff7a00;
+      color: white;
+      text-decoration: none;
+      border-radius: 8px;
+      font-weight: bold;
+      transition: all 0.3s ease;
+    }
+
+    .profile-link:hover {
+      background: #e66d00;
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(255, 122, 0, 0.4);
+    }
+
+    /* Anketler Bölümü */
+    .survey-section {
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      padding: 40px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+      border: 3px solid #ff7a00;
+    }
+
+    .survey-section h2 {
+      color: #ff7a00;
+      font-size: 2em;
+      margin-bottom: 30px;
+      text-align: center;
+    }
+
+    .form-container {
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    .form-group {
+      margin-bottom: 20px;
+    }
+
+    .form-group label {
+      display: block;
+      color: #333;
+      font-weight: bold;
+      margin-bottom: 8px;
+      font-size: 1.05em;
+    }
+
+    input, textarea, select {
+      width: 100%;
+      padding: 12px;
+      border: 2px solid #ddd;
+      border-radius: 8px;
+      font-size: 1em;
+      font-family: inherit;
+      transition: border-color 0.3s ease;
+    }
+
+    input:focus, textarea:focus, select:focus {
+      outline: none;
+      border-color: #ff7a00;
+    }
+
+    select {
+      appearance: none;
+      background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23ff7a00' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+      background-repeat: no-repeat;
+      background-position: right 10px top 50%;
+      background-size: 20px;
+      cursor: pointer;
+    }
+
+    textarea {
+      resize: vertical;
+      min-height: 100px;
+    }
+
+    .btn-submit {
+      width: 100%;
+      padding: 15px;
+      background: #ff7a00;
+      color: white;
+      border: none;
+      font-size: 1.1em;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: bold;
+      transition: all 0.3s ease;
+      margin-top: 10px;
+    }
+
+    .btn-submit:hover:not(:disabled) {
+      background: #e66d00;
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(255, 122, 0, 0.4);
+    }
+
+    .btn-submit:disabled {
+      background: #ccc;
+      cursor: not-allowed;
+    }
+
+    .success-message {
+      display: none;
+      background: #4CAF50;
+      color: white;
+      padding: 20px;
+      border-radius: 8px;
+      text-align: center;
+      margin-top: 20px;
+      font-size: 1.1em;
+      animation: slideIn 0.5s ease;
+    }
+
+    .success-message.show {
+      display: block;
+    }
+
+    @keyframes slideIn {
+      from {
+        opacity: 0;
+        transform: translateY(-20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @media (max-width: 768px) {
+      .profile-content {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+      }
+
+      .profile-image img {
+        width: 150px;
+        height: 150px;
+      }
+
+      header h1 {
+        font-size: 1.8em;
+      }
+
+      .profile-text h2 {
+        font-size: 1.5em;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    
+    <!-- Header -->
+    <header>
+      <h1>Araştırma Görevlisi Gözde EKŞİ</h1>
+      <p>İstinye Üniversitesi | İlk ve Acil Yardım Bölümü</p>
+    </header>
+
+    <!-- Profil Bölümü -->
+    <section class="profile-section">
+      <div class="profile-content">
+        <div class="profile-image">
+          <img src="data:image/png;base64,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" alt="Gözde EKŞİ">
+        </div>
+        <div class="profile-text">
+          <h2>Hakkımda</h2>
+          <p>Lisans eğitimini Namık Kemal Üniversitesi'nde 2015 yılında, yüksek lisans eğitimini ise 2019 yılında Trakya Üniversitesi Halk Sağlığı Hemşireliğinde tamamlayan Gözde Ekşi, Sağlık Bilimleri Üniversitesinde Halk Sağlığı Hemşireliği Ana Bilim Dalında doktora eğitimine devam etmektedir. Çalışma alanları halk sağlığı, aile sağlığı ve çocuk sağlığı ve hastalıkları hemşireliğidir. Özel Afiyet Hastanesi ve Ümraniye Eğitim Araştırma Hastanesinde hemşire olarak uzun yıllar çalışmıştır. 2023 yılı itibarıyla İstinye Üniversitesi İlk ve Acil Yardım Bölümünde Öğretim Görevlisi olarak çalışmaya başlamıştır.</p>
+          <a href="https://www.istinye.edu.tr/tr/shmyo/akademik-kadro/gozde-eksi" target="_blank" class="profile-link">Detaylı Bilgi İçin Tıklayın</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Anketler Bölümü -->
+    <section class="survey-section">
+      <h2>Anketler</h2>
+      <div class="form-container">
+        <form id="webhookForm">
+          <div class="form-group">
+            <label for="ad">Ad</label>
+            <input type="text" id="ad" name="ad" required />
+          </div>
+
+          <div class="form-group">
+            <label for="soyad">Soyad</label>
+            <input type="text" id="soyad" name="soyad" required />
+          </div>
+
+          <div class="form-group">
+            <label for="email">E-Mail</label>
+            <input type="email" id="email" name="email" required />
+          </div>
+
+          <div class="form-group">
+            <label for="bolum">Hangi Bölüm</label>
+            <select id="bolum" name="bolum" required>
+              <option value="" disabled selected>Lütfen Bölümünüzü Seçiniz</option>
+              <option value="Hemşirelik 4.Sınıf">Hemşirelik 4. Sınıf</option>
+              <option value="Hemşirelik 3.Sınıf">Hemşirelik 3. Sınıf</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="gorus">Görüşleriniz</label>
+            <textarea id="gorus" name="gorus" required></textarea>
+          </div>
+
+          <button class="btn-submit" type="submit" id="submitBtn">Gönder</button>
+        </form>
+
+        <div class="success-message" id="successMessage">
+          Formunuz başarıyla gönderildi! Teşekkür ederiz 🙏
+        </div>
+      </div>
+    </section>
+
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
+  
+  <script>
+    function launchConfetti() {
+      confetti({
+        particleCount: 150,
+        spread: 90,
+        origin: { y: 0.6 }
+      });
+    }
+
+    document.getElementById("webhookForm").addEventListener("submit", async function(e) {
+      e.preventDefault();
+
+      const submitBtn = document.getElementById("submitBtn");
+      const successMessage = document.getElementById("successMessage");
+
+      // Konfeti patlatma
+      launchConfetti();
+
+      const formData = new FormData(this);
+
+      try {
+        // Webhook'a gönder
+        await fetch("https://demirhanem.com.tr/webhook-test/netlify", {
+          method: "POST",
+          body: formData
+        });
+
+        // Formu temizle
+        this.reset();
+
+        // Butonu deaktif et
+        submitBtn.disabled = true;
+        submitBtn.textContent = "Gönderildi ✓";
+
+        // Başarı mesajını göster
+        successMessage.classList.add("show");
+
+        // 5 saniye sonra mesajı gizle
+        setTimeout(() => {
+          successMessage.classList.remove("show");
+        }, 5000);
+
+      } catch (error) {
+        console.error("Form gönderilirken hata oluştu:", error);
+        alert("Form gönderilirken bir hata oluştu. Lütfen tekrar deneyin.");
+      }
+    });
+  </script>
+
+</body>
+</html>
