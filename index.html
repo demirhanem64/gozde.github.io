@@ -57,6 +57,10 @@
       color: #ff7a00;
     }
 
+    .nav-logo::before {
+      content: '🩺 ';
+    }
+
     .nav-menu {
       display: flex;
       gap: 30px;
@@ -164,6 +168,32 @@
       text-decoration: underline;
     }
 
+    .social-links {
+      display: flex;
+      gap: 15px;
+      justify-content: center;
+      margin-top: 15px;
+    }
+
+    .social-links a {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: #ff7a00;
+      color: white;
+      font-size: 20px;
+      text-decoration: none;
+      transition: all 0.3s ease;
+    }
+
+    .social-links a:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 5px 15px rgba(255, 122, 0, 0.4);
+    }
+
     .profile-text {
       flex: 1;
       min-width: 300px;
@@ -252,23 +282,28 @@
     /* Contact Section */
     .contact-section {
       background: rgba(255, 255, 255, 0.95);
-      border-radius: 20px;
-      padding: 40px;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-      border: 3px solid #ff7a00;
+      border-radius: 0;
+      padding: 30px 40px;
+      box-shadow: 0 -5px 15px rgba(0,0,0,0.2);
+      border-top: 3px solid #ff7a00;
       text-align: center;
+      margin: 40px -20px 0 -20px;
     }
 
     .contact-section h2 {
       color: #ff7a00;
-      font-size: 2em;
-      margin-bottom: 20px;
+      font-size: 1.5em;
+      margin-bottom: 15px;
     }
 
     .contact-info {
-      font-size: 1.1em;
+      font-size: 0.95em;
       color: #333;
-      line-height: 1.8;
+      line-height: 1.6;
+    }
+
+    .contact-info p {
+      margin: 5px 0;
     }
 
     /* Popup Overlay */
@@ -501,7 +536,7 @@
       <ul class="nav-menu">
         <li><a href="#anasayfa">Anasayfa</a></li>
         <li><a href="#hakkimda">Hakkımda</a></li>
-        <li><a href="#universitemiz">Üniversitemiz</a></li>
+        <li><a href="https://www.istinye.edu.tr" target="_blank">Üniversitemiz</a></li>
         <li><a href="#iletisim">İletişim</a></li>
       </ul>
     </div>
@@ -524,6 +559,18 @@
           <img src="data:image/png;base64,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" alt="Gözde EKŞİ">
           <div class="profile-name">Öğr. Gör. Gözde EKŞİ</div>
           <div class="profile-email"><a href="mailto:gozde.eksi@istinye.edu.tr">gozde.eksi@istinye.edu.tr</a></div>
+          <div class="social-links">
+            <a href="https://www.instagram.com/gozdeksii?igsh=YTBxcWduODh0MGQz" target="_blank" title="Instagram">
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
+              </svg>
+            </a>
+            <a href="https://www.facebook.com/share/1FgoxGv3SZ/?mibextid=wwXIfr" target="_blank" title="Facebook">
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M9 8h-3v4h3v12h5v-12h3.642l.358-4h-4v-1.667c0-.955.192-1.333 1.115-1.333h2.885v-5h-3.808c-3.596 0-5.192 1.583-5.192 4.615v3.385z"/>
+              </svg>
+            </a>
+          </div>
         </div>
         <div class="profile-text">
           <h2>Hakkımda</h2>
@@ -553,10 +600,8 @@
       <h2>İletişim</h2>
       <div class="contact-info">
         <p><strong>Öğr. Gör. Gözde EKŞİ</strong></p>
-        <p>İstinye Üniversitesi</p>
-        <p>Sağlık Hizmetleri Meslek Yüksekokulu</p>
-        <p>İlk ve Acil Yardım Bölümü</p>
-        <p style="margin-top: 20px;">
+        <p>İstinye Üniversitesi - Sağlık Hizmetleri Meslek Yüksekokulu - İlk ve Acil Yardım Bölümü</p>
+        <p style="margin-top: 10px;">
           <strong>E-posta:</strong> <a href="mailto:gozde.eksi@istinye.edu.tr" style="color: #ff7a00; text-decoration: none;">gozde.eksi@istinye.edu.tr</a>
         </p>
       </div>
@@ -838,14 +883,18 @@
     // Smooth scroll for navigation
     document.querySelectorAll('.nav-menu a').forEach(anchor => {
       anchor.addEventListener('click', function (e) {
-        e.preventDefault();
         const targetId = this.getAttribute('href');
-        const targetSection = document.querySelector(targetId);
-        if (targetSection) {
-          targetSection.scrollIntoView({
-            behavior: 'smooth',
-            block: 'start'
-          });
+        
+        // Eğer dış link değilse smooth scroll uygula
+        if (targetId && targetId.startsWith('#')) {
+          e.preventDefault();
+          const targetSection = document.querySelector(targetId);
+          if (targetSection) {
+            targetSection.scrollIntoView({
+              behavior: 'smooth',
+              block: 'start'
+            });
+          }
         }
       });
     });
