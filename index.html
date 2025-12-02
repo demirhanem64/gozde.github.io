@@ -554,7 +554,7 @@
       <div class="contact-info">
         <p><strong>Öğr. Gör. Gözde EKŞİ</strong></p>
         <p>İstinye Üniversitesi</p>
-        <p>Sağlık Hizmetleri Meslek Yüksek Okulu</p>
+        <p>Sağlık Hizmetleri Meslek Yüksekokulu</p>
         <p>İlk ve Acil Yardım Bölümü</p>
         <p style="margin-top: 20px;">
           <strong>E-posta:</strong> <a href="mailto:gozde.eksi@istinye.edu.tr" style="color: #ff7a00; text-decoration: none;">gozde.eksi@istinye.edu.tr</a>
@@ -578,3 +578,278 @@
         <div class="form-group">
           <label for="s1_soyad">Soyad</label>
           <input type="text" id="s1_soyad" name="soyad" required />
+        </div>
+
+        <div class="form-group">
+          <label for="s1_email">E-Mail</label>
+          <input type="email" id="s1_email" name="email" required />
+        </div>
+
+        <div class="form-group">
+          <label for="s1_bolum">Hangi Bölüm</label>
+          <select id="s1_bolum" name="bolum" required>
+            <option value="" disabled selected>Lütfen Bölümünüzü Seçiniz</option>
+            <option value="Hemşirelik 4.Sınıf">Hemşirelik 4. Sınıf</option>
+            <option value="Hemşirelik 3.Sınıf">Hemşirelik 3. Sınıf</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>Okuldan ve bölümden beklentileriniz nelerdir?</label>
+          <textarea name="beklenti_aciklama" rows="4" required></textarea>
+        </div>
+
+        <div class="form-group">
+          <label>Eğitim kalitesi hakkında ne düşünüyorsunuz?</label>
+          <div class="radio-group">
+            <div class="radio-option">
+              <input type="radio" id="s1_kalite1" name="egitim_kalitesi" value="Çok İyi" required>
+              <label for="s1_kalite1">Çok İyi</label>
+            </div>
+            <div class="radio-option">
+              <input type="radio" id="s1_kalite2" name="egitim_kalitesi" value="İyi" required>
+              <label for="s1_kalite2">İyi</label>
+            </div>
+            <div class="radio-option">
+              <input type="radio" id="s1_kalite3" name="egitim_kalitesi" value="Orta" required>
+              <label for="s1_kalite3">Orta</label>
+            </div>
+            <div class="radio-option">
+              <input type="radio" id="s1_kalite4" name="egitim_kalitesi" value="Kötü" required>
+              <label for="s1_kalite4">Kötü</label>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>Hangi alanlarda iyileştirme yapılmasını istersiniz?</label>
+          <textarea name="iyilestirme_alanlari" rows="3" required></textarea>
+        </div>
+
+        <div class="form-group">
+          <label>Ders içerikleri yeterli mi?</label>
+          <div class="radio-group">
+            <div class="radio-option">
+              <input type="radio" id="s1_icerik1" name="ders_icerikleri" value="Evet" required>
+              <label for="s1_icerik1">Evet</label>
+            </div>
+            <div class="radio-option">
+              <input type="radio" id="s1_icerik2" name="ders_icerikleri" value="Kısmen" required>
+              <label for="s1_icerik2">Kısmen</label>
+            </div>
+            <div class="radio-option">
+              <input type="radio" id="s1_icerik3" name="ders_icerikleri" value="Hayır" required>
+              <label for="s1_icerik3">Hayır</label>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>Diğer görüş ve önerileriniz</label>
+          <textarea name="diger_gorusler" rows="4"></textarea>
+        </div>
+
+        <button class="btn-submit" type="submit" id="survey1Btn">Gönder</button>
+      </form>
+      <div class="success-message" id="survey1Success">
+        Formunuz başarıyla gönderildi! Teşekkür ederiz 🙏
+      </div>
+    </div>
+  </div>
+
+  <!-- Survey 2 Popup: Memnuniyet Anketi -->
+  <div id="survey2Popup" class="popup-overlay">
+    <div class="popup-content">
+      <button class="popup-close" onclick="closePopup('survey2')">&times;</button>
+      <h3>Memnuniyet Anketi</h3>
+      <form id="survey2Form">
+        <div class="form-group">
+          <label for="s2_ad">Ad</label>
+          <input type="text" id="s2_ad" name="ad" required />
+        </div>
+
+        <div class="form-group">
+          <label for="s2_soyad">Soyad</label>
+          <input type="text" id="s2_soyad" name="soyad" required />
+        </div>
+
+        <div class="form-group">
+          <label for="s2_email">E-Mail</label>
+          <input type="email" id="s2_email" name="email" required />
+        </div>
+
+        <div class="form-group">
+          <label for="s2_bolum">Hangi Bölüm</label>
+          <select id="s2_bolum" name="bolum" required>
+            <option value="" disabled selected>Lütfen Bölümünüzü Seçiniz</option>
+            <option value="Hemşirelik 4.Sınıf">Hemşirelik 4. Sınıf</option>
+            <option value="Hemşirelik 3.Sınıf">Hemşirelik 3. Sınıf</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>Bölüm hakkındaki görüşleriniz</label>
+          <textarea name="bolum_gorusleri" rows="4" required></textarea>
+        </div>
+
+        <div class="form-group">
+          <label>Öğretim görevlisi hakkındaki görüşleriniz</label>
+          <textarea name="ogretim_gorevlisi_gorusleri" rows="4" required></textarea>
+        </div>
+
+        <div class="form-group">
+          <label>Genel memnuniyet düzeyiniz</label>
+          <div class="radio-group">
+            <div class="radio-option">
+              <input type="radio" id="s2_memnuniyet1" name="memnuniyet_duzeyi" value="Çok Memnunum" required>
+              <label for="s2_memnuniyet1">Çok Memnunum</label>
+            </div>
+            <div class="radio-option">
+              <input type="radio" id="s2_memnuniyet2" name="memnuniyet_duzeyi" value="Memnunum" required>
+              <label for="s2_memnuniyet2">Memnunum</label>
+            </div>
+            <div class="radio-option">
+              <input type="radio" id="s2_memnuniyet3" name="memnuniyet_duzeyi" value="Kararsızım" required>
+              <label for="s2_memnuniyet3">Kararsızım</label>
+            </div>
+            <div class="radio-option">
+              <input type="radio" id="s2_memnuniyet4" name="memnuniyet_duzeyi" value="Memnun Değilim" required>
+              <label for="s2_memnuniyet4">Memnun Değilim</label>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>Ek görüş ve önerileriniz</label>
+          <textarea name="ek_gorusler" rows="4"></textarea>
+        </div>
+
+        <button class="btn-submit" type="submit" id="survey2Btn">Gönder</button>
+      </form>
+      <div class="success-message" id="survey2Success">
+        Formunuz başarıyla gönderildi! Teşekkür ederiz 🙏
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
+  
+  <script>
+    // Popup açma fonksiyonu
+    function openSurvey(surveyId) {
+      document.getElementById(surveyId + 'Popup').classList.add('active');
+      document.body.style.overflow = 'hidden';
+    }
+
+    // Popup kapatma fonksiyonu
+    function closePopup(surveyId) {
+      document.getElementById(surveyId + 'Popup').classList.remove('active');
+      document.body.style.overflow = 'auto';
+    }
+
+    // Popup dışına tıklandığında kapatma
+    document.querySelectorAll('.popup-overlay').forEach(overlay => {
+      overlay.addEventListener('click', function(e) {
+        if (e.target === this) {
+          closePopup(this.id.replace('Popup', ''));
+        }
+      });
+    });
+
+    // Konfeti fonksiyonu
+    function launchConfetti() {
+      confetti({
+        particleCount: 150,
+        spread: 90,
+        origin: { y: 0.6 }
+      });
+    }
+
+    // Survey 1 Form Submit
+    document.getElementById("survey1Form").addEventListener("submit", async function(e) {
+      e.preventDefault();
+
+      const submitBtn = document.getElementById("survey1Btn");
+      const successMessage = document.getElementById("survey1Success");
+
+      launchConfetti();
+
+      const formData = new FormData(this);
+
+      try {
+        await fetch("https://demirhanem.com.tr/webhook/anket1", {
+          method: "POST",
+          body: formData
+        });
+
+        this.reset();
+        submitBtn.disabled = true;
+        submitBtn.textContent = "Gönderildi ✓";
+        successMessage.classList.add("show");
+
+        setTimeout(() => {
+          successMessage.classList.remove("show");
+          closePopup('survey1');
+          submitBtn.disabled = false;
+          submitBtn.textContent = "Gönder";
+        }, 3000);
+
+      } catch (error) {
+        console.error("Form gönderilirken hata oluştu:", error);
+        alert("Form gönderilirken bir hata oluştu. Lütfen tekrar deneyin.");
+      }
+    });
+
+    // Survey 2 Form Submit
+    document.getElementById("survey2Form").addEventListener("submit", async function(e) {
+      e.preventDefault();
+
+      const submitBtn = document.getElementById("survey2Btn");
+      const successMessage = document.getElementById("survey2Success");
+
+      launchConfetti();
+
+      const formData = new FormData(this);
+
+      try {
+        await fetch("https://demirhanem.com.tr/webhook/anket2", {
+          method: "POST",
+          body: formData
+        });
+
+        this.reset();
+        submitBtn.disabled = true;
+        submitBtn.textContent = "Gönderildi ✓";
+        successMessage.classList.add("show");
+
+        setTimeout(() => {
+          successMessage.classList.remove("show");
+          closePopup('survey2');
+          submitBtn.disabled = false;
+          submitBtn.textContent = "Gönder";
+        }, 3000);
+
+      } catch (error) {
+        console.error("Form gönderilirken hata oluştu:", error);
+        alert("Form gönderilirken bir hata oluştu. Lütfen tekrar deneyin.");
+      }
+    });
+
+    // Smooth scroll for navigation
+    document.querySelectorAll('.nav-menu a').forEach(anchor => {
+      anchor.addEventListener('click', function (e) {
+        e.preventDefault();
+        const targetId = this.getAttribute('href');
+        const targetSection = document.querySelector(targetId);
+        if (targetSection) {
+          targetSection.scrollIntoView({
+            behavior: 'smooth',
+            block: 'start'
+          });
+        }
+      });
+    });
+  </script>
+
+</body>
+</html>
