@@ -826,18 +826,27 @@
       const submitBtn = document.getElementById("survey1Btn");
       const successMessage = document.getElementById("survey1Success");
 
-      launchConfetti();
+      submitBtn.disabled = true;
+      submitBtn.textContent = "Gönderiliyor...";
 
       const formData = new FormData(this);
+      const data = Object.fromEntries(formData.entries());
 
       try {
-        await fetch("https://demirhanem.com.tr/webhook/anket1", {
+        const response = await fetch("https://demirhanem.com.tr/webhook/anket1", {
           method: "POST",
-          body: formData
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify(data)
         });
 
+        if (!response.ok) {
+          throw new Error("Sunucu hatası: " + response.status);
+        }
+
+        launchConfetti();
         this.reset();
-        submitBtn.disabled = true;
         submitBtn.textContent = "Gönderildi ✓";
         successMessage.classList.add("show");
 
@@ -851,6 +860,8 @@
       } catch (error) {
         console.error("Form gönderilirken hata oluştu:", error);
         alert("Form gönderilirken bir hata oluştu. Lütfen tekrar deneyin.");
+        submitBtn.disabled = false;
+        submitBtn.textContent = "Gönder";
       }
     });
 
