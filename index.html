@@ -97,17 +97,17 @@
                 
                 <!-- Quick Links Cards -->
                 <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem; margin-top: 2rem;">
-                    <div style="background: white; padding: 2rem; border-radius: 20px; box-shadow: 0 10px 30px rgba(8,145,178,0.1); text-align: center; cursor: pointer; transition: transform 0.3s ease;" onmouseover="this.style.transform='translateY(-5px)'" onmouseout="this.style.transform='translateY(0)'">
+                    <div onclick="window.location.hash='anketler'" style="background: white; padding: 2rem; border-radius: 20px; box-shadow: 0 10px 30px rgba(8,145,178,0.1); text-align: center; cursor: pointer; transition: transform 0.3s ease;" onmouseover="this.style.transform='translateY(-5px)'" onmouseout="this.style.transform='translateY(0)'">
                         <div style="font-size: 2.5rem; margin-bottom: 1rem;">📋</div>
                         <h3 style="color: #0891b2; font-size: 1.3rem; margin-bottom: 0.5rem;">Anketler</h3>
                         <p style="color: #64748b; line-height: 1.6;">Öğrenci görüşlerini almak için çeşitli anketler düzenleyin</p>
                     </div>
-                    <div style="background: white; padding: 2rem; border-radius: 20px; box-shadow: 0 10px 30px rgba(8,145,178,0.1); text-align: center; cursor: pointer; transition: transform 0.3s ease;" onmouseover="this.style.transform='translateY(-5px)'" onmouseout="this.style.transform='translateY(0)'">
+                    <div onclick="alert('Ders içerikleri yakında eklenecektir!')" style="background: white; padding: 2rem; border-radius: 20px; box-shadow: 0 10px 30px rgba(8,145,178,0.1); text-align: center; cursor: pointer; transition: transform 0.3s ease;" onmouseover="this.style.transform='translateY(-5px)'" onmouseout="this.style.transform='translateY(0)'">
                         <div style="font-size: 2.5rem; margin-bottom: 1rem;">📚</div>
                         <h3 style="color: #0891b2; font-size: 1.3rem; margin-bottom: 0.5rem;">Ders İçerikleri</h3>
                         <p style="color: #64748b; line-height: 1.6;">Ders notları ve materyalleri paylaşın</p>
                     </div>
-                    <div style="background: white; padding: 2rem; border-radius: 20px; box-shadow: 0 10px 30px rgba(8,145,178,0.1); text-align: center; cursor: pointer; transition: transform 0.3s ease;" onmouseover="this.style.transform='translateY(-5px)'" onmouseout="this.style.transform='translateY(0)'">
+                    <div onclick="window.location.hash='iletisim'" style="background: white; padding: 2rem; border-radius: 20px; box-shadow: 0 10px 30px rgba(8,145,178,0.1); text-align: center; cursor: pointer; transition: transform 0.3s ease;" onmouseover="this.style.transform='translateY(-5px)'" onmouseout="this.style.transform='translateY(0)'">
                         <div style="font-size: 2.5rem; margin-bottom: 1rem;">💬</div>
                         <h3 style="color: #0891b2; font-size: 1.3rem; margin-bottom: 0.5rem;">İletişim</h3>
                         <p style="color: #64748b; line-height: 1.6;">Öğrencilerinizle kolayca iletişime geçin</p>
@@ -737,22 +737,22 @@
         const SURVEYS_DATA = {
             "surveys": [
                 {
-                    "id": "gozdeanket1",
+                    "id": "anket1",
                     "title": "Ders Değerlendirme Anketi",
                     "description": "Derslerin kalitesini değerlendirmek için görüşlerinizi paylaşın",
-                    "webhookUrl": "https://demirhanem.com.tr/webhook/gozdeanket1"
+                    "webhookUrl": "https://demirhanem.com.tr/webhook/anket1"
                 },
                 {
-                    "id": "gozdeanket2",
+                    "id": "anket2",
                     "title": "Öğrenci Memnuniyet Anketi",
                     "description": "Eğitim süreciniz hakkında görüşlerinizi öğrenmek istiyoruz",
-                    "webhookUrl": "https://demirhanem.com.tr/webhook/gozdeanket2"
+                    "webhookUrl": "https://demirhanem.com.tr/webhook/anket2"
                 },
                 {
-                    "id": "gozdeanket3",
+                    "id": "anket3",
                     "title": "Kurs Geri Bildirim Anketi",
                     "description": "Kurs içeriği ve sunumu hakkındaki düşüncelerinizi paylaşın",
-                    "webhookUrl": "https://demirhanem.com.tr/webhook/gozdeanket3"
+                    "webhookUrl": "https://demirhanem.com.tr/webhook/anket3"
                 }
             ]
         };
@@ -1164,6 +1164,341 @@
             font-weight: 600;
             cursor: not-allowed;
             margin-top: 1rem;
+        }
+        /* Hakkımda Page Styles */
+        .bio-hero {
+            background: white;
+            padding: 3rem;
+            border-radius: 25px;
+            box-shadow: 0 20px 60px rgba(8,145,178,0.15);
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+        .bio-hero h2 {
+            background: linear-gradient(135deg, #0891b2, #f97316);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-size: 2.5rem;
+            margin-bottom: 1.5rem;
+        }
+        .position-title {
+            color: #f97316;
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+        .department-name, .university-name {
+            color: #0e7490;
+            font-size: 1.1rem;
+            margin: 0.25rem 0;
+        }
+        .bio-content {
+            display: grid;
+            gap: 2rem;
+        }
+        .bio-section {
+            background: white;
+            padding: 2.5rem;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(8,145,178,0.1);
+        }
+        .bio-section-title {
+            color: #0891b2;
+            font-size: 1.5rem;
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.75rem;
+            border-bottom: 3px solid #f97316;
+            display: inline-block;
+        }
+        .expertise-list {
+            list-style: none;
+            padding: 0;
+            display: grid;
+            gap: 1.5rem;
+        }
+        .expertise-item {
+            display: flex;
+            align-items: start;
+            gap: 1.5rem;
+            padding: 1.5rem;
+            background: linear-gradient(135deg, #f0fdfa, #fff7ed);
+            border-radius: 15px;
+            border-left: 4px solid #0891b2;
+        }
+        .expertise-icon {
+            font-size: 3rem;
+        }
+        .expertise-details h5 {
+            color: #0891b2;
+            font-size: 1.3rem;
+            margin-bottom: 0.5rem;
+        }
+        .expertise-details p {
+            color: #64748b;
+            line-height: 1.6;
+        }
+        .bio-text {
+            color: #64748b;
+            line-height: 1.8;
+            font-size: 1.05rem;
+        }
+        /* İletişim Page Styles */
+        #iletisim h2 {
+            background: linear-gradient(135deg, #0891b2, #f97316);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-size: 2.5rem;
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+        .contact-intro {
+            background: white;
+            padding: 2rem;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(8,145,178,0.1);
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+        .contact-description {
+            color: #64748b;
+            font-size: 1.1rem;
+            line-height: 1.8;
+        }
+        .contact-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+        .contact-card {
+            background: white;
+            padding: 2.5rem;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(8,145,178,0.1);
+            transition: transform 0.3s ease;
+        }
+        .contact-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(8,145,178,0.2);
+        }
+        .contact-card-icon {
+            text-align: center;
+            margin-bottom: 1.5rem;
+        }
+        .contact-card-icon .icon {
+            font-size: 3rem;
+        }
+        .contact-card-title {
+            color: #0891b2;
+            font-size: 1.5rem;
+            text-align: center;
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.75rem;
+            border-bottom: 2px solid #f97316;
+        }
+        .contact-details {
+            display: grid;
+            gap: 1rem;
+        }
+        .contact-item {
+            display: grid;
+            gap: 0.5rem;
+        }
+        .contact-label {
+            color: #0891b2;
+            font-weight: 600;
+            font-size: 0.95rem;
+        }
+        .contact-value {
+            color: #64748b;
+            line-height: 1.6;
+        }
+        .social-links {
+            display: grid;
+            gap: 1rem;
+        }
+        .social-link {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem;
+            background: linear-gradient(135deg, #f0fdfa, #fff7ed);
+            border-radius: 12px;
+            text-decoration: none;
+            transition: transform 0.3s ease;
+        }
+        .social-link:hover {
+            transform: translateX(5px);
+            box-shadow: 0 5px 15px rgba(8,145,178,0.2);
+        }
+        .social-icon {
+            font-size: 2rem;
+        }
+        .social-name {
+            color: #0891b2;
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+        .social-handle {
+            color: #64748b;
+            font-size: 0.9rem;
+        }
+        /* Üniversitem Page Styles */
+        #universitem h2 {
+            background: linear-gradient(135deg, #0891b2, #f97316);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-size: 2.5rem;
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+        .university-hero {
+            background: white;
+            padding: 3rem;
+            border-radius: 25px;
+            box-shadow: 0 20px 60px rgba(8,145,178,0.15);
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+        .university-logo-section {
+            margin-bottom: 1.5rem;
+        }
+        .university-icon {
+            font-size: 4rem;
+        }
+        .university-title {
+            color: #0891b2;
+            font-size: 2rem;
+            margin: 1rem 0;
+        }
+        .university-tagline {
+            color: #64748b;
+            font-size: 1.2rem;
+            font-style: italic;
+        }
+        .university-info {
+            display: grid;
+            gap: 2rem;
+        }
+        .info-card {
+            background: white;
+            padding: 2.5rem;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(8,145,178,0.1);
+        }
+        .info-card-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 3px solid #f97316;
+        }
+        .info-icon {
+            font-size: 2.5rem;
+        }
+        .info-title {
+            color: #0891b2;
+            font-size: 1.5rem;
+        }
+        .info-content {
+            display: grid;
+            gap: 1.5rem;
+        }
+        .info-text {
+            color: #64748b;
+            line-height: 1.8;
+            font-size: 1.05rem;
+        }
+        .department-features, .department-mission, .department-programs {
+            margin-top: 1.5rem;
+        }
+        .features-title, .mission-title, .programs-title {
+            color: #0891b2;
+            font-size: 1.2rem;
+            margin-bottom: 1rem;
+        }
+        .features-list, .programs-list {
+            list-style: none;
+            padding: 0;
+            display: grid;
+            gap: 0.75rem;
+        }
+        .feature-item, .program-item {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.75rem;
+            background: #f0fdfa;
+            border-radius: 10px;
+        }
+        .feature-icon, .program-icon {
+            color: #10b981;
+            font-weight: bold;
+        }
+        .feature-text, .program-name {
+            color: #0e7490;
+        }
+        .mission-text {
+            color: #64748b;
+            line-height: 1.8;
+            padding: 1.5rem;
+            background: linear-gradient(135deg, #f0fdfa, #fff7ed);
+            border-radius: 12px;
+            border-left: 4px solid #0891b2;
+        }
+        .university-links {
+            display: grid;
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+        .university-link {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 1.25rem;
+            background: linear-gradient(135deg, #0891b2, #06b6d4);
+            color: white;
+            text-decoration: none;
+            border-radius: 12px;
+            transition: transform 0.3s ease;
+        }
+        .university-link:hover {
+            transform: translateX(5px);
+            box-shadow: 0 10px 25px rgba(8,145,178,0.3);
+        }
+        .link-icon {
+            font-size: 1.5rem;
+        }
+        .link-text {
+            flex: 1;
+            margin: 0 1rem;
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+        .link-arrow {
+            font-size: 1.5rem;
+        }
+        .campus-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+        }
+        .campus-item {
+            padding: 1.5rem;
+            background: linear-gradient(135deg, #f0fdfa, #fff7ed);
+            border-radius: 15px;
+            border-left: 4px solid #f97316;
+        }
+        .campus-name {
+            color: #0891b2;
+            font-size: 1.2rem;
+            margin-bottom: 0.75rem;
+        }
+        .campus-description {
+            color: #64748b;
+            line-height: 1.6;
         }
     </style>
 </body>
