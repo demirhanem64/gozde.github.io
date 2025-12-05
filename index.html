@@ -55,9 +55,15 @@
     <!-- Navigation -->
     <nav id="main-navigation" class="navigation" role="navigation" aria-label="Ana navigasyon">
         <div class="nav-container">
-            <div class="nav-brand">
-                <h1 class="logo">Gözde Ekşi</h1>
-            </div>
+            <a href="#anasayfa" class="nav-brand" style="text-decoration: none; display: flex; align-items: center; gap: 1rem;">
+                <div class="logo-icon" style="width: 50px; height: 50px; background: linear-gradient(135deg, #f97316, #fb923c); border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 1.8rem; box-shadow: 0 5px 15px rgba(249,115,22,0.4);">
+                    🏥
+                </div>
+                <div class="logo-text">
+                    <h1 class="logo" style="font-size: 1.3rem; margin: 0; line-height: 1.2;">Gözde Ekşi</h1>
+                    <p style="font-size: 0.75rem; margin: 0; opacity: 0.9; color: white;">Öğretim Görevlisi & Bölüm Başkanı</p>
+                </div>
+            </a>
             <button class="mobile-menu-toggle" aria-label="Menüyü aç/kapat" aria-expanded="false" style="top: 1px;">
                 <span class="hamburger-icon"></span>
             </button>
@@ -316,21 +322,21 @@
                                 <span class="expertise-icon">🏥</span>
                                 <div class="expertise-details">
                                     <h5>Halk Sağlığı</h5>
-                                    <p>Toplum sağlığının korunması ve geliştirilmesi</p>
+                                    <p>Toplum sağlığının korunması ve geliştirilmesi konusunda kapsamlı çalışmalar yürütmekteyim. Sağlık eğitimi, hastalıkların önlenmesi, sağlık politikaları ve toplum sağlığı programlarının planlanması ve uygulanması alanlarında deneyim sahibiyim. Toplumun sağlık düzeyini yükseltmek ve sağlıklı yaşam koşullarını iyileştirmek için epidemiyolojik araştırmalar ve saha çalışmaları gerçekleştiriyorum.</p>
                                 </div>
                             </li>
                             <li class="expertise-item">
                                 <span class="expertise-icon">👨‍👩‍👧‍👦</span>
                                 <div class="expertise-details">
                                     <h5>Aile Sağlığı</h5>
-                                    <p>Aile merkezli sağlık hizmetleri ve danışmanlık</p>
+                                    <p>Aile merkezli sağlık hizmetleri yaklaşımı ile bireylerin ve ailelerin sağlık ihtiyaçlarını bütüncül bir perspektifle ele alıyorum. Aile planlaması, anne-çocuk sağlığı, kronik hastalık yönetimi ve aile danışmanlığı konularında eğitim ve araştırma faaliyetleri yürütmekteyim. Ailelerin sağlık okuryazarlığını artırmak ve sağlıklı yaşam tarzı davranışlarını geliştirmek için kapsamlı programlar tasarlıyorum.</p>
                                 </div>
                             </li>
                             <li class="expertise-item">
                                 <span class="expertise-icon">👶</span>
                                 <div class="expertise-details">
-                                    <h5>Çocuk Sağlığı</h5>
-                                    <p>Çocuk gelişimi ve sağlık takibi</p>
+                                    <h5>Çocuk Sağlığı ve Gelişimi</h5>
+                                    <p>Çocuk sağlığı ve gelişimi alanında, doğumdan ergenlik dönemine kadar olan süreçte çocukların fiziksel, zihinsel ve sosyal gelişimlerinin izlenmesi ve desteklenmesi konusunda çalışmalar yapıyorum. Aşılama programları, büyüme-gelişme takibi, beslenme danışmanlığı ve erken çocukluk döneminde sağlık sorunlarının önlenmesi konularında eğitim veriyorum. Çocuk sağlığı politikalarının geliştirilmesi ve uygulanmasına katkı sağlıyorum.</p>
                                 </div>
                             </li>
                         </ul>
@@ -583,7 +589,7 @@
                                     resmi üniversite web sitesini ziyaret edebilirsiniz.
                                 </p>
                                 <div class="university-links">
-                                    <a href="https://www.istinye.edu.tr/fakulteler-ve-enstituler/saglik-hizmetleri-meslek-yuksekokulu/ilk-ve-acil-yardim" 
+                                    <a href="https://www.istinye.edu.tr/tr/shmyo/programlar/ilk-ve-acil-yardim" 
                                        class="university-link primary-link" 
                                        target="_blank" 
                                        rel="noopener noreferrer"
@@ -909,17 +915,15 @@
             submitBtn.textContent = 'Gönderiliyor...';
             submitBtn.style.opacity = '0.7';
             
-            // Collect form data
+            // Collect form data - each field separately
             const formData = new FormData(form);
             const data = {
                 surveyId: surveyId,
                 timestamp: new Date().toISOString(),
-                responses: {
-                    firstName: formData.get('firstName'),
-                    lastName: formData.get('lastName'),
-                    departmentClass: formData.get('departmentClass'),
-                    email: formData.get('email')
-                },
+                firstName: formData.get('firstName'),
+                lastName: formData.get('lastName'),
+                departmentClass: formData.get('departmentClass'),
+                email: formData.get('email'),
                 kvkkConsent: formData.get('kvkkConsent') === 'on'
             };
             
@@ -1499,6 +1503,17 @@
         .campus-description {
             color: #64748b;
             line-height: 1.6;
+        }
+        /* Logo hover effect */
+        .nav-brand:hover .logo-icon {
+            transform: scale(1.1) rotate(5deg);
+            transition: transform 0.3s ease;
+        }
+        .nav-brand {
+            transition: opacity 0.3s ease;
+        }
+        .nav-brand:hover {
+            opacity: 0.9;
         }
     </style>
 </body>
