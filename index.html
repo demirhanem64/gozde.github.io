@@ -50,25 +50,6 @@
         :root{--color-turquoise:#0891b2;--color-turquoise-light:#06b6d4;--color-turquoise-dark:#0e7490;--color-orange:#f97316;--color-orange-light:#fb923c;--color-orange-dark:#ea580c;--color-background:#f0fdfa;--color-background-alt:#fff7ed;--color-text:#0f172a;--color-text-light:#64748b;--color-white:#ffffff;--color-success:#10b981;--color-error:#ef4444;--color-warning:#f59e0b;--spacing-xs:.25rem;--spacing-sm:.5rem;--spacing-md:1rem;--spacing-lg:1.5rem;--spacing-xl:2rem;--spacing-2xl:3rem;--spacing-3xl:4rem;--font-family-base:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif;--font-family-heading:'Georgia','Cambria','Times New Roman',serif;--font-size-xs:.75rem;--font-size-sm:.875rem;--font-size-base:1rem;--font-size-lg:1.125rem;--font-size-xl:1.25rem;--font-size-2xl:1.5rem;--font-size-3xl:1.875rem;--font-size-4xl:2.25rem;--font-weight-normal:400;--font-weight-medium:500;--font-weight-semibold:600;--font-weight-bold:700;--line-height-tight:1.25;--line-height-normal:1.5;--line-height-relaxed:1.75;--radius-sm:.25rem;--radius-md:.5rem;--radius-lg:.75rem;--radius-xl:1rem;--radius-full:9999px;--shadow-sm:0 1px 2px 0 rgba(0,0,0,.05);--shadow-md:0 4px 6px -1px rgba(0,0,0,.1),0 2px 4px -1px rgba(0,0,0,.06);--shadow-lg:0 10px 15px -3px rgba(0,0,0,.1),0 4px 6px -2px rgba(0,0,0,.05);--shadow-xl:0 20px 25px -5px rgba(0,0,0,.1),0 10px 10px -5px rgba(0,0,0,.04);--transition-fast:150ms ease-in-out;--transition-base:250ms ease-in-out;--transition-slow:350ms ease-in-out;--z-index-dropdown:1000;--z-index-sticky:1020;--z-index-fixed:1030;--z-index-modal-backdrop:1040;--z-index-modal:1050;--z-index-popover:1060;--z-index-tooltip:1070}*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}html{font-size:16px;scroll-behavior:smooth}body{font-family:var(--font-family-base);font-size:var(--font-size-base);font-weight:var(--font-weight-normal);line-height:var(--line-height-normal);color:var(--color-text);background-color:var(--color-background);-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}h1,h2,h3,h4,h5,h6{font-family:var(--font-family-heading);font-weight:var(--font-weight-bold);line-height:var(--line-height-tight);color:var(--color-text);margin-bottom:var(--spacing-md)}h1{font-size:var(--font-size-4xl)}h2{font-size:var(--font-size-3xl)}h3{font-size:var(--font-size-2xl)}.navigation{background:linear-gradient(135deg,#0891b2,#06b6d4);box-shadow:var(--shadow-md);position:sticky;top:0;z-index:var(--z-index-sticky)}.nav-container{display:flex;justify-content:space-between;align-items:center;padding:var(--spacing-md) var(--spacing-lg);max-width:1200px;margin:0 auto}.nav-brand .logo{font-size:var(--font-size-2xl);color:var(--color-white);margin:0;font-weight:700}.nav-menu{display:flex;gap:var(--spacing-lg);list-style:none;margin:0}.nav-link{padding:var(--spacing-sm) var(--spacing-md);color:var(--color-white);font-weight:var(--font-weight-medium);border-radius:var(--radius-md);transition:all var(--transition-fast);text-decoration:none;cursor:pointer}.nav-link:hover{background-color:rgba(249,115,22,0.2)}.nav-link.active{background-color:var(--color-orange);color:var(--color-white)}.mobile-menu-toggle{display:none;background:none;border:none;cursor:pointer;padding:0.5rem;color:white}.hamburger-icon{display:block;width:25px;height:2px;background:white;position:relative}.hamburger-icon::before,.hamburger-icon::after{content:'';display:block;width:25px;height:2px;background:white;position:absolute;left:0}.hamburger-icon::before{top:-8px}.hamburger-icon::after{top:8px}.container{width:100%;max-width:1200px;margin:0 auto;padding:0 var(--spacing-lg)}.page-section{padding:var(--spacing-3xl) 0;display:none}.page-section.active{display:block}@media (max-width:768px){.mobile-menu-toggle{display:block}.nav-menu{position:absolute;top:100%;left:0;right:0;background:linear-gradient(135deg,#0891b2,#06b6d4);flex-direction:column;gap:0;padding:1rem;display:none}.nav-menu.active{display:flex}.nav-link{display:block;width:100%;text-align:center;padding:1rem}}
     </style>
     
-    <!-- Non-Critical CSS - Deferred Loading -->
-    <link rel="preload" href="css/variables.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
-    <link rel="preload" href="css/base.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
-    <link rel="preload" href="css/components.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
-    <link rel="preload" href="css/layout.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
-    <link rel="preload" href="css/animations.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
-    <link rel="preload" href="css/responsive.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
-    <link rel="preload" href="css/accessibility.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
-    <link rel="preload" href="css/browser-compat.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
-    <noscript>
-        <link rel="stylesheet" href="css/variables.css">
-        <link rel="stylesheet" href="css/base.css">
-        <link rel="stylesheet" href="css/components.css">
-        <link rel="stylesheet" href="css/layout.css">
-        <link rel="stylesheet" href="css/animations.css">
-        <link rel="stylesheet" href="css/responsive.css">
-        <link rel="stylesheet" href="css/accessibility.css">
-        <link rel="stylesheet" href="css/browser-compat.css">
-    </noscript>
 </head>
 <body>
     <!-- Navigation -->
@@ -749,16 +730,265 @@
         });
     </script>
     
-    <!-- Service Worker Registration (Optional - for offline support) -->
-    <!-- Uncomment to enable offline support -->
-    <!-- <script src="js/sw-register.js"></script> -->
     
-    <!-- JavaScript Modules - Deferred for Performance -->
-    <script type="module" src="js/utils.js" defer></script>
-    <script type="module" src="js/accessibility.js" defer></script>
-    <script type="module" src="js/navigation.js" defer></script>
-    <script type="module" src="js/animations.js" defer></script>
-    <script type="module" src="js/forms.js" defer></script>
-    <script type="module" src="js/webhook.js" defer></script>
+    <!-- Survey System - Inline Implementation -->
+    <script>
+        // Survey data embedded
+        const SURVEYS_DATA = {
+            "surveys": [
+                {
+                    "id": "gozdeanket1",
+                    "title": "Ders Değerlendirme Anketi",
+                    "description": "Derslerin kalitesini değerlendirmek için görüşlerinizi paylaşın",
+                    "webhookUrl": "https://demirhanem.com.tr/webhook/gozdeanket1"
+                },
+                {
+                    "id": "gozdeanket2",
+                    "title": "Öğrenci Memnuniyet Anketi",
+                    "description": "Eğitim süreciniz hakkında görüşlerinizi öğrenmek istiyoruz",
+                    "webhookUrl": "https://demirhanem.com.tr/webhook/gozdeanket2"
+                },
+                {
+                    "id": "gozdeanket3",
+                    "title": "Kurs Geri Bildirim Anketi",
+                    "description": "Kurs içeriği ve sunumu hakkındaki düşüncelerinizi paylaşın",
+                    "webhookUrl": "https://demirhanem.com.tr/webhook/gozdeanket3"
+                }
+            ]
+        };
+        
+        // Initialize survey system when DOM is ready
+        document.addEventListener('DOMContentLoaded', function() {
+            loadSurveyList();
+        });
+        
+        // Load survey list
+        function loadSurveyList() {
+            const surveyListContainer = document.getElementById('survey-list');
+            if (!surveyListContainer) return;
+            
+            let html = '<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem; margin-bottom: 2rem;">';
+            
+            SURVEYS_DATA.surveys.forEach(survey => {
+                html += `
+                    <div class="survey-card" style="background: white; padding: 2rem; border-radius: 20px; box-shadow: 0 10px 30px rgba(8,145,178,0.1); cursor: pointer; transition: transform 0.3s ease;" 
+                         onclick="loadSurveyForm('${survey.id}')"
+                         onmouseover="this.style.transform='translateY(-5px)'"
+                         onmouseout="this.style.transform='translateY(0)'">
+                        <div style="font-size: 2.5rem; text-align: center; margin-bottom: 1rem;">📋</div>
+                        <h3 style="color: #0891b2; font-size: 1.3rem; margin-bottom: 0.5rem; text-align: center;">${survey.title}</h3>
+                        <p style="color: #64748b; line-height: 1.6; text-align: center; margin-bottom: 1rem;">${survey.description}</p>
+                        <button style="width: 100%; background: linear-gradient(135deg, #0891b2, #f97316); color: white; border: none; padding: 0.75rem; border-radius: 10px; font-weight: 600; cursor: pointer; transition: transform 0.2s;"
+                                onmouseover="this.style.transform='scale(1.05)'"
+                                onmouseout="this.style.transform='scale(1)'">
+                            Anketi Doldur
+                        </button>
+                    </div>
+                `;
+            });
+            
+            html += '</div>';
+            surveyListContainer.innerHTML = html;
+        }
+        
+        // Load survey form
+        function loadSurveyForm(surveyId) {
+            const survey = SURVEYS_DATA.surveys.find(s => s.id === surveyId);
+            if (!survey) return;
+            
+            const formContainer = document.getElementById('survey-form-container');
+            if (!formContainer) return;
+            
+            const html = `
+                <div style="background: white; padding: 2.5rem; border-radius: 20px; box-shadow: 0 10px 30px rgba(8,145,178,0.1); max-width: 600px; margin: 0 auto;">
+                    <button onclick="closeSurveyForm()" style="background: none; border: none; font-size: 1.5rem; cursor: pointer; float: right; color: #64748b;">×</button>
+                    <h3 style="color: #0891b2; font-size: 1.8rem; margin-bottom: 0.5rem;">${survey.title}</h3>
+                    <p style="color: #64748b; margin-bottom: 2rem;">${survey.description}</p>
+                    
+                    <form id="survey-form-${surveyId}" onsubmit="submitSurvey(event, '${surveyId}', '${survey.webhookUrl}')">
+                        <div style="margin-bottom: 1.5rem;">
+                            <label style="display: block; color: #0e7490; font-weight: 600; margin-bottom: 0.5rem;">Ad *</label>
+                            <input type="text" name="firstName" required minlength="2" 
+                                   style="width: 100%; padding: 0.75rem; border: 2px solid #e2e8f0; border-radius: 10px; font-size: 1rem;"
+                                   placeholder="Adınızı giriniz">
+                        </div>
+                        
+                        <div style="margin-bottom: 1.5rem;">
+                            <label style="display: block; color: #0e7490; font-weight: 600; margin-bottom: 0.5rem;">Soyad *</label>
+                            <input type="text" name="lastName" required minlength="2"
+                                   style="width: 100%; padding: 0.75rem; border: 2px solid #e2e8f0; border-radius: 10px; font-size: 1rem;"
+                                   placeholder="Soyadınızı giriniz">
+                        </div>
+                        
+                        <div style="margin-bottom: 1.5rem;">
+                            <label style="display: block; color: #0e7490; font-weight: 600; margin-bottom: 0.5rem;">Bölüm - Sınıf *</label>
+                            <input type="text" name="departmentClass" required
+                                   style="width: 100%; padding: 0.75rem; border: 2px solid #e2e8f0; border-radius: 10px; font-size: 1rem;"
+                                   placeholder="Örn: İlk ve Acil Yardım - 2. Sınıf">
+                        </div>
+                        
+                        <div style="margin-bottom: 1.5rem;">
+                            <label style="display: block; color: #0e7490; font-weight: 600; margin-bottom: 0.5rem;">E-posta *</label>
+                            <input type="email" name="email" required
+                                   style="width: 100%; padding: 0.75rem; border: 2px solid #e2e8f0; border-radius: 10px; font-size: 1rem;"
+                                   placeholder="ornek@email.com">
+                        </div>
+                        
+                        <div style="margin-bottom: 1.5rem; padding: 1rem; background: #f0fdfa; border-radius: 10px; border-left: 4px solid #0891b2;">
+                            <label style="display: flex; align-items: start; cursor: pointer;">
+                                <input type="checkbox" name="kvkkConsent" required style="margin-right: 0.75rem; margin-top: 0.25rem; width: 18px; height: 18px;">
+                                <span style="color: #0e7490; font-size: 0.9rem; line-height: 1.6;">
+                                    <strong>KVKK Aydınlatma Metni:</strong> Kişisel verileriniz, eğitim kalitesini artırmak amacıyla toplanmakta ve işlenmektedir. Verileriniz güvenli bir şekilde saklanacak ve üçüncü şahıslarla paylaşılmayacaktır. Bu formu göndererek kişisel verilerinizin işlenmesini kabul etmiş olursunuz.
+                                </span>
+                            </label>
+                        </div>
+                        
+                        <button type="submit" id="submit-btn-${surveyId}"
+                                style="width: 100%; background: linear-gradient(135deg, #0891b2, #f97316); color: white; border: none; padding: 1rem; border-radius: 10px; font-size: 1.1rem; font-weight: 600; cursor: pointer; transition: transform 0.2s;"
+                                onmouseover="this.style.transform='scale(1.02)'"
+                                onmouseout="this.style.transform='scale(1)'">
+                            Anketi Gönder
+                        </button>
+                    </form>
+                </div>
+            `;
+            
+            formContainer.innerHTML = html;
+            formContainer.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+        
+        // Close survey form
+        function closeSurveyForm() {
+            const formContainer = document.getElementById('survey-form-container');
+            if (formContainer) {
+                formContainer.innerHTML = '';
+            }
+        }
+        
+        // Submit survey
+        async function submitSurvey(event, surveyId, webhookUrl) {
+            event.preventDefault();
+            
+            const form = event.target;
+            const submitBtn = document.getElementById(`submit-btn-${surveyId}`);
+            
+            // Disable button and show loading
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Gönderiliyor...';
+            
+            // Collect form data
+            const formData = new FormData(form);
+            const data = {
+                surveyId: surveyId,
+                timestamp: new Date().toISOString(),
+                responses: {
+                    firstName: formData.get('firstName'),
+                    lastName: formData.get('lastName'),
+                    departmentClass: formData.get('departmentClass'),
+                    email: formData.get('email')
+                },
+                kvkkConsent: formData.get('kvkkConsent') === 'on'
+            };
+            
+            try {
+                // Send to webhook
+                const response = await fetch(webhookUrl, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(data)
+                });
+                
+                if (response.ok) {
+                    // Show success message
+                    showThankYouPopup();
+                    // Reset form
+                    form.reset();
+                    // Close form after delay
+                    setTimeout(() => {
+                        closeSurveyForm();
+                    }, 3000);
+                } else {
+                    throw new Error('Sunucu hatası');
+                }
+            } catch (error) {
+                alert('Anket gönderilirken bir hata oluştu. Lütfen tekrar deneyin.');
+                console.error('Survey submission error:', error);
+            } finally {
+                // Re-enable button
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'Anketi Gönder';
+            }
+        }
+        
+        // Show thank you popup
+        function showThankYouPopup() {
+            const popup = document.createElement('div');
+            popup.style.cssText = `
+                position: fixed;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                background: white;
+                padding: 2rem 3rem;
+                border-radius: 20px;
+                box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+                z-index: 10000;
+                text-align: center;
+                animation: fadeIn 0.3s ease;
+            `;
+            
+            popup.innerHTML = `
+                <div style="font-size: 3rem; margin-bottom: 1rem;">✅</div>
+                <h3 style="color: #0891b2; font-size: 1.5rem; margin-bottom: 0.5rem;">Teşekkür Ederiz!</h3>
+                <p style="color: #64748b;">Anketiniz başarıyla gönderildi.</p>
+            `;
+            
+            document.body.appendChild(popup);
+            
+            // Auto close after 3 seconds
+            setTimeout(() => {
+                popup.style.animation = 'fadeOut 0.3s ease';
+                setTimeout(() => {
+                    document.body.removeChild(popup);
+                }, 300);
+            }, 3000);
+        }
+    </script>
+    
+    <style>
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translate(-50%, -60%); }
+            to { opacity: 1; transform: translate(-50%, -50%); }
+        }
+        @keyframes fadeOut {
+            from { opacity: 1; }
+            to { opacity: 0; }
+        }
+        .site-footer {
+            background: linear-gradient(135deg, #0891b2, #06b6d4);
+            color: white;
+            padding: 2rem 0;
+            margin-top: 4rem;
+            text-align: center;
+        }
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1.5rem;
+        }
+        .footer-copyright, .footer-domain, .footer-affiliation, .footer-title {
+            margin: 0.5rem 0;
+        }
+        .footer-link {
+            color: white;
+            text-decoration: none;
+            font-weight: 600;
+        }
+        .footer-link:hover {
+            text-decoration: underline;
+        }
+    </style>
 </body>
 </html>
