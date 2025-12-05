@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test: Success and Error Handling</title>
+    <link rel="stylesheet" href="css/variables.css">
+    <link rel="stylesheet" href="css/base.css">
+    <link rel="stylesheet" href="css/components.css">
+    <style>
+        body {
+            padding: 2rem;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        .test-section {
+            margin-bottom: 2rem;
+            padding: 1.5rem;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .test-button {
+            margin: 0.5rem;
+        }
+    </style>
+</head>
+<body>
+    <h1>Success and Error Handling Test</h1>
+    
+    <div class="test-section">
+        <h2>Test 1: Thank You Popup</h2>
+        <p>Click the button to test the thank you popup with auto-close (4 seconds)</p>
+        <button class="btn btn-primary test-button" id="test-success">Show Thank You Popup</button>
+    </div>
+    
+    <div class="test-section">
+        <h2>Test 2: Error Popup with Retry</h2>
+        <p>Click the button to test the error popup with retry functionality</p>
+        <button class="btn btn-secondary test-button" id="test-error">Show Error Popup</button>
+    </div>
+    
+    <div class="test-section">
+        <h2>Test 3: Network Error</h2>
+        <p>Click the button to test network error handling</p>
+        <button class="btn btn-secondary test-button" id="test-network-error">Show Network Error</button>
+    </div>
+    
+    <div class="test-section">
+        <h2>Test 4: Server Error</h2>
+        <p>Click the button to test server error (500) handling</p>
+        <button class="btn btn-secondary test-button" id="test-server-error">Show Server Error</button>
+    </div>
+
+    <script type="module">
+        import { SurveyForm } from './js/forms.js';
+        
+        // Mock survey config
+        const mockSurveyConfig = {
+            id: 'gozdeanket1',
+            title: 'Test Anketi',
+            description: 'Test için örnek anket',
+            fields: [
+                { name: 'firstName', type: 'text', label: 'Ad', required: true },
+                { name: 'lastName', type: 'text', label: 'Soyad', required: true },
+                { name: 'departmentClass', type: 'text', label: 'Bölüm-Sınıf', required: true },
+                { name: 'email', type: 'email', label: 'E-posta', required: true }
+            ]
+        };
+        
+        // Create a mock form instance
+        const mockForm = new SurveyForm(mockSurveyConfig);
+        
+        // Test 1: Thank You Popup
+        document.getElementById('test-success').addEventListener('click', () => {
+            mockForm.showThankYouPopup();
+        });
+        
+        // Test 2: Error Popup
+        document.getElementById('test-error').addEventListener('click', () => {
+            mockForm.showErrorWithRetry(
+                'Form gönderilirken bir hata oluştu. Lütfen tekrar deneyin.',
+                'Error: Connection timeout'
+            );
+        });
+        
+        // Test 3: Network Error
+        document.getElementById('test-network-error').addEventListener('click', () => {
+            mockForm.showErrorWithRetry(
+                'Ağ bağlantısı hatası. Lütfen internet bağlantınızı kontrol edin.',
+                'NetworkError: Failed to fetch'
+            );
+        });
+        
+        // Test 4: Server Error
+        document.getElementById('test-server-error').addEventListener('click', () => {
+            mockForm.showErrorWithRetry(
+                'Sunucu hatası (500). Lütfen daha sonra tekrar deneyin.',
+                'HTTP Error 500: Internal Server Error'
+            );
+        });
+    </script>
+</body>
+</html>

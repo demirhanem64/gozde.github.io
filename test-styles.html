@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Style Test - Gözde Ekşi Portfolio</title>
+    <link rel="stylesheet" href="css/variables.css">
+    <link rel="stylesheet" href="css/base.css">
+    <style>
+        .test-container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 2rem;
+        }
+        .color-swatch {
+            display: inline-block;
+            width: 150px;
+            height: 100px;
+            margin: 1rem;
+            border-radius: var(--radius-md);
+            box-shadow: var(--shadow-md);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+        }
+        .turquoise { background-color: var(--color-turquoise); }
+        .turquoise-light { background-color: var(--color-turquoise-light); }
+        .turquoise-dark { background-color: var(--color-turquoise-dark); }
+        .orange { background-color: var(--color-orange); }
+        .orange-light { background-color: var(--color-orange-light); }
+        .orange-dark { background-color: var(--color-orange-dark); }
+        .typography-test {
+            margin: 2rem 0;
+            padding: 2rem;
+            background: var(--color-white);
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-md);
+        }
+    </style>
+</head>
+<body>
+    <div class="test-container">
+        <h1>Stil Test Sayfası</h1>
+        
+        <section class="typography-test">
+            <h2>Renk Paleti Testi</h2>
+            <div>
+                <div class="color-swatch turquoise">Turkuaz<br>#0891b2</div>
+                <div class="color-swatch turquoise-light">Açık Turkuaz<br>#06b6d4</div>
+                <div class="color-swatch turquoise-dark">Koyu Turkuaz<br>#0e7490</div>
+            </div>
+            <div>
+                <div class="color-swatch orange">Turuncu<br>#f97316</div>
+                <div class="color-swatch orange-light">Açık Turuncu<br>#fb923c</div>
+                <div class="color-swatch orange-dark">Koyu Turuncu<br>#ea580c</div>
+            </div>
+        </section>
+
+        <section class="typography-test">
+            <h2>Tipografi Testi</h2>
+            <h1>Başlık 1 - Georgia/Cambria Serif</h1>
+            <h2>Başlık 2 - Georgia/Cambria Serif</h2>
+            <h3>Başlık 3 - Georgia/Cambria Serif</h3>
+            <h4>Başlık 4 - Georgia/Cambria Serif</h4>
+            <p>Bu bir paragraf metnidir. Sistem fontları kullanılarak render edilir ve sağlık/eğitim sektörüne uygun profesyonel bir görünüm sağlar.</p>
+            <p>İstinye Üniversitesi İlk ve Acil Yardım Bölümü için tasarlanmış bu site, modern ve okunabilir bir tipografi kullanır.</p>
+            <a href="#">Bu bir link örneğidir</a>
+        </section>
+
+        <section class="typography-test">
+            <h2>✅ Test Sonuçları</h2>
+            <ul>
+                <li>✅ Turkuaz renk paleti (#0891b2 ve varyantları) tanımlandı</li>
+                <li>✅ Turuncu renk paleti (#f97316 ve varyantları) tanımlandı</li>
+                <li>✅ CSS custom properties (variables) oluşturuldu</li>
+                <li>✅ Typography stilleri uygulandı</li>
+                <li>✅ CSS Reset eklendi</li>
+                <li>✅ Sağlık/eğitim sektörüne uygun font seçimi yapıldı</li>
+                <li>✅ Global stiller tanımlandı</li>
+            </ul>
+        </section>
+    </div>
+</body>
+</html>

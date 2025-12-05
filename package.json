@@ -1,0 +1,19 @@
+{
+  "name": "gozde-eksi-portfolio",
+  "version": "1.0.0",
+  "description": "Portfolio website for Gözde Ekşi - İstinye University",
+  "type": "module",
+  "scripts": {
+    "test": "jest --run",
+    "test:watch": "jest --watch",
+    "build": "node build-tools/build.js",
+    "build:css": "node build-tools/minify-css.js",
+    "build:js": "node build-tools/minify-js.js"
+  },
+  "devDependencies": {
+    "@jest/globals": "^29.7.0",
+    "fast-check": "^3.15.0",
+    "jest": "^29.7.0",
+    "jest-environment-jsdom": "^29.7.0"
+  }
+}

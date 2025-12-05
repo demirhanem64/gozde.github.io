@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KVKK Consent Test</title>
+    <link rel="stylesheet" href="css/variables.css">
+    <link rel="stylesheet" href="css/base.css">
+    <link rel="stylesheet" href="css/components.css">
+    <style>
+        body {
+            padding: 2rem;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        .test-section {
+            margin-bottom: 2rem;
+            padding: 1rem;
+            background: #f0f9ff;
+            border-radius: 8px;
+        }
+        .test-result {
+            margin-top: 1rem;
+            padding: 1rem;
+            border-radius: 4px;
+        }
+        .test-result.success {
+            background: #d1fae5;
+            color: #065f46;
+        }
+        .test-result.error {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+    </style>
+</head>
+<body>
+    <h1>KVKK Aydınlatma Metni Test</h1>
+    
+    <div class="test-section">
+        <h2>Test 1: KVKK Component Rendering</h2>
+        <p>Bu test, KVKK bileşeninin doğru şekilde render edildiğini kontrol eder.</p>
+        <div id="test-result-1" class="test-result"></div>
+    </div>
+
+    <div class="test-section">
+        <h2>Test 2: Form with KVKK Consent</h2>
+        <div id="survey-form-test"></div>
+        <div id="test-result-2" class="test-result"></div>
+    </div>
+
+    <div class="test-section">
+        <h2>Test 3: Submit Button State</h2>
+        <p>Submit butonu başlangıçta disabled olmalı, checkbox işaretlendiğinde enabled olmalı.</p>
+        <div id="test-result-3" class="test-result"></div>
+    </div>
+
+    <div class="test-section">
+        <h2>Test 4: Validation Without Consent</h2>
+        <p>KVKK onayı olmadan form gönderimi engellenmelidir.</p>
+        <div id="test-result-4" class="test-result"></div>
+    </div>
+
+    <script type="module">
+        import { SurveyForm } from './js/forms.js';
+
+        // Test survey configuration
+        const testSurveyConfig = {
+            id: "test-survey",
+            title: "Test Anketi",
+            description: "KVKK testi için örnek anket",
+            webhookUrl: "https://example.com/webhook",
+            fields: [
+                {
+                    name: "firstName",
+                    type: "text",
+                    label: "Ad",
+                    required: true,
+                    validation: { minLength: 2 }
+                },
+                {
+                    name: "email",
+                    type: "email",
+                    label: "E-posta",
+                    required: true
+                }
+            ]
+        };
+
+        // Test 1: Check if KVKK component renders
+        function test1() {
+            const surveyForm = new SurveyForm(testSurveyConfig);
+            surveyForm.render('survey-form-test');
+            
+            const kvkkTitle = document.querySelector('.kvkk-title');
+            const kvkkContent = document.querySelector('.kvkk-content');
+            const kvkkCheckbox = document.querySelector('#kvkkConsent');
+            
+            const result = document.getElementById('test-result-1');
+            
+            if (kvkkTitle && kvkkContent && kvkkCheckbox) {
+                result.className = 'test-result success';
+                result.textContent = '✓ KVKK bileşeni başarıyla render edildi';
+                return true;
+            } else {
+                result.className = 'test-result error';
+                result.textContent = '✗ KVKK bileşeni render edilemedi';
+                return false;
+            }
+        }
+
+        // Test 2: Check KVKK content
+        function test2() {
+            const kvkkContent = document.querySelector('.kvkk-content');
+            const result = document.getElementById('test-result-2');
+            
+            if (kvkkContent) {
+                const hasDataController = kvkkContent.textContent.includes('Veri Sorumlusu');
+                const hasDataPurpose = kvkkContent.textContent.includes('Veri Toplama Amacı');
+                const hasDataProcessing = kvkkContent.textContent.includes('Veri İşleme ve Kullanım');
+                const hasDataStorage = kvkkContent.textContent.includes('Veri Saklama');
+                const hasRights = kvkkContent.textContent.includes('Haklarınız');
+                
+                if (hasDataController && hasDataPurpose && hasDataProcessing && hasDataStorage && hasRights) {
+                    result.className = 'test-result success';
+                    result.textContent = '✓ KVKK metni tüm gerekli bilgileri içeriyor (veri sorumlusu, toplama amacı, işleme, saklama, haklar)';
+                    return true;
+                } else {
+                    result.className = 'test-result error';
+                    result.textContent = '✗ KVKK metni eksik bilgiler içeriyor';
+                    return false;
+                }
+            } else {
+                result.className = 'test-result error';
+                result.textContent = '✗ KVKK içeriği bulunamadı';
+                return false;
+            }
+        }
+
+        // Test 3: Check submit button state
+        function test3() {
+            const submitButton = document.querySelector('button[type="submit"]');
+            const kvkkCheckbox = document.querySelector('#kvkkConsent');
+            const result = document.getElementById('test-result-3');
+            
+            if (submitButton && kvkkCheckbox) {
+                // Initially should be disabled
+                const initiallyDisabled = submitButton.disabled;
+                
+                // Check the checkbox
+                kvkkCheckbox.checked = true;
+                kvkkCheckbox.dispatchEvent(new Event('change'));
+                
+                // Wait a bit for the event to process
+                setTimeout(() => {
+                    const enabledAfterCheck = !submitButton.disabled;
+                    
+                    // Uncheck the checkbox
+                    kvkkCheckbox.checked = false;
+                    kvkkCheckbox.dispatchEvent(new Event('change'));
+                    
+                    setTimeout(() => {
+                        const disabledAfterUncheck = submitButton.disabled;
+                        
+                        if (initiallyDisabled && enabledAfterCheck && disabledAfterUncheck) {
+                            result.className = 'test-result success';
+                            result.textContent = '✓ Submit butonu KVKK checkbox durumuna göre doğru şekilde enable/disable oluyor';
+                        } else {
+                            result.className = 'test-result error';
+                            result.textContent = `✗ Submit butonu durumu hatalı (başlangıç: ${initiallyDisabled}, işaretli: ${enabledAfterCheck}, işaretsiz: ${disabledAfterUncheck})`;
+                        }
+                    }, 100);
+                }, 100);
+                
+                return true;
+            } else {
+                result.className = 'test-result error';
+                result.textContent = '✗ Submit butonu veya checkbox bulunamadı';
+                return false;
+            }
+        }
+
+        // Test 4: Check validation without consent
+        function test4() {
+            const form = document.querySelector('.survey-form');
+            const kvkkCheckbox = document.querySelector('#kvkkConsent');
+            const firstNameInput = document.querySelector('#firstName');
+            const emailInput = document.querySelector('#email');
+            const result = document.getElementById('test-result-4');
+            
+            if (form && kvkkCheckbox && firstNameInput && emailInput) {
+                // Fill in the form fields
+                firstNameInput.value = 'Test';
+                emailInput.value = 'test@example.com';
+                
+                // Make sure checkbox is unchecked
+                kvkkCheckbox.checked = false;
+                
+                // Try to submit
+                const submitEvent = new Event('submit', { cancelable: true });
+                form.dispatchEvent(submitEvent);
+                
+                // Check if there's an error message
+                setTimeout(() => {
+                    const errorElement = document.querySelector('#kvkkConsent-error');
+                    const hasError = errorElement && errorElement.textContent.length > 0;
+                    
+                    if (hasError) {
+                        result.className = 'test-result success';
+                        result.textContent = '✓ KVKK onayı olmadan form gönderimi engellendi ve hata mesajı gösterildi';
+                    } else {
+                        result.className = 'test-result error';
+                        result.textContent = '✗ KVKK onayı olmadan form gönderimi engellenemedi';
+                    }
+                }, 100);
+                
+                return true;
+            } else {
+                result.className = 'test-result error';
+                result.textContent = '✗ Form elemanları bulunamadı';
+                return false;
+            }
+        }
+
+        // Run tests
+        window.addEventListener('DOMContentLoaded', () => {
+            setTimeout(() => {
+                test1();
+                setTimeout(() => {
+                    test2();
+                    setTimeout(() => {
+                        test3();
+                        setTimeout(() => {
+                            test4();
+                        }, 500);
+                    }, 500);
+                }, 100);
+            }, 100);
+        });
+    </script>
+</body>
+</html>

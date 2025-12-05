@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Form Validation Test</title>
+    <link rel="stylesheet" href="css/variables.css">
+    <link rel="stylesheet" href="css/base.css">
+    <link rel="stylesheet" href="css/components.css">
+    <style>
+        body {
+            padding: 2rem;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        .test-section {
+            margin-bottom: 2rem;
+            padding: 1rem;
+            background: #f0f9ff;
+            border-radius: 8px;
+        }
+        .test-title {
+            color: #0891b2;
+            margin-bottom: 1rem;
+        }
+    </style>
+</head>
+<body>
+    <h1>Form Validation Test</h1>
+    
+    <div class="test-section">
+        <h2 class="test-title">Test Instructions</h2>
+        <ol>
+            <li>Try submitting the form without filling any fields</li>
+            <li>Fill in invalid email addresses (e.g., "test", "test@", "test@test")</li>
+            <li>Fill in names with less than 2 characters</li>
+            <li>Try submitting without checking KVKK consent</li>
+            <li>Observe real-time validation as you type</li>
+        </ol>
+    </div>
+
+    <div id="survey-form-container"></div>
+
+    <script type="module">
+        import { SurveyForm } from './js/forms.js';
+
+        const mockSurveyConfig = {
+            id: "test-survey",
+            title: "Test Validation Form",
+            description: "Bu form validation sistemini test etmek için kullanılır",
+            webhookUrl: "https://demirhanem.com.tr/webhook/test",
+            fields: [
+                {
+                    name: "firstName",
+                    type: "text",
+                    label: "Ad",
+                    required: true,
+                    placeholder: "Adınızı giriniz",
+                    validation: { minLength: 2 }
+                },
+                {
+                    name: "lastName",
+                    type: "text",
+                    label: "Soyad",
+                    required: true,
+                    placeholder: "Soyadınızı giriniz",
+                    validation: { minLength: 2 }
+                },
+                {
+                    name: "departmentClass",
+                    type: "text",
+                    label: "Bölüm - Sınıf",
+                    required: true,
+                    placeholder: "Örn: İlk ve Acil Yardım - 2. Sınıf"
+                },
+                {
+                    name: "email",
+                    type: "email",
+                    label: "E-posta",
+                    required: true,
+                    placeholder: "ornek@email.com",
+                    validation: { pattern: "email" }
+                }
+            ]
+        };
+
+        const surveyForm = new SurveyForm(mockSurveyConfig);
+        surveyForm.render('survey-form-container');
+
+        // Override submit to show validation results
+        const originalSubmit = surveyForm.submit.bind(surveyForm);
+        surveyForm.submit = function() {
+            console.log('Attempting to submit form...');
+            const isValid = this.validate();
+            console.log('Form valid:', isValid);
+            console.log('Errors:', this.errors);
+            
+            if (isValid) {
+                alert('✅ Form validation passed! All fields are valid.');
+            } else {
+                alert('❌ Form validation failed. Please check the error messages.');
+            }
+        };
+    </script>
+</body>
+</html>

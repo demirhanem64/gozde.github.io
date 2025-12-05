@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KVKK Demo</title>
+    <link rel="stylesheet" href="css/variables.css">
+    <link rel="stylesheet" href="css/base.css">
+    <link rel="stylesheet" href="css/components.css">
+    <style>
+        body { padding: 2rem; max-width: 800px; margin: 0 auto; }
+        .demo-header { text-align: center; margin-bottom: 2rem; }
+        .demo-info { background: #e0f2fe; padding: 1rem; border-radius: 8px; margin-bottom: 2rem; }
+    </style>
+</head>
+<body>
+    <div class="demo-header">
+        <h1>🔒 KVKK Aydınlatma Metni Demo</h1>
+        <p>Task 12 Implementation Demonstration</p>
+    </div>
+
+    <div class="demo-info">
+        <h3>✅ Implementation Complete</h3>
+        <p><strong>What's been implemented:</strong></p>
+        <ul>
+            <li>Comprehensive KVKK disclosure text (5 sections)</li>
+            <li>Scrollable content box for easy reading</li>
+            <li>Checkbox with consent validation</li>
+            <li>Submit button state management</li>
+            <li>Form submission prevention without consent</li>
+        </ul>
+    </div>
+
+    <div id="demo-form-container"></div>
+
+    <script type="module">
+        import { SurveyForm } from './js/forms.js';
+
+        const demoConfig = {
+            id: "demo-survey",
+            title: "Demo Anket Formu",
+            description: "KVKK Aydınlatma Metni implementasyonunu görmek için aşağıdaki formu inceleyin",
+            webhookUrl: "https://example.com/webhook",
+            fields: [
+                {
+                    name: "firstName",
+                    type: "text",
+                    label: "Ad",
+                    required: true,
+                    placeholder: "Adınızı giriniz",
+                    validation: { minLength: 2 }
+                },
+                {
+                    name: "lastName",
+                    type: "text",
+                    label: "Soyad",
+                    required: true,
+                    placeholder: "Soyadınızı giriniz",
+                    validation: { minLength: 2 }
+                },
+                {
+                    name: "email",
+                    type: "email",
+                    label: "E-posta",
+                    required: true,
+                    placeholder: "ornek@email.com"
+                }
+            ]
+        };
+
+        const form = new SurveyForm(demoConfig);
+        form.render('demo-form-container');
+    </script>
+</body>
+</html>

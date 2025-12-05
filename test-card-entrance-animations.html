@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Card Entrance Animations Test</title>
+    
+    <!-- CSS Files -->
+    <link rel="stylesheet" href="css/variables.css">
+    <link rel="stylesheet" href="css/base.css">
+    <link rel="stylesheet" href="css/components.css">
+    <link rel="stylesheet" href="css/layout.css">
+    <link rel="stylesheet" href="css/animations.css">
+    <link rel="stylesheet" href="css/responsive.css">
+    
+    <style>
+        body {
+            padding: 2rem;
+            background-color: var(--color-background);
+        }
+        
+        .test-section {
+            margin-bottom: 4rem;
+        }
+        
+        .test-title {
+            font-size: 2rem;
+            color: var(--color-turquoise);
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+        
+        .spacer {
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            color: var(--color-text-light);
+        }
+        
+        .contact-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: var(--spacing-xl);
+        }
+        
+        .expertise-list {
+            list-style: none;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            gap: var(--spacing-lg);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 class="test-title">Card Entrance Animations Test</h1>
+        <p style="text-align: center; margin-bottom: 2rem;">Scroll down to see cards animate in with staggered timing</p>
+        
+        <!-- Spacer to enable scrolling -->
+        <div class="spacer">
+            ↓ Scroll Down ↓
+        </div>
+        
+        <!-- Test Section 1: Contact Cards -->
+        <section class="test-section">
+            <h2 class="test-title">Contact Cards (4 cards)</h2>
+            <div class="contact-grid">
+                <div class="contact-card">
+                    <div class="contact-card-icon">
+                        <span class="icon">🏛️</span>
+                    </div>
+                    <h3 class="contact-card-title">Card 1</h3>
+                    <p>This card should animate in first</p>
+                </div>
+                
+                <div class="contact-card">
+                    <div class="contact-card-icon">
+                        <span class="icon">📱</span>
+                    </div>
+                    <h3 class="contact-card-title">Card 2</h3>
+                    <p>This card should animate in second (0.1s delay)</p>
+                </div>
+                
+                <div class="contact-card">
+                    <div class="contact-card-icon">
+                        <span class="icon">⏰</span>
+                    </div>
+                    <h3 class="contact-card-title">Card 3</h3>
+                    <p>This card should animate in third (0.2s delay)</p>
+                </div>
+                
+                <div class="contact-card">
+                    <div class="contact-card-icon">
+                        <span class="icon">📍</span>
+                    </div>
+                    <h3 class="contact-card-title">Card 4</h3>
+                    <p>This card should animate in fourth (0.3s delay)</p>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Spacer -->
+        <div class="spacer">
+            ↓ Keep Scrolling ↓
+        </div>
+        
+        <!-- Test Section 2: Expertise Items -->
+        <section class="test-section">
+            <h2 class="test-title">Expertise Items (3 cards)</h2>
+            <ul class="expertise-list">
+                <li class="expertise-item">
+                    <span class="expertise-icon">🏥</span>
+                    <div class="expertise-details">
+                        <h5>Expertise 1</h5>
+                        <p>First expertise item with staggered animation</p>
+                    </div>
+                </li>
+                <li class="expertise-item">
+                    <span class="expertise-icon">👨‍👩‍👧‍👦</span>
+                    <div class="expertise-details">
+                        <h5>Expertise 2</h5>
+                        <p>Second expertise item (0.1s delay)</p>
+                    </div>
+                </li>
+                <li class="expertise-item">
+                    <span class="expertise-icon">👶</span>
+                    <div class="expertise-details">
+                        <h5>Expertise 3</h5>
+                        <p>Third expertise item (0.2s delay)</p>
+                    </div>
+                </li>
+            </ul>
+        </section>
+        
+        <!-- Spacer -->
+        <div class="spacer">
+            ↓ More Cards Below ↓
+        </div>
+        
+        <!-- Test Section 3: Info Cards -->
+        <section class="test-section">
+            <h2 class="test-title">Info Cards (2 cards)</h2>
+            <div style="display: flex; flex-direction: column; gap: 2rem;">
+                <div class="info-card">
+                    <div class="info-card-header">
+                        <span class="info-icon">🏛️</span>
+                        <h4 class="info-title">Info Card 1</h4>
+                    </div>
+                    <div class="info-content">
+                        <p class="info-text">This info card should animate in first</p>
+                    </div>
+                </div>
+                
+                <div class="info-card">
+                    <div class="info-card-header">
+                        <span class="info-icon">🚑</span>
+                        <h4 class="info-title">Info Card 2</h4>
+                    </div>
+                    <div class="info-content">
+                        <p class="info-text">This info card should animate in second (0.1s delay)</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Spacer -->
+        <div class="spacer">
+            ↓ Final Section ↓
+        </div>
+        
+        <!-- Test Section 4: Bio Sections -->
+        <section class="test-section">
+            <h2 class="test-title">Bio Sections (2 cards)</h2>
+            <div class="bio-section">
+                <h4 class="bio-section-title">Bio Section 1</h4>
+                <p class="bio-text">This bio section should animate in first</p>
+            </div>
+            
+            <div class="bio-section">
+                <h4 class="bio-section-title">Bio Section 2</h4>
+                <p class="bio-text">This bio section should animate in second (0.1s delay)</p>
+            </div>
+        </section>
+        
+        <div style="text-align: center; margin-top: 4rem; padding: 2rem; background: white; border-radius: 1rem;">
+            <h3>✅ Test Complete</h3>
+            <p>All cards should have animated in with staggered timing as you scrolled.</p>
+            <p><strong>Expected behavior:</strong></p>
+            <ul style="text-align: left; max-width: 600px; margin: 1rem auto;">
+                <li>Cards fade in and slide up from below</li>
+                <li>Each card in a group has a 0.1s delay from the previous one</li>
+                <li>Animation triggers when card enters viewport</li>
+                <li>Animation only plays once per card</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- JavaScript -->
+    <script type="module" src="js/animations.js"></script>
+</body>
+</html>

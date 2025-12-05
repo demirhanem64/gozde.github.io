@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hover & Click Animations Test</title>
+    
+    <!-- CSS Files -->
+    <link rel="stylesheet" href="css/variables.css">
+    <link rel="stylesheet" href="css/base.css">
+    <link rel="stylesheet" href="css/components.css">
+    <link rel="stylesheet" href="css/layout.css">
+    <link rel="stylesheet" href="css/animations.css">
+    
+    <style>
+        body {
+            padding: 2rem;
+            background-color: var(--color-background);
+        }
+        
+        .test-section {
+            margin-bottom: 3rem;
+            padding: 2rem;
+            background-color: var(--color-white);
+            border-radius: var(--radius-lg);
+        }
+        
+        .test-section h2 {
+            color: var(--color-turquoise);
+            margin-bottom: 1.5rem;
+        }
+        
+        .test-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-top: 1rem;
+        }
+        
+        .test-result {
+            padding: 1rem;
+            background-color: var(--color-background);
+            border-radius: var(--radius-md);
+            margin-top: 2rem;
+        }
+        
+        .test-result h3 {
+            color: var(--color-turquoise-dark);
+            margin-bottom: 0.5rem;
+        }
+        
+        .test-result ul {
+            list-style: none;
+            padding: 0;
+        }
+        
+        .test-result li {
+            padding: 0.5rem;
+            margin-bottom: 0.5rem;
+            background-color: var(--color-white);
+            border-radius: var(--radius-sm);
+        }
+        
+        .test-result li::before {
+            content: '✓ ';
+            color: var(--color-success);
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 style="text-align: center; color: var(--color-turquoise); margin-bottom: 2rem;">
+            Hover & Click Animations Test
+        </h1>
+        
+        <!-- Button Tests -->
+        <div class="test-section">
+            <h2>Button Hover & Click Effects</h2>
+            <p>Hover over buttons to see lift effect and shadow. Click to see ripple and press animation.</p>
+            <div class="test-grid">
+                <button class="btn btn-primary">Primary Button</button>
+                <button class="btn btn-secondary">Secondary Button</button>
+                <button class="btn btn-primary" disabled>Disabled Button</button>
+            </div>
+        </div>
+        
+        <!-- Card Tests -->
+        <div class="test-section">
+            <h2>Card Hover Effects</h2>
+            <p>Hover over cards to see lift, scale, and shadow effects.</p>
+            <div class="test-grid">
+                <div class="card">
+                    <h3 class="card-title">Test Card 1</h3>
+                    <p class="card-description">This card should lift and scale on hover.</p>
+                </div>
+                <div class="card">
+                    <h3 class="card-title">Test Card 2</h3>
+                    <p class="card-description">Watch the shadow grow on hover.</p>
+                </div>
+                <div class="card">
+                    <h3 class="card-title">Test Card 3</h3>
+                    <p class="card-description">Title color should change too.</p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Survey Card Tests -->
+        <div class="test-section">
+            <h2>Survey Card Hover Effects</h2>
+            <p>Hover to see border, lift, scale, and icon rotation.</p>
+            <div class="test-grid">
+                <div class="card survey-card">
+                    <div class="survey-card-icon">📋</div>
+                    <h3 class="card-title">Survey 1</h3>
+                    <p class="card-description">Icon should rotate on hover</p>
+                    <button class="btn btn-primary survey-select-btn">Select</button>
+                </div>
+                <div class="card survey-card">
+                    <div class="survey-card-icon">📝</div>
+                    <h3 class="card-title">Survey 2</h3>
+                    <p class="card-description">Border should appear</p>
+                    <button class="btn btn-primary survey-select-btn">Select</button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Contact Card Tests -->
+        <div class="test-section">
+            <h2>Contact Card Hover Effects</h2>
+            <p>Hover to see enhanced lift and icon animation.</p>
+            <div class="test-grid">
+                <div class="contact-card">
+                    <div class="contact-card-icon">
+                        <span class="icon">📧</span>
+                    </div>
+                    <h3 class="contact-card-title">Email</h3>
+                    <p>Icon should scale and rotate</p>
+                </div>
+                <div class="contact-card">
+                    <div class="contact-card-icon">
+                        <span class="icon">📱</span>
+                    </div>
+                    <h3 class="contact-card-title">Phone</h3>
+                    <p>Card should lift higher</p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Link Tests -->
+        <div class="test-section">
+            <h2>Link Hover & Click Effects</h2>
+            <p>Hover to see slide and scale. Click to see press feedback.</p>
+            
+            <h3 style="margin-top: 1.5rem; margin-bottom: 1rem;">Social Links</h3>
+            <div style="max-width: 400px;">
+                <a href="#" class="social-link instagram">
+                    <span class="social-icon">📷</span>
+                    <span class="social-name">Instagram</span>
+                    <span class="social-handle">@test</span>
+                </a>
+                <a href="#" class="social-link facebook" style="margin-top: 1rem; display: flex;">
+                    <span class="social-icon">👥</span>
+                    <span class="social-name">Facebook</span>
+                    <span class="social-handle">Test User</span>
+                </a>
+            </div>
+            
+            <h3 style="margin-top: 1.5rem; margin-bottom: 1rem;">University Links</h3>
+            <div style="max-width: 400px;">
+                <a href="#" class="university-link primary-link">
+                    <span class="link-icon">🌐</span>
+                    <span class="link-text">Primary Link</span>
+                    <span class="link-arrow">→</span>
+                </a>
+                <a href="#" class="university-link secondary-link" style="margin-top: 1rem; display: flex;">
+                    <span class="link-icon">🏛️</span>
+                    <span class="link-text">Secondary Link</span>
+                    <span class="link-arrow">→</span>
+                </a>
+            </div>
+        </div>
+        
+        <!-- Expertise Item Tests -->
+        <div class="test-section">
+            <h2>Expertise Item Hover Effects</h2>
+            <p>Hover to see slide, scale, and icon animation.</p>
+            <ul class="expertise-list">
+                <li class="expertise-item">
+                    <span class="expertise-icon">🏥</span>
+                    <div class="expertise-details">
+                        <h5>Test Expertise 1</h5>
+                        <p>Icon should rotate and scale on hover</p>
+                    </div>
+                </li>
+                <li class="expertise-item">
+                    <span class="expertise-icon">👨‍👩‍👧‍👦</span>
+                    <div class="expertise-details">
+                        <h5>Test Expertise 2</h5>
+                        <p>Background should change to white</p>
+                    </div>
+                </li>
+            </ul>
+        </div>
+        
+        <!-- Form Input Tests -->
+        <div class="test-section">
+            <h2>Form Input Hover & Focus Effects</h2>
+            <p>Hover to see border color change. Focus to see enhanced border and shadow.</p>
+            <div class="form-group">
+                <label class="form-label">Test Input</label>
+                <input type="text" class="form-input" placeholder="Hover and focus me">
+            </div>
+            <div class="form-group">
+                <label class="form-label">Email Input</label>
+                <input type="email" class="form-input" placeholder="test@example.com">
+            </div>
+        </div>
+        
+        <!-- KVKK Checkbox Test -->
+        <div class="test-section">
+            <h2>KVKK Checkbox Hover Effect</h2>
+            <p>Hover to see border, shadow, and scale effect.</p>
+            <div class="kvkk-checkbox">
+                <div class="form-checkbox">
+                    <input type="checkbox" id="test-kvkk">
+                    <label for="test-kvkk" class="kvkk-consent-label">
+                        Test KVKK consent checkbox - hover to see effects
+                    </label>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Test Results -->
+        <div class="test-result">
+            <h3>Expected Behaviors:</h3>
+            <ul>
+                <li>Buttons: Lift on hover, press down on click, ripple effect</li>
+                <li>Cards: Lift and scale on hover, enhanced shadow</li>
+                <li>Survey Cards: Border appears, icon rotates</li>
+                <li>Contact Cards: Higher lift, icon scales and rotates</li>
+                <li>Social Links: Slide right, icon rotates, color changes</li>
+                <li>University Links: Slide right, arrow moves, icon scales</li>
+                <li>Expertise Items: Slide right, icon rotates, background changes</li>
+                <li>Form Inputs: Border color changes on hover, shadow on focus</li>
+                <li>KVKK Checkbox: Border, shadow, and slight scale on hover</li>
+            </ul>
+        </div>
+    </div>
+    
+    <!-- JavaScript -->
+    <script type="module" src="js/animations.js"></script>
+</body>
+</html>
