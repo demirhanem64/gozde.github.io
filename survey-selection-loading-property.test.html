@@ -1,0 +1,562 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Property Test: Survey Selection Loading</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .test-header {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .test-header h1 {
+            margin: 0 0 10px 0;
+            color: #0891b2;
+        }
+        .test-header p {
+            margin: 5px 0;
+            color: #666;
+        }
+        .test-results {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .test-case {
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 4px;
+            border-left: 4px solid #ddd;
+        }
+        .test-case.pass {
+            background: #f0fdf4;
+            border-left-color: #10b981;
+        }
+        .test-case.fail {
+            background: #fef2f2;
+            border-left-color: #ef4444;
+        }
+        .test-case h3 {
+            margin: 0 0 10px 0;
+            font-size: 16px;
+        }
+        .test-case.pass h3::before {
+            content: '✓ ';
+            color: #10b981;
+            font-weight: bold;
+        }
+        .test-case.fail h3::before {
+            content: '✗ ';
+            color: #ef4444;
+            font-weight: bold;
+        }
+        .test-details {
+            font-size: 14px;
+            color: #666;
+            margin: 5px 0;
+        }
+        .error-message {
+            color: #ef4444;
+            font-family: monospace;
+            font-size: 12px;
+            background: #fee;
+            padding: 10px;
+            border-radius: 4px;
+            margin-top: 10px;
+        }
+        .summary {
+            background: #f0fdfa;
+            padding: 15px;
+            border-radius: 4px;
+            margin-top: 20px;
+            border-left: 4px solid #0891b2;
+        }
+        .summary.fail {
+            background: #fef2f2;
+            border-left-color: #ef4444;
+        }
+        .summary h2 {
+            margin: 0 0 10px 0;
+            font-size: 18px;
+        }
+        #test-container {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="test-header">
+        <h1>Property Test: Survey Selection Loading</h1>
+        <p><strong>Feature:</strong> gozde-eksi-portfolio-website, Property 23: Survey Selection Loading</p>
+        <p><strong>Validates:</strong> Requirements 10.2</p>
+        <p><strong>Property:</strong> For any survey option selected by the user, the System should load and display the corresponding survey form with the correct fields and configuration.</p>
+    </div>
+
+    <div class="test-results" id="results">
+        <p>Running tests...</p>
+    </div>
+
+    <!-- Hidden test container -->
+    <div id="test-container">
+        <div id="survey-list"></div>
+        <div id="survey-form-container" style="display: none;"></div>
+    </div>
+
+    <!-- Load dependencies -->
+    <script type="module">
+        import { SurveyManager, SurveyForm } from '../js/forms.js';
+
+        const results = [];
+        let totalTests = 0;
+        let passedTests = 0;
+
+        function addResult(testName, passed, details = '', error = null) {
+            totalTests++;
+            if (passed) passedTests++;
+            
+            results.push({
+                name: testName,
+                passed,
+                details,
+                error
+            });
+        }
+
+        function renderResults() {
+            const resultsDiv = document.getElementById('results');
+            
+            let html = '';
+            results.forEach(result => {
+                html += `
+                    <div class="test-case ${result.passed ? 'pass' : 'fail'}">
+                        <h3>${result.name}</h3>
+                        ${result.details ? `<div class="test-details">${result.details}</div>` : ''}
+                        ${result.error ? `<div class="error-message">${result.error}</div>` : ''}
+                    </div>
+                `;
+            });
+            
+            const allPassed = passedTests === totalTests;
+            html += `
+                <div class="summary ${allPassed ? '' : 'fail'}">
+                    <h2>Summary</h2>
+                    <p><strong>${passedTests}/${totalTests}</strong> tests passed</p>
+                    <p>${allPassed ? '✓ All tests passed!' : '✗ Some tests failed'}</p>
+                </div>
+            `;
+            
+            resultsDiv.innerHTML = html;
+        }
+
+        // Helper function to reset test environment
+        function resetTestEnvironment() {
+            const surveyList = document.getElementById('survey-list');
+            const formContainer = document.getElementById('survey-form-container');
+            
+            if (surveyList) {
+                surveyList.innerHTML = '';
+                surveyList.style.display = 'block';
+            }
+            
+            if (formContainer) {
+                formContainer.innerHTML = '';
+                formContainer.style.display = 'none';
+            }
+        }
+
+        // Load surveys data
+        async function loadSurveys() {
+            try {
+                const response = await fetch('../data/surveys.json');
+                const data = await response.json();
+                return data.surveys;
+            } catch (error) {
+                console.error('Error loading surveys:', error);
+                return [];
+            }
+        }
+
+        // Run all tests
+        async function runTests() {
+            const surveys = await loadSurveys();
+            
+            if (surveys.length === 0) {
+                addResult('Load Surveys', false, '', 'Failed to load surveys data');
+                renderResults();
+                return;
+            }
+
+            // Test 1: Selecting any survey loads the corresponding form with correct configuration
+            try {
+                let iterationsPassed = 0;
+                const numRuns = Math.min(100, surveys.length * 20);
+                
+                for (let i = 0; i < numRuns; i++) {
+                    resetTestEnvironment();
+                    
+                    // Pick a random survey
+                    const survey = surveys[Math.floor(Math.random() * surveys.length)];
+                    
+                    // Create survey manager
+                    const manager = new SurveyManager();
+                    await manager.loadSurveys();
+                    await manager.renderSurveyList('survey-list');
+                    
+                    // Select the survey
+                    manager.selectSurvey(survey.id);
+                    
+                    // Verify form container is visible
+                    const formContainer = document.getElementById('survey-form-container');
+                    if (formContainer.style.display !== 'block') {
+                        throw new Error(`Form container not visible for survey ${survey.id}`);
+                    }
+                    
+                    // Verify current survey is set correctly
+                    const currentSurvey = manager.getCurrentSurvey();
+                    if (!currentSurvey || currentSurvey.id !== survey.id) {
+                        throw new Error(`Current survey not set correctly for ${survey.id}`);
+                    }
+                    
+                    // Verify form title and description
+                    const formTitle = formContainer.querySelector('h3');
+                    if (!formTitle || formTitle.textContent !== survey.title) {
+                        throw new Error(`Form title mismatch for survey ${survey.id}`);
+                    }
+                    
+                    const formDescription = formContainer.querySelector('.form-description');
+                    if (!formDescription || formDescription.textContent !== survey.description) {
+                        throw new Error(`Form description mismatch for survey ${survey.id}`);
+                    }
+                    
+                    // Verify all fields are present
+                    for (const field of survey.fields) {
+                        const input = formContainer.querySelector(`#${field.name}`);
+                        if (!input) {
+                            throw new Error(`Field ${field.name} not found for survey ${survey.id}`);
+                        }
+                        if (input.getAttribute('type') !== field.type) {
+                            throw new Error(`Field ${field.name} type mismatch for survey ${survey.id}`);
+                        }
+                    }
+                    
+                    // Verify KVKK checkbox
+                    const kvkkCheckbox = formContainer.querySelector('#kvkkConsent');
+                    if (!kvkkCheckbox || kvkkCheckbox.getAttribute('type') !== 'checkbox') {
+                        throw new Error(`KVKK checkbox not found or incorrect for survey ${survey.id}`);
+                    }
+                    
+                    // Verify submit button
+                    const submitButton = formContainer.querySelector('button[type="submit"]');
+                    if (!submitButton || !submitButton.disabled) {
+                        throw new Error(`Submit button not found or not disabled for survey ${survey.id}`);
+                    }
+                    
+                    iterationsPassed++;
+                }
+                
+                addResult(
+                    'Property 23: Survey Selection Loading',
+                    true,
+                    `Verified that selecting any survey loads the correct form configuration (${iterationsPassed}/${numRuns} iterations)`
+                );
+            } catch (error) {
+                addResult(
+                    'Property 23: Survey Selection Loading',
+                    false,
+                    '',
+                    error.message
+                );
+            }
+
+            // Test 2: Survey list is hidden when a survey is selected
+            try {
+                let iterationsPassed = 0;
+                const numRuns = Math.min(100, surveys.length * 20);
+                
+                for (let i = 0; i < numRuns; i++) {
+                    resetTestEnvironment();
+                    
+                    const survey = surveys[Math.floor(Math.random() * surveys.length)];
+                    
+                    const manager = new SurveyManager();
+                    await manager.loadSurveys();
+                    await manager.renderSurveyList('survey-list');
+                    
+                    const surveyList = document.getElementById('survey-list');
+                    if (surveyList.style.display === 'none') {
+                        throw new Error('Survey list should be visible initially');
+                    }
+                    
+                    manager.selectSurvey(survey.id);
+                    
+                    if (surveyList.style.display !== 'none') {
+                        throw new Error(`Survey list not hidden after selecting ${survey.id}`);
+                    }
+                    
+                    const formContainer = document.getElementById('survey-form-container');
+                    if (formContainer.style.display !== 'block') {
+                        throw new Error(`Form container not visible after selecting ${survey.id}`);
+                    }
+                    
+                    iterationsPassed++;
+                }
+                
+                addResult(
+                    'Survey list hidden on selection',
+                    true,
+                    `Verified survey list is hidden when any survey is selected (${iterationsPassed}/${numRuns} iterations)`
+                );
+            } catch (error) {
+                addResult(
+                    'Survey list hidden on selection',
+                    false,
+                    '',
+                    error.message
+                );
+            }
+
+            // Test 3: Each survey loads with its unique webhook URL
+            try {
+                let iterationsPassed = 0;
+                const numRuns = Math.min(100, surveys.length * 20);
+                
+                for (let i = 0; i < numRuns; i++) {
+                    resetTestEnvironment();
+                    
+                    const survey = surveys[Math.floor(Math.random() * surveys.length)];
+                    
+                    const manager = new SurveyManager();
+                    await manager.loadSurveys();
+                    
+                    manager.selectSurvey(survey.id);
+                    
+                    const currentSurvey = manager.getCurrentSurvey();
+                    if (currentSurvey.webhookUrl !== survey.webhookUrl) {
+                        throw new Error(`Webhook URL mismatch for survey ${survey.id}`);
+                    }
+                    
+                    const expectedPattern = /^https:\/\/demirhanem\.com\.tr\/webhook\/gozdeanket\d+$/;
+                    if (!expectedPattern.test(currentSurvey.webhookUrl)) {
+                        throw new Error(`Webhook URL doesn't match pattern for survey ${survey.id}`);
+                    }
+                    
+                    iterationsPassed++;
+                }
+                
+                addResult(
+                    'Unique webhook URLs per survey',
+                    true,
+                    `Verified each survey has correct unique webhook URL (${iterationsPassed}/${numRuns} iterations)`
+                );
+            } catch (error) {
+                addResult(
+                    'Unique webhook URLs per survey',
+                    false,
+                    '',
+                    error.message
+                );
+            }
+
+            // Test 4: Selecting different surveys loads different configurations
+            try {
+                if (surveys.length < 2) {
+                    throw new Error('Need at least 2 surveys to test different configurations');
+                }
+                
+                let iterationsPassed = 0;
+                const numRuns = 50;
+                
+                for (let i = 0; i < numRuns; i++) {
+                    resetTestEnvironment();
+                    
+                    // Pick two different surveys
+                    const index1 = Math.floor(Math.random() * surveys.length);
+                    let index2 = Math.floor(Math.random() * surveys.length);
+                    while (index2 === index1) {
+                        index2 = Math.floor(Math.random() * surveys.length);
+                    }
+                    
+                    const survey1 = surveys[index1];
+                    const survey2 = surveys[index2];
+                    
+                    const manager = new SurveyManager();
+                    await manager.loadSurveys();
+                    
+                    // Select first survey
+                    manager.selectSurvey(survey1.id);
+                    const currentSurvey1 = manager.getCurrentSurvey();
+                    
+                    if (currentSurvey1.id !== survey1.id) {
+                        throw new Error(`First survey not loaded correctly`);
+                    }
+                    
+                    // Go back and select second survey
+                    manager.showSurveyList();
+                    manager.selectSurvey(survey2.id);
+                    const currentSurvey2 = manager.getCurrentSurvey();
+                    
+                    if (currentSurvey2.id !== survey2.id) {
+                        throw new Error(`Second survey not loaded correctly`);
+                    }
+                    
+                    if (currentSurvey2.id === currentSurvey1.id) {
+                        throw new Error(`Different surveys should have different IDs`);
+                    }
+                    
+                    if (currentSurvey2.webhookUrl === currentSurvey1.webhookUrl) {
+                        throw new Error(`Different surveys should have different webhook URLs`);
+                    }
+                    
+                    iterationsPassed++;
+                }
+                
+                addResult(
+                    'Different surveys load different configurations',
+                    true,
+                    `Verified selecting different surveys loads different configurations (${iterationsPassed}/${numRuns} iterations)`
+                );
+            } catch (error) {
+                addResult(
+                    'Different surveys load different configurations',
+                    false,
+                    '',
+                    error.message
+                );
+            }
+
+            // Test 5: All required form fields are present
+            try {
+                let iterationsPassed = 0;
+                const numRuns = Math.min(100, surveys.length * 20);
+                
+                for (let i = 0; i < numRuns; i++) {
+                    resetTestEnvironment();
+                    
+                    const survey = surveys[Math.floor(Math.random() * surveys.length)];
+                    
+                    const manager = new SurveyManager();
+                    await manager.loadSurveys();
+                    
+                    manager.selectSurvey(survey.id);
+                    
+                    const formContainer = document.getElementById('survey-form-container');
+                    
+                    let foundFieldCount = 0;
+                    for (const field of survey.fields) {
+                        const input = formContainer.querySelector(`#${field.name}`);
+                        if (input) {
+                            foundFieldCount++;
+                            
+                            if (input.getAttribute('type') !== field.type) {
+                                throw new Error(`Field ${field.name} type mismatch`);
+                            }
+                            
+                            if (input.getAttribute('name') !== field.name) {
+                                throw new Error(`Field ${field.name} name mismatch`);
+                            }
+                            
+                            if (field.placeholder && input.getAttribute('placeholder') !== field.placeholder) {
+                                throw new Error(`Field ${field.name} placeholder mismatch`);
+                            }
+                        }
+                    }
+                    
+                    if (foundFieldCount !== survey.fields.length) {
+                        throw new Error(`Expected ${survey.fields.length} fields, found ${foundFieldCount}`);
+                    }
+                    
+                    iterationsPassed++;
+                }
+                
+                addResult(
+                    'All required fields present',
+                    true,
+                    `Verified all configured fields are rendered for any survey (${iterationsPassed}/${numRuns} iterations)`
+                );
+            } catch (error) {
+                addResult(
+                    'All required fields present',
+                    false,
+                    '',
+                    error.message
+                );
+            }
+
+            // Test 6: Back button functionality
+            try {
+                let iterationsPassed = 0;
+                const numRuns = Math.min(100, surveys.length * 20);
+                
+                for (let i = 0; i < numRuns; i++) {
+                    resetTestEnvironment();
+                    
+                    const survey = surveys[Math.floor(Math.random() * surveys.length)];
+                    
+                    const manager = new SurveyManager();
+                    await manager.loadSurveys();
+                    await manager.renderSurveyList('survey-list');
+                    
+                    manager.selectSurvey(survey.id);
+                    
+                    const formContainer = document.getElementById('survey-form-container');
+                    if (formContainer.style.display !== 'block') {
+                        throw new Error('Form should be visible after selection');
+                    }
+                    
+                    const backButton = formContainer.querySelector('.survey-back-btn');
+                    if (!backButton) {
+                        throw new Error('Back button not found');
+                    }
+                    
+                    // Simulate back button click
+                    manager.showSurveyList();
+                    
+                    const surveyList = document.getElementById('survey-list');
+                    if (surveyList.style.display !== 'block') {
+                        throw new Error('Survey list should be visible after going back');
+                    }
+                    
+                    if (formContainer.style.display !== 'none') {
+                        throw new Error('Form should be hidden after going back');
+                    }
+                    
+                    if (manager.getCurrentSurvey() !== null) {
+                        throw new Error('Current survey should be null after going back');
+                    }
+                    
+                    iterationsPassed++;
+                }
+                
+                addResult(
+                    'Back button returns to survey list',
+                    true,
+                    `Verified back button functionality works correctly (${iterationsPassed}/${numRuns} iterations)`
+                );
+            } catch (error) {
+                addResult(
+                    'Back button returns to survey list',
+                    false,
+                    '',
+                    error.message
+                );
+            }
+
+            renderResults();
+        }
+
+        // Run tests when page loads
+        runTests();
+    </script>
+</body>
+</html>

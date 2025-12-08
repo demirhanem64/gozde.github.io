@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Property Test: Announcement Display Completeness</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+            background: #f0fdfa;
+        }
+        .test-header {
+            background: linear-gradient(135deg, #0891b2, #06b6d4);
+            color: white;
+            padding: 2rem;
+            border-radius: 12px;
+            margin-bottom: 2rem;
+        }
+        .test-results {
+            background: white;
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        .test-status {
+            padding: 1rem;
+            border-radius: 8px;
+            margin: 1rem 0;
+            font-weight: bold;
+        }
+        .test-pass {
+            background: #d1fae5;
+            color: #065f46;
+            border-left: 4px solid #10b981;
+        }
+        .test-fail {
+            background: #fee2e2;
+            color: #991b1b;
+            border-left: 4px solid #ef4444;
+        }
+        .test-info {
+            background: #dbeafe;
+            color: #1e40af;
+            border-left: 4px solid #3b82f6;
+        }
+        .test-detail {
+            margin: 0.5rem 0;
+            padding: 0.5rem;
+            background: #f9fafb;
+            border-radius: 4px;
+            font-family: monospace;
+            font-size: 0.9rem;
+        }
+        #run-test-btn {
+            background: linear-gradient(135deg, #f97316, #fb923c);
+            color: white;
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            margin: 1rem 0;
+        }
+        #run-test-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(249,115,22,0.3);
+        }
+        #run-test-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+    </style>
+</head>
+<body>
+    <div class="test-header">
+        <h1>🧪 Property-Based Test: Announcement Display Completeness</h1>
+        <p><strong>Feature:</strong> portfolio-improvements</p>
+        <p><strong>Property 2:</strong> Announcement display completeness</p>
+        <p><strong>Validates:</strong> Requirements 2.2, 2.4, 4.1</p>
+        <p><em>For any announcement displayed (in card or popup), the system should show title, date, time, and content in the appropriate format</em></p>
+    </div>
+
+    <div class="test-results">
+        <button id="run-test-btn" onclick="runPropertyTest()">▶️ Run Property Test (100 iterations)</button>
+        <div id="test-output"></div>
+    </div>
+
+    <!-- Load fast-check from CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/fast-check@3.15.0/lib/bundle.js"></script>
+    
+    <!-- Load AnnouncementManager -->
+    <script src="../js/announcements.js"></script>
+
+    <script>
+        // **Feature: portfolio-improvements, Property 2: Announcement display completeness**
+        // **Validates: Requirements 2.2, 2.4, 4.1**
+
+        const testOutput = document.getElementById('test-output');
+        const runButton = document.getElementById('run-test-btn');
+
+        function logTest(message, type = 'info') {
+            const div = document.createElement('div');
+            div.className = `test-status test-${type}`;
+            div.textContent = message;
+            testOutput.appendChild(div);
+        }
+
+        function logDetail(message) {
+            const div = document.createElement('div');
+            div.className = 'test-detail';
+            div.textContent = message;
+            testOutput.appendChild(div);
+        }
+
+        // Generator for valid announcement data
+        const announcementArbitrary = fc.record({
+            title: fc.string({ minLength: 1, maxLength: 200 }).filter(s => s.trim().length > 0),
+            date: fc.date({ min: new Date('2020-01-01'), max: new Date('2030-12-31') })
+                .map(d => d.toISOString().split('T')[0]),
+            time: fc.tuple(
+                fc.integer({ min: 0, max: 23 }),
+                fc.integer({ min: 0, max: 59 })
+            ).map(([h, m]) => `${String(h).padStart(2, '0')}:${String(m).padStart(2, '0')}`),
+            summary: fc.string({ minLength: 1, maxLength: 150 }).filter(s => s.trim().length > 0),
+            content: fc.string({ minLength: 1, maxLength: 1000 }).filter(s => s.trim().length > 0),
+            isActive: fc.boolean()
+        });
+
+        function testAnnouncementCardDisplay(announcement) {
+            // Create a temporary container
+            const container = document.createElement('div');
+            container.innerHTML = createAnnouncementCard(announcement);
+            const card = container.firstElementChild;
+
+            // Check that title is displayed
+            const titleElement = card.querySelector('.announcement-title');
+            if (!titleElement) {
+                return { success: false, reason: 'Title element not found' };
+            }
+            if (!titleElement.textContent.includes(announcement.title)) {
+                return { success: false, reason: `Title mismatch: expected "${announcement.title}", found "${titleElement.textContent}"` };
+            }
+
+            // Check that date is displayed
+            const dateElement = card.querySelector('.announcement-date');
+            if (!dateElement) {
+                return { success: false, reason: 'Date element not found' };
+            }
+            // Date should be formatted, so just check it exists and has content
+            if (!dateElement.textContent || dateElement.textContent.trim().length === 0) {
+                return { success: false, reason: 'Date element is empty' };
+            }
+
+            // Check that time is displayed
+            const timeElement = card.querySelector('.announcement-time');
+            if (!timeElement) {
+                return { success: false, reason: 'Time element not found' };
+            }
+            if (!timeElement.textContent.includes(announcement.time)) {
+                return { success: false, reason: `Time mismatch: expected "${announcement.time}", found "${timeElement.textContent}"` };
+            }
+
+            // Check that summary is displayed
+            const summaryElement = card.querySelector('.announcement-summary');
+            if (!summaryElement) {
+                return { success: false, reason: 'Summary element not found' };
+            }
+            if (!summaryElement.textContent.includes(announcement.summary)) {
+                return { success: false, reason: `Summary mismatch: expected "${announcement.summary}", found "${summaryElement.textContent}"` };
+            }
+
+            return { success: true };
+        }
+
+        async function runPropertyTest() {
+            testOutput.innerHTML = '';
+            runButton.disabled = true;
+
+            logTest('🚀 Starting property-based test...', 'info');
+            logDetail('Testing that all announcements display required fields: title, date, time, summary');
+
+            try {
+                // Create a test announcement with known ID for the card generator
+                const testAnnouncement = (data) => ({
+                    id: 'test-' + Math.random().toString(36).substring(7),
+                    ...data
+                });
+
+                const property = fc.property(
+                    announcementArbitrary,
+                    (announcementData) => {
+                        const announcement = testAnnouncement(announcementData);
+                        const result = testAnnouncementCardDisplay(announcement);
+                        
+                        if (!result.success) {
+                            throw new Error(result.reason);
+                        }
+                        
+                        return true;
+                    }
+                );
+
+                // Run the property test with 100 iterations
+                const result = await fc.check(property, { numRuns: 100 });
+
+                if (result.failed) {
+                    logTest('❌ Property test FAILED', 'fail');
+                    logDetail(`Failed after ${result.numRuns} runs`);
+                    if (result.counterexample) {
+                        logDetail('Counterexample: ' + JSON.stringify(result.counterexample, null, 2));
+                    }
+                    if (result.error) {
+                        logDetail('Error: ' + result.error);
+                    }
+                } else {
+                    logTest('✅ Property test PASSED', 'pass');
+                    logDetail(`Successfully tested ${result.numRuns} random announcements`);
+                    logDetail('All announcements correctly displayed title, date, time, and summary');
+                }
+
+            } catch (error) {
+                logTest('❌ Test execution error', 'fail');
+                logDetail('Error: ' + error.message);
+                console.error(error);
+            } finally {
+                runButton.disabled = false;
+            }
+        }
+
+        // Auto-run test on page load
+        window.addEventListener('load', () => {
+            setTimeout(runPropertyTest, 500);
+        });
+    </script>
+</body>
+</html>

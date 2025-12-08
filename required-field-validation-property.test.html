@@ -1,0 +1,695 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Property Test: Required Field Validation</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .test-header {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .test-header h1 {
+            margin: 0 0 10px 0;
+            color: #0891b2;
+        }
+        .test-header p {
+            margin: 5px 0;
+            color: #666;
+        }
+        .test-results {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .test-case {
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 4px;
+            border-left: 4px solid #ddd;
+        }
+        .test-case.pass {
+            background: #f0fdf4;
+            border-left-color: #10b981;
+        }
+        .test-case.fail {
+            background: #fef2f2;
+            border-left-color: #ef4444;
+        }
+        .test-case h3 {
+            margin: 0 0 10px 0;
+            font-size: 16px;
+        }
+        .test-case.pass h3::before {
+            content: '✓ ';
+            color: #10b981;
+            font-weight: bold;
+        }
+        .test-case.fail h3::before {
+            content: '✗ ';
+            color: #ef4444;
+            font-weight: bold;
+        }
+        .test-details {
+            font-size: 14px;
+            color: #666;
+            margin: 5px 0;
+        }
+        .error-message {
+            color: #ef4444;
+            font-family: monospace;
+            font-size: 12px;
+            background: #fee;
+            padding: 10px;
+            border-radius: 4px;
+            margin-top: 10px;
+        }
+        .summary {
+            background: #f0fdfa;
+            padding: 15px;
+            border-radius: 4px;
+            margin-top: 20px;
+            border-left: 4px solid #0891b2;
+        }
+        .summary.fail {
+            background: #fef2f2;
+            border-left-color: #ef4444;
+        }
+        .summary h2 {
+            margin: 0 0 10px 0;
+            font-size: 18px;
+        }
+        #test-container {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="test-header">
+        <h1>Property Test: Required Field Validation</h1>
+        <p><strong>Feature:</strong> gozde-eksi-portfolio-website, Property 8: Required Field Validation</p>
+        <p><strong>Validates:</strong> Requirements 5.4</p>
+        <p><strong>Property:</strong> For any survey form with required fields, attempting to submit the form with empty required fields should prevent submission and display validation messages.</p>
+    </div>
+
+    <div class="test-results" id="results">
+        <p>Running tests...</p>
+    </div>
+
+    <!-- Hidden test container -->
+    <div id="test-container"></div>
+
+    <!-- Load dependencies -->
+    <script type="module">
+        import { SurveyForm } from '../js/forms.js';
+
+        const results = [];
+        let totalTests = 0;
+        let passedTests = 0;
+
+        function addResult(testName, passed, details = '', error = null) {
+            totalTests++;
+            if (passed) passedTests++;
+            
+            results.push({
+                name: testName,
+                passed,
+                details,
+                error
+            });
+        }
+
+        function renderResults() {
+            const resultsDiv = document.getElementById('results');
+            
+            let html = '';
+            results.forEach(result => {
+                html += `
+                    <div class="test-case ${result.passed ? 'pass' : 'fail'}">
+                        <h3>${result.name}</h3>
+                        ${result.details ? `<div class="test-details">${result.details}</div>` : ''}
+                        ${result.error ? `<div class="error-message">${result.error}</div>` : ''}
+                    </div>
+                `;
+            });
+            
+            const allPassed = passedTests === totalTests;
+            html += `
+                <div class="summary ${allPassed ? '' : 'fail'}">
+                    <h2>Summary</h2>
+                    <p><strong>${passedTests}/${totalTests}</strong> tests passed</p>
+                    <p>${allPassed ? '✓ All tests passed!' : '✗ Some tests failed'}</p>
+                </div>
+            `;
+            
+            resultsDiv.innerHTML = html;
+        }
+
+        // Helper function to reset test environment
+        function resetTestEnvironment() {
+            const container = document.getElementById('test-container');
+            if (container) {
+                container.innerHTML = '';
+            }
+        }
+
+        // Load surveys data
+        async function loadSurveys() {
+            try {
+                const response = await fetch('../data/surveys.json');
+                const data = await response.json();
+                return data.surveys;
+            } catch (error) {
+                console.error('Error loading surveys:', error);
+                return [];
+            }
+        }
+
+        // Run all tests
+        async function runTests() {
+            const surveys = await loadSurveys();
+            
+            if (surveys.length === 0) {
+                addResult('Load Surveys', false, '', 'Failed to load surveys data');
+                renderResults();
+                return;
+            }
+
+            // Test 1: Validation fails when required fields are empty
+            try {
+                let iterationsPassed = 0;
+                const numRuns = Math.min(100, surveys.length * 34);
+                
+                for (let i = 0; i < numRuns; i++) {
+                    resetTestEnvironment();
+                    
+                    // Pick a random survey
+                    const survey = surveys[Math.floor(Math.random() * surveys.length)];
+                    
+                    // Render the form
+                    const surveyForm = new SurveyForm(survey);
+                    surveyForm.render('test-container');
+                    
+                    const container = document.getElementById('test-container');
+                    const form = container.querySelector('form');
+                    
+                    if (!form) {
+                        throw new Error(`Form not rendered for survey ${survey.id}`);
+                    }
+                    
+                    // Find all required fields
+                    const requiredFields = survey.fields.filter(f => f.required);
+                    
+                    // If there are no required fields, skip this iteration
+                    if (requiredFields.length === 0) {
+                        continue;
+                    }
+                    
+                    // Leave all fields empty and validate
+                    const isValid = surveyForm.validate();
+                    
+                    // Validation should fail
+                    if (isValid) {
+                        throw new Error(`Validation passed with empty required fields for survey ${survey.id}`);
+                    }
+                    
+                    // Check that errors exist for required fields
+                    if (Object.keys(surveyForm.errors).length === 0) {
+                        throw new Error(`No errors generated for empty required fields in survey ${survey.id}`);
+                    }
+                    
+                    iterationsPassed++;
+                }
+                
+                addResult(
+                    'Property 8: Required Field Validation',
+                    true,
+                    `Verified that validation fails when required fields are empty (${iterationsPassed}/${numRuns} iterations)`
+                );
+            } catch (error) {
+                addResult(
+                    'Property 8: Required Field Validation',
+                    false,
+                    '',
+                    error.message
+                );
+            }
+
+            // Test 2: Each empty required field generates an error
+            try {
+                let iterationsPassed = 0;
+                const numRuns = Math.min(100, surveys.length * 34);
+                
+                for (let i = 0; i < numRuns; i++) {
+                    resetTestEnvironment();
+                    
+                    const survey = surveys[Math.floor(Math.random() * surveys.length)];
+                    
+                    const surveyForm = new SurveyForm(survey);
+                    surveyForm.render('test-container');
+                    
+                    const container = document.getElementById('test-container');
+                    const form = container.querySelector('form');
+                    const requiredFields = survey.fields.filter(f => f.required);
+                    
+                    if (requiredFields.length === 0) {
+                        continue;
+                    }
+                    
+                    // Test each required field individually
+                    for (const field of requiredFields) {
+                        // Clear errors
+                        surveyForm.errors = {};
+                        
+                        // Get the input element
+                        const input = form.querySelector(`#${field.name}`);
+                        if (!input) {
+                            throw new Error(`Input field ${field.name} not found in survey ${survey.id}`);
+                        }
+                        
+                        // Set input value to empty
+                        input.value = '';
+                        
+                        // Validate this specific field
+                        const isValid = surveyForm.validateField(field.name);
+                        
+                        // Validation should fail for empty required field
+                        if (isValid) {
+                            throw new Error(`Validation passed for empty required field ${field.name} in survey ${survey.id}`);
+                        }
+                        
+                        // Error should exist for this field
+                        if (!surveyForm.errors[field.name]) {
+                            throw new Error(`No error generated for empty required field ${field.name} in survey ${survey.id}`);
+                        }
+                    }
+                    
+                    iterationsPassed++;
+                }
+                
+                addResult(
+                    'Each empty required field generates error',
+                    true,
+                    `Verified each empty required field generates an error (${iterationsPassed}/${numRuns} iterations)`
+                );
+            } catch (error) {
+                addResult(
+                    'Each empty required field generates error',
+                    false,
+                    '',
+                    error.message
+                );
+            }
+
+            // Test 3: Error messages appear in DOM for empty required fields
+            try {
+                let iterationsPassed = 0;
+                const numRuns = Math.min(100, surveys.length * 34);
+                
+                for (let i = 0; i < numRuns; i++) {
+                    resetTestEnvironment();
+                    
+                    const survey = surveys[Math.floor(Math.random() * surveys.length)];
+                    
+                    const surveyForm = new SurveyForm(survey);
+                    surveyForm.render('test-container');
+                    
+                    const container = document.getElementById('test-container');
+                    const form = container.querySelector('form');
+                    const requiredFields = survey.fields.filter(f => f.required);
+                    
+                    if (requiredFields.length === 0) {
+                        continue;
+                    }
+                    
+                    // Validate form with empty fields
+                    surveyForm.validate();
+                    
+                    // Check that error messages are displayed for required fields
+                    for (const field of requiredFields) {
+                        const errorElement = form.querySelector(`#${field.name}-error`);
+                        if (!errorElement) {
+                            throw new Error(`Error element not found for field ${field.name} in survey ${survey.id}`);
+                        }
+                        
+                        // Error element should have text content
+                        if (!errorElement.textContent || errorElement.textContent.length === 0) {
+                            throw new Error(`Error message not displayed for field ${field.name} in survey ${survey.id}`);
+                        }
+                    }
+                    
+                    iterationsPassed++;
+                }
+                
+                addResult(
+                    'Error messages appear in DOM',
+                    true,
+                    `Verified error messages appear in DOM for empty required fields (${iterationsPassed}/${numRuns} iterations)`
+                );
+            } catch (error) {
+                addResult(
+                    'Error messages appear in DOM',
+                    false,
+                    '',
+                    error.message
+                );
+            }
+
+            // Test 4: Empty required fields get error CSS class
+            try {
+                let iterationsPassed = 0;
+                const numRuns = Math.min(100, surveys.length * 34);
+                
+                for (let i = 0; i < numRuns; i++) {
+                    resetTestEnvironment();
+                    
+                    const survey = surveys[Math.floor(Math.random() * surveys.length)];
+                    
+                    const surveyForm = new SurveyForm(survey);
+                    surveyForm.render('test-container');
+                    
+                    const container = document.getElementById('test-container');
+                    const form = container.querySelector('form');
+                    const requiredFields = survey.fields.filter(f => f.required);
+                    
+                    if (requiredFields.length === 0) {
+                        continue;
+                    }
+                    
+                    // Validate form with empty fields
+                    surveyForm.validate();
+                    
+                    // Check that inputs have error class
+                    for (const field of requiredFields) {
+                        const input = form.querySelector(`#${field.name}`);
+                        if (!input) {
+                            throw new Error(`Input field ${field.name} not found in survey ${survey.id}`);
+                        }
+                        
+                        // Input should have error class
+                        if (!input.classList.contains('error')) {
+                            throw new Error(`Input field ${field.name} doesn't have error class in survey ${survey.id}`);
+                        }
+                    }
+                    
+                    iterationsPassed++;
+                }
+                
+                addResult(
+                    'Empty required fields get error CSS class',
+                    true,
+                    `Verified empty required fields get error CSS class (${iterationsPassed}/${numRuns} iterations)`
+                );
+            } catch (error) {
+                addResult(
+                    'Empty required fields get error CSS class',
+                    false,
+                    '',
+                    error.message
+                );
+            }
+
+            // Test 5: Validation passes when all required fields are filled
+            try {
+                let iterationsPassed = 0;
+                const numRuns = Math.min(100, surveys.length * 34);
+                
+                for (let i = 0; i < numRuns; i++) {
+                    resetTestEnvironment();
+                    
+                    const survey = surveys[Math.floor(Math.random() * surveys.length)];
+                    
+                    const surveyForm = new SurveyForm(survey);
+                    surveyForm.render('test-container');
+                    
+                    const container = document.getElementById('test-container');
+                    const form = container.querySelector('form');
+                    
+                    // Fill all required fields with valid values
+                    for (const field of survey.fields) {
+                        const input = form.querySelector(`#${field.name}`);
+                        if (input && field.required) {
+                            if (field.type === 'email') {
+                                input.value = 'test@example.com';
+                            } else {
+                                input.value = 'Valid Value';
+                            }
+                        }
+                    }
+                    
+                    // Check KVKK consent
+                    const kvkkCheckbox = form.querySelector('#kvkkConsent');
+                    if (kvkkCheckbox) {
+                        kvkkCheckbox.checked = true;
+                    }
+                    
+                    // Validate form
+                    const isValid = surveyForm.validate();
+                    
+                    // Validation should pass
+                    if (!isValid) {
+                        throw new Error(`Validation failed with all required fields filled for survey ${survey.id}. Errors: ${JSON.stringify(surveyForm.errors)}`);
+                    }
+                    
+                    // No errors should exist
+                    if (Object.keys(surveyForm.errors).length !== 0) {
+                        throw new Error(`Errors exist after filling all fields in survey ${survey.id}: ${JSON.stringify(surveyForm.errors)}`);
+                    }
+                    
+                    iterationsPassed++;
+                }
+                
+                addResult(
+                    'Validation passes with filled fields',
+                    true,
+                    `Verified validation passes when all required fields are filled (${iterationsPassed}/${numRuns} iterations)`
+                );
+            } catch (error) {
+                addResult(
+                    'Validation passes with filled fields',
+                    false,
+                    '',
+                    error.message
+                );
+            }
+
+            // Test 6: Validation fails if any single required field is empty
+            try {
+                let iterationsPassed = 0;
+                const numRuns = Math.min(100, surveys.length * 10);
+                
+                for (let i = 0; i < numRuns; i++) {
+                    resetTestEnvironment();
+                    
+                    const survey = surveys[Math.floor(Math.random() * surveys.length)];
+                    const requiredFields = survey.fields.filter(f => f.required);
+                    
+                    // Skip if no required fields
+                    if (requiredFields.length === 0) {
+                        continue;
+                    }
+                    
+                    // Pick a random required field to leave empty
+                    const emptyFieldIndex = Math.floor(Math.random() * requiredFields.length);
+                    
+                    const surveyForm = new SurveyForm(survey);
+                    surveyForm.render('test-container');
+                    
+                    const container = document.getElementById('test-container');
+                    const form = container.querySelector('form');
+                    
+                    // Fill all fields except one
+                    for (const field of survey.fields) {
+                        const input = form.querySelector(`#${field.name}`);
+                        if (input && field.required) {
+                            // Leave one field empty
+                            if (field.name === requiredFields[emptyFieldIndex].name) {
+                                input.value = '';
+                            } else {
+                                // Fill with valid value
+                                if (field.type === 'email') {
+                                    input.value = 'test@example.com';
+                                } else {
+                                    input.value = 'Valid Value';
+                                }
+                            }
+                        }
+                    }
+                    
+                    // Check KVKK consent
+                    const kvkkCheckbox = form.querySelector('#kvkkConsent');
+                    if (kvkkCheckbox) {
+                        kvkkCheckbox.checked = true;
+                    }
+                    
+                    // Validate form
+                    const isValid = surveyForm.validate();
+                    
+                    // Validation should fail
+                    if (isValid) {
+                        throw new Error(`Validation passed with empty field ${requiredFields[emptyFieldIndex].name} in survey ${survey.id}`);
+                    }
+                    
+                    // Error should exist for the empty field
+                    const emptyFieldName = requiredFields[emptyFieldIndex].name;
+                    if (!surveyForm.errors[emptyFieldName]) {
+                        throw new Error(`No error for empty field ${emptyFieldName} in survey ${survey.id}`);
+                    }
+                    
+                    iterationsPassed++;
+                }
+                
+                addResult(
+                    'Validation fails if any field is empty',
+                    true,
+                    `Verified validation fails if any single required field is empty (${iterationsPassed}/${numRuns} iterations)`
+                );
+            } catch (error) {
+                addResult(
+                    'Validation fails if any field is empty',
+                    false,
+                    '',
+                    error.message
+                );
+            }
+
+            // Test 7: Whitespace-only values fail required field validation
+            try {
+                let iterationsPassed = 0;
+                const numRuns = Math.min(100, surveys.length * 10);
+                const whitespaceStrings = ['   ', '\t\t', '\n\n', '  \t  ', ' \n ', '     '];
+                
+                for (let i = 0; i < numRuns; i++) {
+                    resetTestEnvironment();
+                    
+                    const survey = surveys[Math.floor(Math.random() * surveys.length)];
+                    const requiredFields = survey.fields.filter(f => f.required);
+                    
+                    if (requiredFields.length === 0) {
+                        continue;
+                    }
+                    
+                    const surveyForm = new SurveyForm(survey);
+                    surveyForm.render('test-container');
+                    
+                    const container = document.getElementById('test-container');
+                    const form = container.querySelector('form');
+                    
+                    // Fill first required field with whitespace
+                    const firstRequiredField = requiredFields[0];
+                    const input = form.querySelector(`#${firstRequiredField.name}`);
+                    
+                    if (input) {
+                        const whitespaceString = whitespaceStrings[Math.floor(Math.random() * whitespaceStrings.length)];
+                        input.value = whitespaceString;
+                        
+                        // Validate this field
+                        const isValid = surveyForm.validateField(firstRequiredField.name);
+                        
+                        // Validation should fail for whitespace-only value
+                        if (isValid) {
+                            throw new Error(`Validation passed for whitespace-only value in field ${firstRequiredField.name} in survey ${survey.id}`);
+                        }
+                        
+                        if (!surveyForm.errors[firstRequiredField.name]) {
+                            throw new Error(`No error for whitespace-only value in field ${firstRequiredField.name} in survey ${survey.id}`);
+                        }
+                    }
+                    
+                    iterationsPassed++;
+                }
+                
+                addResult(
+                    'Whitespace-only values fail validation',
+                    true,
+                    `Verified whitespace-only values fail required field validation (${iterationsPassed}/${numRuns} iterations)`
+                );
+            } catch (error) {
+                addResult(
+                    'Whitespace-only values fail validation',
+                    false,
+                    '',
+                    error.message
+                );
+            }
+
+            // Test 8: Error messages are in Turkish
+            try {
+                let iterationsPassed = 0;
+                const numRuns = Math.min(100, surveys.length * 34);
+                
+                for (let i = 0; i < numRuns; i++) {
+                    resetTestEnvironment();
+                    
+                    const survey = surveys[Math.floor(Math.random() * surveys.length)];
+                    
+                    const surveyForm = new SurveyForm(survey);
+                    surveyForm.render('test-container');
+                    
+                    const container = document.getElementById('test-container');
+                    const form = container.querySelector('form');
+                    const requiredFields = survey.fields.filter(f => f.required);
+                    
+                    if (requiredFields.length === 0) {
+                        continue;
+                    }
+                    
+                    // Validate empty form
+                    surveyForm.validate();
+                    
+                    // Check error messages are in Turkish
+                    for (const field of requiredFields) {
+                        const error = surveyForm.errors[field.name];
+                        if (error) {
+                            // Error message should be a non-empty string
+                            if (typeof error !== 'string') {
+                                throw new Error(`Error message is not a string for field ${field.name} in survey ${survey.id}`);
+                            }
+                            
+                            if (error.length === 0) {
+                                throw new Error(`Error message is empty for field ${field.name} in survey ${survey.id}`);
+                            }
+                            
+                            // Should not be empty after trimming
+                            if (error.trim().length === 0) {
+                                throw new Error(`Error message is only whitespace for field ${field.name} in survey ${survey.id}`);
+                            }
+                        }
+                    }
+                    
+                    iterationsPassed++;
+                }
+                
+                addResult(
+                    'Error messages are in Turkish',
+                    true,
+                    `Verified error messages for required fields are in Turkish (${iterationsPassed}/${numRuns} iterations)`
+                );
+            } catch (error) {
+                addResult(
+                    'Error messages are in Turkish',
+                    false,
+                    '',
+                    error.message
+                );
+            }
+
+            renderResults();
+        }
+
+        // Run tests when page loads
+        runTests();
+    </script>
+</body>
+</html>

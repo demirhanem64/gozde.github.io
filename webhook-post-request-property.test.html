@@ -1,0 +1,604 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Property Test: Webhook POST Request</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #f0fdfa;
+        }
+        
+        h1 {
+            color: #0891b2;
+            border-bottom: 3px solid #f97316;
+            padding-bottom: 10px;
+        }
+        
+        .test-section {
+            background: white;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .test-result {
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 5px;
+            border-left: 4px solid;
+        }
+        
+        .test-result.pass {
+            background: #d1fae5;
+            border-color: #10b981;
+            color: #065f46;
+        }
+        
+        .test-result.fail {
+            background: #fee2e2;
+            border-color: #ef4444;
+            color: #991b1b;
+        }
+        
+        .test-result.running {
+            background: #fef3c7;
+            border-color: #f59e0b;
+            color: #92400e;
+        }
+        
+        .test-name {
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        
+        .test-details {
+            font-size: 0.9em;
+            margin-top: 5px;
+            font-family: 'Courier New', monospace;
+        }
+        
+        .summary {
+            background: #0891b2;
+            color: white;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+            text-align: center;
+        }
+        
+        .summary.fail {
+            background: #ef4444;
+        }
+        
+        .property-info {
+            background: #fff7ed;
+            border-left: 4px solid #f97316;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+        
+        .property-info h3 {
+            margin-top: 0;
+            color: #ea580c;
+        }
+        
+        code {
+            background: #f1f5f9;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+        }
+    </style>
+</head>
+<body>
+    <h1>🧪 Property-Based Test: Webhook POST Request</h1>
+    
+    <div class="property-info">
+        <h3>Property 12: Webhook POST Request</h3>
+        <p><strong>Feature:</strong> gozde-eksi-portfolio-website</p>
+        <p><strong>Validates:</strong> Requirements 7.1</p>
+        <p><strong>Property Statement:</strong> <em>For any</em> valid survey form submission, the System should make an HTTP POST request to the configured webhook endpoint with the form data.</p>
+    </div>
+    
+    <div id="test-results"></div>
+    
+    <div id="summary" class="summary" style="display: none;">
+        <h2 id="summary-text"></h2>
+        <p id="summary-details"></p>
+    </div>
+
+    <script type="module">
+        import WebhookService from '../js/webhook.js';
+        
+        // Simple property-based testing framework
+        class PropertyTest {
+            constructor() {
+                this.results = [];
+                this.numRuns = 100;
+            }
+            
+            async assert(testName, propertyFn, options = {}) {
+                const runs = options.numRuns || this.numRuns;
+                
+                try {
+                    for (let i = 0; i < runs; i++) {
+                        await propertyFn(i);
+                    }
+                    this.results.push({ name: testName, passed: true, runs });
+                    return true;
+                } catch (error) {
+                    this.results.push({ 
+                        name: testName, 
+                        passed: false, 
+                        error: error.message,
+                        runs 
+                    });
+                    return false;
+                }
+            }
+            
+            expect(actual) {
+                return {
+                    toBe(expected) {
+                        if (actual !== expected) {
+                            throw new Error(`Expected ${JSON.stringify(expected)}, got ${JSON.stringify(actual)}`);
+                        }
+                    },
+                    not: {
+                        toBe(expected) {
+                            if (actual === expected) {
+                                throw new Error(`Expected not to be ${JSON.stringify(expected)}`);
+                            }
+                        }
+                    },
+                    toMatch(pattern) {
+                        if (!pattern.test(actual)) {
+                            throw new Error(`Expected ${JSON.stringify(actual)} to match pattern ${pattern}`);
+                        }
+                    },
+                    toBeDefined() {
+                        if (actual === undefined) {
+                            throw new Error('Expected value to be defined');
+                        }
+                    },
+                    toBeGreaterThan(expected) {
+                        if (actual <= expected) {
+                            throw new Error(`Expected ${actual} to be greater than ${expected}`);
+                        }
+                    }
+                };
+            }
+        }
+        
+        // Mock fetch for testing
+        class FetchMock {
+            constructor() {
+                this.calls = [];
+                this.mockResponse = null;
+            }
+            
+            reset() {
+                this.calls = [];
+                this.mockResponse = null;
+            }
+            
+            setMockResponse(response) {
+                this.mockResponse = response;
+            }
+            
+            async fetch(url, options) {
+                this.calls.push({ url, options });
+                
+                if (this.mockResponse) {
+                    return this.mockResponse;
+                }
+                
+                // Default successful response
+                return {
+                    ok: true,
+                    status: 200,
+                    json: async () => ({ success: true })
+                };
+            }
+            
+            getCallCount() {
+                return this.calls.length;
+            }
+            
+            getLastCall() {
+                return this.calls[this.calls.length - 1];
+            }
+        }
+        
+        // Generators for property-based testing
+        function randomInt(min, max) {
+            return Math.floor(Math.random() * (max - min + 1)) + min;
+        }
+        
+        function randomString(minLength, maxLength) {
+            const length = randomInt(minLength, maxLength);
+            const chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ ';
+            let result = '';
+            for (let i = 0; i < length; i++) {
+                result += chars.charAt(Math.floor(Math.random() * chars.length));
+            }
+            return result.trim() || 'test';
+        }
+        
+        function randomEmail() {
+            const username = randomString(3, 10).replace(/\s/g, '');
+            const domain = randomString(3, 10).replace(/\s/g, '');
+            return `${username}@${domain}.com`;
+        }
+        
+        function generateFormData() {
+            return {
+                firstName: randomString(2, 50),
+                lastName: randomString(2, 50),
+                departmentClass: randomString(5, 100),
+                email: randomEmail(),
+                kvkkConsent: true
+            };
+        }
+        
+        // Test runner
+        async function runTests() {
+            const resultsDiv = document.getElementById('test-results');
+            const pt = new PropertyTest();
+            const fetchMock = new FetchMock();
+            
+            // Override global fetch
+            const originalFetch = window.fetch;
+            window.fetch = fetchMock.fetch.bind(fetchMock);
+            
+            // Test 1: For any valid form data, sendSurveyData makes a POST request
+            resultsDiv.innerHTML += createTestResult(
+                'Test 1: For any valid form data, sendSurveyData makes a POST request',
+                null,
+                'Running 100 iterations...'
+            );
+            
+            const test1Passed = await pt.assert(
+                'sendSurveyData makes POST request',
+                async (iteration) => {
+                    fetchMock.reset();
+                    fetchMock.setMockResponse({
+                        ok: true,
+                        status: 200,
+                        json: async () => ({ success: true })
+                    });
+                    
+                    const surveyNumber = randomInt(1, 100);
+                    const formData = generateFormData();
+                    
+                    const webhookService = new WebhookService('https://demirhanem.com.tr/webhook');
+                    await webhookService.sendSurveyData(surveyNumber, formData);
+                    
+                    // Verify fetch was called
+                    pt.expect(fetchMock.getCallCount()).toBe(1);
+                    
+                    // Verify POST method
+                    const lastCall = fetchMock.getLastCall();
+                    pt.expect(lastCall.options.method).toBe('POST');
+                }
+            );
+            
+            updateTestResult(0, test1Passed, pt.results[0]);
+            
+            // Test 2: POST request is sent to correct webhook URL
+            resultsDiv.innerHTML += createTestResult(
+                'Test 2: POST request is sent to correct webhook URL',
+                null,
+                'Running 100 iterations...'
+            );
+            
+            const test2Passed = await pt.assert(
+                'POST request to correct URL',
+                async (iteration) => {
+                    fetchMock.reset();
+                    fetchMock.setMockResponse({
+                        ok: true,
+                        status: 200,
+                        json: async () => ({ success: true })
+                    });
+                    
+                    const surveyNumber = randomInt(1, 100);
+                    const formData = generateFormData();
+                    
+                    const webhookService = new WebhookService('https://demirhanem.com.tr/webhook');
+                    await webhookService.sendSurveyData(surveyNumber, formData);
+                    
+                    const lastCall = fetchMock.getLastCall();
+                    const expectedUrl = `https://demirhanem.com.tr/webhook/gozdeanket${surveyNumber}`;
+                    pt.expect(lastCall.url).toBe(expectedUrl);
+                }
+            );
+            
+            updateTestResult(1, test2Passed, pt.results[1]);
+            
+            // Test 3: POST request includes Content-Type: application/json header
+            resultsDiv.innerHTML += createTestResult(
+                'Test 3: POST request includes correct Content-Type header',
+                null,
+                'Running 100 iterations...'
+            );
+            
+            const test3Passed = await pt.assert(
+                'Correct Content-Type header',
+                async (iteration) => {
+                    fetchMock.reset();
+                    fetchMock.setMockResponse({
+                        ok: true,
+                        status: 200,
+                        json: async () => ({ success: true })
+                    });
+                    
+                    const surveyNumber = randomInt(1, 100);
+                    const formData = generateFormData();
+                    
+                    const webhookService = new WebhookService('https://demirhanem.com.tr/webhook');
+                    await webhookService.sendSurveyData(surveyNumber, formData);
+                    
+                    const lastCall = fetchMock.getLastCall();
+                    pt.expect(lastCall.options.headers).toBeDefined();
+                    pt.expect(lastCall.options.headers['Content-Type']).toBe('application/json');
+                }
+            );
+            
+            updateTestResult(2, test3Passed, pt.results[2]);
+            
+            // Test 4: POST request body is valid JSON
+            resultsDiv.innerHTML += createTestResult(
+                'Test 4: POST request body is valid JSON',
+                null,
+                'Running 100 iterations...'
+            );
+            
+            const test4Passed = await pt.assert(
+                'Valid JSON body',
+                async (iteration) => {
+                    fetchMock.reset();
+                    fetchMock.setMockResponse({
+                        ok: true,
+                        status: 200,
+                        json: async () => ({ success: true })
+                    });
+                    
+                    const surveyNumber = randomInt(1, 100);
+                    const formData = generateFormData();
+                    
+                    const webhookService = new WebhookService('https://demirhanem.com.tr/webhook');
+                    await webhookService.sendSurveyData(surveyNumber, formData);
+                    
+                    const lastCall = fetchMock.getLastCall();
+                    
+                    // Body should be a string
+                    if (typeof lastCall.options.body !== 'string') {
+                        throw new Error('Body is not a string');
+                    }
+                    
+                    // Body should be parseable as JSON
+                    let parsedBody;
+                    try {
+                        parsedBody = JSON.parse(lastCall.options.body);
+                    } catch (e) {
+                        throw new Error('Body is not valid JSON');
+                    }
+                    
+                    // Parsed body should be an object
+                    if (typeof parsedBody !== 'object' || parsedBody === null) {
+                        throw new Error('Parsed body is not an object');
+                    }
+                }
+            );
+            
+            updateTestResult(3, test4Passed, pt.results[3]);
+            
+            // Test 5: Fetch API is invoked for any valid form data
+            resultsDiv.innerHTML += createTestResult(
+                'Test 5: Fetch API is invoked',
+                null,
+                'Running 100 iterations...'
+            );
+            
+            const test5Passed = await pt.assert(
+                'Fetch API invoked',
+                async (iteration) => {
+                    fetchMock.reset();
+                    fetchMock.setMockResponse({
+                        ok: true,
+                        status: 200,
+                        json: async () => ({ success: true })
+                    });
+                    
+                    const surveyNumber = randomInt(1, 100);
+                    const formData = generateFormData();
+                    
+                    // Before calling, fetch should not have been called
+                    pt.expect(fetchMock.getCallCount()).toBe(0);
+                    
+                    const webhookService = new WebhookService('https://demirhanem.com.tr/webhook');
+                    await webhookService.sendSurveyData(surveyNumber, formData);
+                    
+                    // After calling, fetch should have been called exactly once
+                    pt.expect(fetchMock.getCallCount()).toBe(1);
+                }
+            );
+            
+            updateTestResult(4, test5Passed, pt.results[4]);
+            
+            // Test 6: Different survey numbers result in different endpoints
+            resultsDiv.innerHTML += createTestResult(
+                'Test 6: Different survey numbers use different endpoints',
+                null,
+                'Running 100 iterations...'
+            );
+            
+            const test6Passed = await pt.assert(
+                'Different endpoints for different surveys',
+                async (iteration) => {
+                    fetchMock.reset();
+                    fetchMock.setMockResponse({
+                        ok: true,
+                        status: 200,
+                        json: async () => ({ success: true })
+                    });
+                    
+                    const surveyNumber1 = randomInt(1, 50);
+                    const surveyNumber2 = randomInt(51, 100);
+                    const formData = generateFormData();
+                    
+                    const webhookService = new WebhookService('https://demirhanem.com.tr/webhook');
+                    
+                    // Send to first survey
+                    await webhookService.sendSurveyData(surveyNumber1, formData);
+                    const url1 = fetchMock.getLastCall().url;
+                    
+                    fetchMock.reset();
+                    
+                    // Send to second survey
+                    await webhookService.sendSurveyData(surveyNumber2, formData);
+                    const url2 = fetchMock.getLastCall().url;
+                    
+                    // URLs should be different
+                    if (url1 === url2) {
+                        throw new Error(`URLs are the same: ${url1}`);
+                    }
+                }
+            );
+            
+            updateTestResult(5, test6Passed, pt.results[5]);
+            
+            // Test 7: Successful POST returns success result
+            resultsDiv.innerHTML += createTestResult(
+                'Test 7: Successful POST returns success result',
+                null,
+                'Running 100 iterations...'
+            );
+            
+            const test7Passed = await pt.assert(
+                'Success result for successful POST',
+                async (iteration) => {
+                    fetchMock.reset();
+                    const statusCode = randomInt(200, 299);
+                    fetchMock.setMockResponse({
+                        ok: true,
+                        status: statusCode,
+                        json: async () => ({ received: true })
+                    });
+                    
+                    const surveyNumber = randomInt(1, 100);
+                    const formData = generateFormData();
+                    
+                    const webhookService = new WebhookService('https://demirhanem.com.tr/webhook');
+                    const result = await webhookService.sendSurveyData(surveyNumber, formData);
+                    
+                    // Result should indicate success
+                    pt.expect(result.success).toBe(true);
+                }
+            );
+            
+            updateTestResult(6, test7Passed, pt.results[6]);
+            
+            // Test 8: Failed POST returns error result
+            resultsDiv.innerHTML += createTestResult(
+                'Test 8: Failed POST returns error result',
+                null,
+                'Running 100 iterations...'
+            );
+            
+            const test8Passed = await pt.assert(
+                'Error result for failed POST',
+                async (iteration) => {
+                    fetchMock.reset();
+                    const statusCode = randomInt(400, 599);
+                    fetchMock.setMockResponse({
+                        ok: false,
+                        status: statusCode,
+                        json: async () => ({ error: 'Server error' })
+                    });
+                    
+                    const surveyNumber = randomInt(1, 100);
+                    const formData = generateFormData();
+                    
+                    const webhookService = new WebhookService('https://demirhanem.com.tr/webhook');
+                    const result = await webhookService.sendSurveyData(surveyNumber, formData);
+                    
+                    // Result should indicate failure
+                    pt.expect(result.success).toBe(false);
+                    pt.expect(result.error).toBeDefined();
+                }
+            );
+            
+            updateTestResult(7, test8Passed, pt.results[7]);
+            
+            // Restore original fetch
+            window.fetch = originalFetch;
+            
+            // Show summary
+            const totalTests = pt.results.length;
+            const passedTests = pt.results.filter(r => r.passed).length;
+            showSummary(passedTests === totalTests, passedTests, totalTests);
+        }
+        
+        function createTestResult(name, passed, details) {
+            const status = passed === null ? 'running' : (passed ? 'pass' : 'fail');
+            const icon = passed === null ? '⏳' : (passed ? '✅' : '❌');
+            
+            return `
+                <div class="test-section">
+                    <div class="test-result ${status}">
+                        <div class="test-name">${icon} ${name}</div>
+                        <div class="test-details">${details}</div>
+                    </div>
+                </div>
+            `;
+        }
+        
+        function updateTestResult(index, passed, result) {
+            const sections = document.querySelectorAll('.test-section');
+            const section = sections[index];
+            const testResult = section.querySelector('.test-result');
+            
+            testResult.className = `test-result ${passed ? 'pass' : 'fail'}`;
+            
+            const icon = passed ? '✅' : '❌';
+            const testName = testResult.querySelector('.test-name');
+            testName.innerHTML = testName.innerHTML.replace(/^[⏳✅❌]/, icon);
+            
+            const details = passed 
+                ? `PASSED - ${result.runs} iterations completed successfully`
+                : `FAILED - ${result.error}`;
+            
+            testResult.querySelector('.test-details').textContent = details;
+        }
+        
+        function showSummary(allPassed, passed, total) {
+            const summaryDiv = document.getElementById('summary');
+            const summaryText = document.getElementById('summary-text');
+            const summaryDetails = document.getElementById('summary-details');
+            
+            summaryDiv.style.display = 'block';
+            summaryDiv.className = allPassed ? 'summary' : 'summary fail';
+            
+            if (allPassed) {
+                summaryText.textContent = '🎉 All Tests Passed!';
+                summaryDetails.textContent = `${passed} out of ${total} property tests passed`;
+            } else {
+                summaryText.textContent = '❌ Some Tests Failed';
+                summaryDetails.textContent = `${passed} out of ${total} property tests passed`;
+            }
+        }
+        
+        // Run tests when page loads
+        window.addEventListener('DOMContentLoaded', runTests);
+    </script>
+</body>
+</html>

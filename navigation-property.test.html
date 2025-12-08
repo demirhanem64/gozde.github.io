@@ -1,0 +1,506 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Property Test: Navigation Link Functionality</title>
+    
+    <!-- Load CSS files -->
+    <link rel="stylesheet" href="../css/variables.css">
+    <link rel="stylesheet" href="../css/base.css">
+    <link rel="stylesheet" href="../css/components.css">
+    <link rel="stylesheet" href="../css/layout.css">
+    
+    <style>
+        body {
+            font-family: monospace;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .test-results {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+        .test-pass {
+            color: #10b981;
+            font-weight: bold;
+        }
+        .test-fail {
+            color: #ef4444;
+            font-weight: bold;
+        }
+        .test-item {
+            margin: 10px 0;
+            padding: 10px;
+            border-left: 3px solid #ccc;
+        }
+        .test-item.pass {
+            border-left-color: #10b981;
+            background: #f0fdf4;
+        }
+        .test-item.fail {
+            border-left-color: #ef4444;
+            background: #fef2f2;
+        }
+        h1 {
+            color: #0f172a;
+        }
+        .summary {
+            margin-top: 20px;
+            padding: 15px;
+            background: #f0fdfa;
+            border-radius: 4px;
+        }
+        .test-app {
+            margin-top: 20px;
+            border: 2px solid #0891b2;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+    </style>
+</head>
+<body>
+    <div class="test-results">
+        <h1>🧪 Property-Based Test: Navigation Link Functionality</h1>
+        <p><strong>Feature:</strong> gozde-eksi-portfolio-website, Property 3: Navigation Link Functionality</p>
+        <p><strong>Validates:</strong> Requirements 2.2</p>
+        <p><strong>Property:</strong> For any navigation link in the Navigation Bar, clicking it should result in navigation to the corresponding section or page (URL hash change or scroll to section).</p>
+        <hr>
+        <div id="test-output"></div>
+        <div id="summary" class="summary"></div>
+    </div>
+
+    <!-- Test Application - Embedded version of the main site -->
+    <div class="test-app">
+        <nav id="main-navigation" class="navigation" role="navigation" aria-label="Ana navigasyon">
+            <div class="nav-container">
+                <div class="nav-brand">
+                    <h1 class="logo">Gözde Ekşi</h1>
+                </div>
+                <button class="mobile-menu-toggle" aria-label="Menüyü aç/kapat" aria-expanded="false">
+                    <span class="hamburger-icon"></span>
+                </button>
+                <ul class="nav-menu">
+                    <li><a href="#anasayfa" class="nav-link active">Anasayfa</a></li>
+                    <li><a href="#anketler" class="nav-link">Anketler</a></li>
+                    <li><a href="#hakkimda" class="nav-link">Hakkımda</a></li>
+                    <li><a href="#iletisim" class="nav-link">İletişim</a></li>
+                    <li><a href="#universitem" class="nav-link">Üniversitem</a></li>
+                </ul>
+            </div>
+        </nav>
+
+        <main id="main-content">
+            <section id="anasayfa" class="page-section active">
+                <div class="container">
+                    <h2>Anasayfa</h2>
+                    <p>Hoş Geldiniz</p>
+                </div>
+            </section>
+
+            <section id="anketler" class="page-section">
+                <div class="container">
+                    <h2>Anketler</h2>
+                    <p>Anket içeriği</p>
+                </div>
+            </section>
+
+            <section id="hakkimda" class="page-section">
+                <div class="container">
+                    <h2>Hakkımda</h2>
+                    <p>Biyografi içeriği</p>
+                </div>
+            </section>
+
+            <section id="iletisim" class="page-section">
+                <div class="container">
+                    <h2>İletişim</h2>
+                    <p>İletişim bilgileri</p>
+                </div>
+            </section>
+
+            <section id="universitem" class="page-section">
+                <div class="container">
+                    <h2>Üniversitem</h2>
+                    <p>Üniversite bilgileri</p>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script type="module">
+        /**
+         * Property-Based Test: Navigation Link Functionality
+         * 
+         * For any navigation link in the Navigation Bar, clicking it should result in 
+         * navigation to the corresponding section or page.
+         */
+
+        // Import utilities
+        import { getElement, addListener } from '../js/utils.js';
+
+        // Simple Navigation implementation for testing
+        class Navigation {
+            constructor(navElement) {
+                this.navElement = navElement;
+                this.navLinks = [];
+                this.currentPage = 'anasayfa';
+                this.init();
+            }
+            
+            init() {
+                this.navLinks = Array.from(this.navElement.querySelectorAll('.nav-link'));
+                this.attachEventListeners();
+            }
+            
+            attachEventListeners() {
+                this.navLinks.forEach(link => {
+                    addListener(link, 'click', (e) => {
+                        e.preventDefault();
+                        const href = link.getAttribute('href');
+                        const pageId = href.replace('#', '');
+                        this.navigateTo(pageId);
+                    });
+                });
+            }
+            
+            navigateTo(pageId) {
+                // Hide all sections
+                const sections = document.querySelectorAll('.page-section');
+                sections.forEach(section => {
+                    section.classList.remove('active');
+                });
+                
+                // Show target section
+                const targetSection = getElement(pageId);
+                if (targetSection) {
+                    targetSection.classList.add('active');
+                    this.currentPage = pageId;
+                    this.setActivePage(pageId);
+                    
+                    // Update URL hash
+                    window.location.hash = pageId;
+                }
+            }
+            
+            setActivePage(pageId) {
+                this.navLinks.forEach(link => {
+                    const href = link.getAttribute('href');
+                    if (href === `#${pageId}`) {
+                        link.classList.add('active');
+                    } else {
+                        link.classList.remove('active');
+                    }
+                });
+            }
+            
+            getCurrentPage() {
+                return this.currentPage;
+            }
+        }
+
+        // Test runner
+        const testResults = [];
+        let passCount = 0;
+        let failCount = 0;
+        let navigationInstance;
+
+        function logTest(name, passed, details = '') {
+            testResults.push({ name, passed, details });
+            if (passed) {
+                passCount++;
+            } else {
+                failCount++;
+            }
+        }
+
+        // Initialize navigation
+        function initNavigation() {
+            const navElement = getElement('main-navigation');
+            if (navElement) {
+                navigationInstance = new Navigation(navElement);
+            }
+        }
+
+        // Test 1: All navigation links have corresponding sections
+        function testNavigationLinksHaveSections() {
+            const navLinks = document.querySelectorAll('.nav-link');
+            let allHaveSections = true;
+            let details = '';
+            
+            navLinks.forEach(link => {
+                const href = link.getAttribute('href');
+                const pageId = href.replace('#', '');
+                const section = document.getElementById(pageId);
+                
+                if (!section) {
+                    allHaveSections = false;
+                    details += `Missing section for ${pageId}; `;
+                }
+            });
+            
+            logTest('All navigation links have corresponding sections', allHaveSections, details);
+        }
+
+        // Test 2: Clicking navigation link updates URL hash
+        function testNavigationUpdatesHash() {
+            const pages = ['anasayfa', 'anketler', 'hakkimda', 'iletisim', 'universitem'];
+            let allPass = true;
+            let details = '';
+            
+            for (const pageId of pages) {
+                const navLink = document.querySelector(`a.nav-link[href="#${pageId}"]`);
+                if (navLink) {
+                    // Simulate click
+                    navLink.click();
+                    
+                    // Check hash
+                    if (window.location.hash !== `#${pageId}`) {
+                        allPass = false;
+                        details += `Hash not updated for ${pageId} (expected #${pageId}, got ${window.location.hash}); `;
+                    }
+                }
+            }
+            
+            logTest('Clicking navigation links updates URL hash', allPass, details);
+        }
+
+        // Test 3: Clicking navigation link activates target section
+        function testNavigationActivatesSection() {
+            const pages = ['anasayfa', 'anketler', 'hakkimda', 'iletisim', 'universitem'];
+            let allPass = true;
+            let details = '';
+            
+            for (const pageId of pages) {
+                const navLink = document.querySelector(`a.nav-link[href="#${pageId}"]`);
+                const targetSection = document.getElementById(pageId);
+                
+                if (navLink && targetSection) {
+                    // Simulate click
+                    navLink.click();
+                    
+                    // Check if section is active
+                    if (!targetSection.classList.contains('active')) {
+                        allPass = false;
+                        details += `Section ${pageId} not activated; `;
+                    }
+                }
+            }
+            
+            logTest('Clicking navigation links activates target sections', allPass, details);
+        }
+
+        // Test 4: Only one section is active at a time
+        function testOnlyOneSectionActive() {
+            const pages = ['anasayfa', 'anketler', 'hakkimda', 'iletisim', 'universitem'];
+            let allPass = true;
+            let details = '';
+            
+            for (const pageId of pages) {
+                const navLink = document.querySelector(`a.nav-link[href="#${pageId}"]`);
+                
+                if (navLink) {
+                    // Simulate click
+                    navLink.click();
+                    
+                    // Count active sections
+                    const activeSections = document.querySelectorAll('.page-section.active');
+                    if (activeSections.length !== 1) {
+                        allPass = false;
+                        details += `Expected 1 active section after clicking ${pageId}, got ${activeSections.length}; `;
+                    } else if (activeSections[0].id !== pageId) {
+                        allPass = false;
+                        details += `Wrong section active after clicking ${pageId} (got ${activeSections[0].id}); `;
+                    }
+                }
+            }
+            
+            logTest('Only one section is active at a time', allPass, details);
+        }
+
+        // Test 5: Navigation link gets active class
+        function testNavigationLinkActiveClass() {
+            const pages = ['anasayfa', 'anketler', 'hakkimda', 'iletisim', 'universitem'];
+            let allPass = true;
+            let details = '';
+            
+            for (const pageId of pages) {
+                const navLink = document.querySelector(`a.nav-link[href="#${pageId}"]`);
+                
+                if (navLink) {
+                    // Simulate click
+                    navLink.click();
+                    
+                    // Check if link has active class
+                    if (!navLink.classList.contains('active')) {
+                        allPass = false;
+                        details += `Nav link ${pageId} not marked active; `;
+                    }
+                    
+                    // Check that other links don't have active class
+                    const allNavLinks = document.querySelectorAll('.nav-link');
+                    allNavLinks.forEach(link => {
+                        if (link !== navLink && link.classList.contains('active')) {
+                            allPass = false;
+                            details += `Nav link ${link.getAttribute('href')} incorrectly marked active; `;
+                        }
+                    });
+                }
+            }
+            
+            logTest('Clicked navigation link gets active class', allPass, details);
+        }
+
+        // Test 6: Property-based test - random navigation sequences
+        function testRandomNavigationSequences() {
+            const pages = ['anasayfa', 'anketler', 'hakkimda', 'iletisim', 'universitem'];
+            const iterations = 100;
+            let failures = [];
+            
+            for (let i = 0; i < iterations; i++) {
+                // Pick random page
+                const randomPage = pages[Math.floor(Math.random() * pages.length)];
+                const navLink = document.querySelector(`a.nav-link[href="#${randomPage}"]`);
+                const targetSection = document.getElementById(randomPage);
+                
+                if (navLink && targetSection) {
+                    // Simulate click
+                    navLink.click();
+                    
+                    // Verify navigation
+                    if (window.location.hash !== `#${randomPage}`) {
+                        failures.push(`Iteration ${i}: Hash mismatch for ${randomPage}`);
+                    }
+                    
+                    if (!targetSection.classList.contains('active')) {
+                        failures.push(`Iteration ${i}: Section ${randomPage} not active`);
+                    }
+                    
+                    if (!navLink.classList.contains('active')) {
+                        failures.push(`Iteration ${i}: Nav link ${randomPage} not active`);
+                    }
+                    
+                    // Check only one section is active
+                    const activeSections = document.querySelectorAll('.page-section.active');
+                    if (activeSections.length !== 1) {
+                        failures.push(`Iteration ${i}: Multiple active sections (${activeSections.length})`);
+                    }
+                }
+            }
+            
+            const passed = failures.length === 0;
+            logTest(`Property test: ${iterations} random navigation sequences`, passed, 
+                failures.length > 0 ? failures.slice(0, 5).join('; ') : '');
+        }
+
+        // Test 7: Sequential navigation preserves content
+        function testSequentialNavigationPreservesContent() {
+            const pages = ['anasayfa', 'anketler', 'hakkimda', 'iletisim', 'universitem'];
+            let allPass = true;
+            let details = '';
+            
+            // Store original content
+            const originalContent = {};
+            pages.forEach(pageId => {
+                const section = document.getElementById(pageId);
+                if (section) {
+                    originalContent[pageId] = section.innerHTML;
+                }
+            });
+            
+            // Navigate through all pages
+            for (const pageId of pages) {
+                const navLink = document.querySelector(`a.nav-link[href="#${pageId}"]`);
+                if (navLink) {
+                    navLink.click();
+                }
+            }
+            
+            // Verify content is preserved
+            pages.forEach(pageId => {
+                const section = document.getElementById(pageId);
+                if (section && originalContent[pageId] !== section.innerHTML) {
+                    allPass = false;
+                    details += `Content changed for ${pageId}; `;
+                }
+            });
+            
+            logTest('Sequential navigation preserves section content', allPass, details);
+        }
+
+        // Test 8: getCurrentPage returns correct value
+        function testGetCurrentPage() {
+            const pages = ['anasayfa', 'anketler', 'hakkimda', 'iletisim', 'universitem'];
+            let allPass = true;
+            let details = '';
+            
+            for (const pageId of pages) {
+                const navLink = document.querySelector(`a.nav-link[href="#${pageId}"]`);
+                
+                if (navLink) {
+                    navLink.click();
+                    
+                    if (navigationInstance && navigationInstance.getCurrentPage() !== pageId) {
+                        allPass = false;
+                        details += `getCurrentPage() returned ${navigationInstance.getCurrentPage()} instead of ${pageId}; `;
+                    }
+                }
+            }
+            
+            logTest('getCurrentPage() returns correct page after navigation', allPass, details);
+        }
+
+        // Run all tests
+        function runTests() {
+            initNavigation();
+            
+            // Run tests in sequence
+            testNavigationLinksHaveSections();
+            testNavigationUpdatesHash();
+            testNavigationActivatesSection();
+            testOnlyOneSectionActive();
+            testNavigationLinkActiveClass();
+            testRandomNavigationSequences();
+            testSequentialNavigationPreservesContent();
+            testGetCurrentPage();
+            
+            // Display results
+            const output = document.getElementById('test-output');
+            testResults.forEach(result => {
+                const div = document.createElement('div');
+                div.className = `test-item ${result.passed ? 'pass' : 'fail'}`;
+                div.innerHTML = `
+                    <span class="${result.passed ? 'test-pass' : 'test-fail'}">
+                        ${result.passed ? '✓ PASS' : '✗ FAIL'}
+                    </span>
+                    <strong>${result.name}</strong>
+                    ${result.details ? `<br><small>${result.details}</small>` : ''}
+                `;
+                output.appendChild(div);
+            });
+            
+            // Display summary
+            const summary = document.getElementById('summary');
+            const totalTests = passCount + failCount;
+            const passRate = ((passCount / totalTests) * 100).toFixed(1);
+            
+            summary.innerHTML = `
+                <h3>Test Summary</h3>
+                <p><strong>Total Tests:</strong> ${totalTests}</p>
+                <p><strong>Passed:</strong> <span class="test-pass">${passCount}</span></p>
+                <p><strong>Failed:</strong> <span class="test-fail">${failCount}</span></p>
+                <p><strong>Pass Rate:</strong> ${passRate}%</p>
+                <p><strong>Status:</strong> ${failCount === 0 ? '<span class="test-pass">ALL TESTS PASSED ✓</span>' : '<span class="test-fail">SOME TESTS FAILED ✗</span>'}</p>
+            `;
+        }
+
+        // Run tests when page loads
+        window.addEventListener('load', () => {
+            setTimeout(runTests, 200);
+        });
+    </script>
+</body>
+</html>

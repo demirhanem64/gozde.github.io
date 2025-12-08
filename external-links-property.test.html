@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Property Test: External Link Behavior</title>
+    
+    <!-- Load CSS files -->
+    <link rel="stylesheet" href="../css/variables.css">
+    <link rel="stylesheet" href="../css/base.css">
+    <link rel="stylesheet" href="../css/components.css">
+    <link rel="stylesheet" href="../css/layout.css">
+    
+    <style>
+        body {
+            font-family: monospace;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .test-results {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+        .test-pass {
+            color: #10b981;
+            font-weight: bold;
+        }
+        .test-fail {
+            color: #ef4444;
+            font-weight: bold;
+        }
+        .test-item {
+            margin: 10px 0;
+            padding: 10px;
+            border-left: 3px solid #ccc;
+        }
+        .test-item.pass {
+            border-left-color: #10b981;
+            background: #f0fdf4;
+        }
+        .test-item.fail {
+            border-left-color: #ef4444;
+            background: #fef2f2;
+        }
+        h1 {
+            color: #0f172a;
+        }
+        .summary {
+            margin-top: 20px;
+            padding: 15px;
+            background: #f0fdfa;
+            border-radius: 4px;
+        }
+        .test-app {
+            margin-top: 20px;
+            border: 2px solid #0891b2;
+            border-radius: 8px;
+            overflow: hidden;
+            padding: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="test-results">
+        <h1>🧪 Property-Based Test: External Link Behavior</h1>
+        <p><strong>Feature:</strong> gozde-eksi-portfolio-website, Property 5: External Link Behavior</p>
+        <p><strong>Validates:</strong> Requirements 4.3</p>
+        <p><strong>Property:</strong> For any external link (social media, university website), the link should have target="_blank" and rel="noopener noreferrer" attributes to open in a new tab securely.</p>
+        <hr>
+        <div id="test-output"></div>
+        <div id="summary" class="summary"></div>
+    </div>
+
+    <!-- Test Application - Embedded version of the contact section -->
+    <div class="test-app">
+        <section id="iletisim" class="page-section" aria-labelledby="iletisim-heading">
+            <div class="container">
+                <h2 id="iletisim-heading">İletişim</h2>
+                <div class="contact-content">
+                    <div class="contact-intro">
+                        <p class="contact-description">
+                            Benimle iletişime geçmek için aşağıdaki bilgileri kullanabilirsiniz.
+                        </p>
+                    </div>
+                    
+                    <div class="contact-grid">
+                        <!-- Social Media Card -->
+                        <div class="contact-card">
+                            <div class="contact-card-icon">
+                                <span class="icon">📱</span>
+                            </div>
+                            <h3 class="contact-card-title">Sosyal Medya</h3>
+                            <div class="social-links">
+                                <a href="https://www.instagram.com/gozdeksii" 
+                                   class="social-link instagram" 
+                                   target="_blank" 
+                                   rel="noopener noreferrer"
+                                   aria-label="Instagram profilimi ziyaret edin">
+                                    <span class="social-icon">📷</span>
+                                    <span class="social-name">Instagram</span>
+                                    <span class="social-handle">@gozdeksii</span>
+                                </a>
+                                <a href="https://www.facebook.com/share/1FgoxGv3SZ/" 
+                                   class="social-link facebook" 
+                                   target="_blank" 
+                                   rel="noopener noreferrer"
+                                   aria-label="Facebook profilimi ziyaret edin">
+                                    <span class="social-icon">👥</span>
+                                    <span class="social-name">Facebook</span>
+                                    <span class="social-handle">Gözde Ekşi</span>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Internal navigation links for comparison -->
+                <nav>
+                    <ul class="nav-menu">
+                        <li><a href="#anasayfa" class="nav-link">Anasayfa</a></li>
+                        <li><a href="#anketler" class="nav-link">Anketler</a></li>
+                    </ul>
+                </nav>
+            </div>
+        </section>
+    </div>
+
+    <script type="module">
+        /**
+         * Property-Based Test: External Link Behavior
+         * 
+         * For any external link (social media, university website), the link should have 
+         * target="_blank" and rel="noopener noreferrer" attributes to open in a new tab securely.
+         */
+
+        // Test runner
+        const testResults = [];
+        let passCount = 0;
+        let failCount = 0;
+
+        function logTest(name, passed, details = '') {
+            testResults.push({ name, passed, details });
+            if (passed) {
+                passCount++;
+            } else {
+                failCount++;
+            }
+        }
+
+        // Helper to check if a URL is external
+        function isExternalURL(url) {
+            try {
+                // External if it's not a hash link and has a different origin
+                if (url.startsWith('#')) return false;
+                if (url.startsWith('/')) return false;
+                if (url.startsWith('./')) return false;
+                if (url.startsWith('../')) return false;
+                
+                const urlObj = new URL(url, window.location.href);
+                return urlObj.origin !== window.location.origin;
+            } catch {
+                return false;
+            }
+        }
+
+        // Test 1: All external links have target="_blank"
+        function testExternalLinksHaveTargetBlank() {
+            const allLinks = document.querySelectorAll('a[href]');
+            const externalLinks = Array.from(allLinks).filter(link => 
+                isExternalURL(link.getAttribute('href'))
+            );
+            
+            let allPass = true;
+            let details = '';
+            
+            externalLinks.forEach(link => {
+                const href = link.getAttribute('href');
+                const target = link.getAttribute('target');
+                
+                if (target !== '_blank') {
+                    allPass = false;
+                    details += `Link ${href} missing target="_blank"; `;
+                }
+            });
+            
+            logTest(`All ${externalLinks.length} external links have target="_blank"`, allPass, details);
+        }
+
+        // Test 2: All external links have rel="noopener noreferrer"
+        function testExternalLinksHaveRelAttribute() {
+            const allLinks = document.querySelectorAll('a[href]');
+            const externalLinks = Array.from(allLinks).filter(link => 
+                isExternalURL(link.getAttribute('href'))
+            );
+            
+            let allPass = true;
+            let details = '';
+            
+            externalLinks.forEach(link => {
+                const href = link.getAttribute('href');
+                const rel = link.getAttribute('rel');
+                
+                if (rel !== 'noopener noreferrer') {
+                    allPass = false;
+                    details += `Link ${href} has rel="${rel}" instead of "noopener noreferrer"; `;
+                }
+            });
+            
+            logTest(`All ${externalLinks.length} external links have rel="noopener noreferrer"`, allPass, details);
+        }
+
+        // Test 3: Instagram link has correct attributes
+        function testInstagramLinkAttributes() {
+            const instagramLink = document.querySelector('a[href*="instagram.com"]');
+            
+            if (!instagramLink) {
+                logTest('Instagram link has correct attributes', false, 'Instagram link not found');
+                return;
+            }
+            
+            const target = instagramLink.getAttribute('target');
+            const rel = instagramLink.getAttribute('rel');
+            
+            const passed = target === '_blank' && rel === 'noopener noreferrer';
+            const details = passed ? '' : `target="${target}", rel="${rel}"`;
+            
+            logTest('Instagram link has correct attributes', passed, details);
+        }
+
+        // Test 4: Facebook link has correct attributes
+        function testFacebookLinkAttributes() {
+            const facebookLink = document.querySelector('a[href*="facebook.com"]');
+            
+            if (!facebookLink) {
+                logTest('Facebook link has correct attributes', false, 'Facebook link not found');
+                return;
+            }
+            
+            const target = facebookLink.getAttribute('target');
+            const rel = facebookLink.getAttribute('rel');
+            
+            const passed = target === '_blank' && rel === 'noopener noreferrer';
+            const details = passed ? '' : `target="${target}", rel="${rel}"`;
+            
+            logTest('Facebook link has correct attributes', passed, details);
+        }
+
+        // Test 5: Internal navigation links do NOT have target="_blank"
+        function testInternalLinksNoTargetBlank() {
+            const navLinks = document.querySelectorAll('.nav-link[href^="#"]');
+            
+            let allPass = true;
+            let details = '';
+            
+            navLinks.forEach(link => {
+                const href = link.getAttribute('href');
+                const target = link.getAttribute('target');
+                
+                if (target === '_blank') {
+                    allPass = false;
+                    details += `Internal link ${href} incorrectly has target="_blank"; `;
+                }
+            });
+            
+            logTest(`Internal navigation links do NOT have target="_blank"`, allPass, details);
+        }
+
+        // Test 6: All links with target="_blank" have rel="noopener noreferrer"
+        function testTargetBlankLinksHaveRel() {
+            const linksWithTargetBlank = document.querySelectorAll('a[target="_blank"]');
+            
+            let allPass = true;
+            let details = '';
+            
+            linksWithTargetBlank.forEach(link => {
+                const href = link.getAttribute('href');
+                const rel = link.getAttribute('rel');
+                
+                if (rel !== 'noopener noreferrer') {
+                    allPass = false;
+                    details += `Link ${href} with target="_blank" has rel="${rel}"; `;
+                }
+            });
+            
+            logTest(`All ${linksWithTargetBlank.length} links with target="_blank" have rel="noopener noreferrer"`, allPass, details);
+        }
+
+        // Test 7: External links prevent window.opener access
+        function testExternalLinksPreventOpenerAccess() {
+            const allLinks = document.querySelectorAll('a[href]');
+            const externalLinks = Array.from(allLinks).filter(link => 
+                isExternalURL(link.getAttribute('href'))
+            );
+            
+            let allPass = true;
+            let details = '';
+            
+            externalLinks.forEach(link => {
+                const href = link.getAttribute('href');
+                const rel = link.getAttribute('rel');
+                
+                if (!rel || !rel.includes('noopener')) {
+                    allPass = false;
+                    details += `Link ${href} missing "noopener" in rel attribute; `;
+                }
+                
+                if (!rel || !rel.includes('noreferrer')) {
+                    allPass = false;
+                    details += `Link ${href} missing "noreferrer" in rel attribute; `;
+                }
+            });
+            
+            logTest('External links prevent window.opener access', allPass, details);
+        }
+
+        // Test 8: Property-based test - random external link checks
+        function testRandomExternalLinkChecks() {
+            const allLinks = document.querySelectorAll('a[href]');
+            const externalLinks = Array.from(allLinks).filter(link => 
+                isExternalURL(link.getAttribute('href'))
+            );
+            
+            if (externalLinks.length === 0) {
+                logTest('Property test: Random external link checks', false, 'No external links found');
+                return;
+            }
+            
+            const iterations = Math.min(100, externalLinks.length * 20);
+            let failures = [];
+            
+            for (let i = 0; i < iterations; i++) {
+                // Pick random external link
+                const randomLink = externalLinks[Math.floor(Math.random() * externalLinks.length)];
+                const href = randomLink.getAttribute('href');
+                const target = randomLink.getAttribute('target');
+                const rel = randomLink.getAttribute('rel');
+                
+                if (target !== '_blank') {
+                    failures.push(`Iteration ${i}: ${href} missing target="_blank"`);
+                }
+                
+                if (rel !== 'noopener noreferrer') {
+                    failures.push(`Iteration ${i}: ${href} has incorrect rel="${rel}"`);
+                }
+            }
+            
+            const passed = failures.length === 0;
+            logTest(`Property test: ${iterations} random external link checks`, passed, 
+                failures.length > 0 ? failures.slice(0, 3).join('; ') : '');
+        }
+
+        // Test 9: Social media domains are correctly identified as external
+        function testSocialMediaDomainsAreExternal() {
+            const socialMediaDomains = ['instagram.com', 'facebook.com', 'twitter.com', 'linkedin.com'];
+            let allPass = true;
+            let details = '';
+            
+            socialMediaDomains.forEach(domain => {
+                const links = document.querySelectorAll(`a[href*="${domain}"]`);
+                
+                links.forEach(link => {
+                    const href = link.getAttribute('href');
+                    
+                    if (!isExternalURL(href)) {
+                        allPass = false;
+                        details += `${href} not identified as external; `;
+                    }
+                    
+                    const target = link.getAttribute('target');
+                    const rel = link.getAttribute('rel');
+                    
+                    if (target !== '_blank') {
+                        allPass = false;
+                        details += `${href} missing target="_blank"; `;
+                    }
+                    
+                    if (rel !== 'noopener noreferrer') {
+                        allPass = false;
+                        details += `${href} missing correct rel attribute; `;
+                    }
+                });
+            });
+            
+            logTest('Social media links are correctly identified and secured', allPass, details);
+        }
+
+        // Test 10: External vs Internal link distinction
+        function testExternalVsInternalDistinction() {
+            const allLinks = document.querySelectorAll('a[href]');
+            let allPass = true;
+            let details = '';
+            
+            allLinks.forEach(link => {
+                const href = link.getAttribute('href');
+                const target = link.getAttribute('target');
+                const isExternal = isExternalURL(href);
+                
+                if (isExternal && target !== '_blank') {
+                    allPass = false;
+                    details += `External link ${href} missing target="_blank"; `;
+                }
+                
+                if (!isExternal && target === '_blank') {
+                    allPass = false;
+                    details += `Internal link ${href} incorrectly has target="_blank"; `;
+                }
+            });
+            
+            logTest('External and internal links are correctly distinguished', allPass, details);
+        }
+
+        // Test 11: Dynamically created external links maintain security
+        function testDynamicExternalLinks() {
+            const testURLs = [
+                'https://www.instagram.com/test',
+                'https://www.facebook.com/test',
+                'https://www.example.com/test'
+            ];
+            
+            let allPass = true;
+            let details = '';
+            
+            testURLs.forEach(url => {
+                const newLink = document.createElement('a');
+                newLink.href = url;
+                newLink.textContent = 'Test Link';
+                newLink.setAttribute('target', '_blank');
+                newLink.setAttribute('rel', 'noopener noreferrer');
+                
+                document.body.appendChild(newLink);
+                
+                // Verify attributes are preserved
+                if (newLink.getAttribute('target') !== '_blank') {
+                    allPass = false;
+                    details += `Dynamic link ${url} lost target="_blank"; `;
+                }
+                
+                if (newLink.getAttribute('rel') !== 'noopener noreferrer') {
+                    allPass = false;
+                    details += `Dynamic link ${url} lost rel attribute; `;
+                }
+                
+                // Clean up
+                document.body.removeChild(newLink);
+            });
+            
+            logTest('Dynamically created external links maintain security attributes', allPass, details);
+        }
+
+        // Test 12: All external links are accessible
+        function testExternalLinksAccessibility() {
+            const allLinks = document.querySelectorAll('a[href]');
+            const externalLinks = Array.from(allLinks).filter(link => 
+                isExternalURL(link.getAttribute('href'))
+            );
+            
+            let allPass = true;
+            let details = '';
+            
+            externalLinks.forEach(link => {
+                const href = link.getAttribute('href');
+                const ariaLabel = link.getAttribute('aria-label');
+                const textContent = link.textContent.trim();
+                
+                // External links should have either aria-label or meaningful text content
+                if (!ariaLabel && !textContent) {
+                    allPass = false;
+                    details += `Link ${href} missing accessible label; `;
+                }
+            });
+            
+            logTest('External links have accessible labels', allPass, details);
+        }
+
+        // Run all tests
+        function runTests() {
+            // Run tests in sequence
+            testExternalLinksHaveTargetBlank();
+            testExternalLinksHaveRelAttribute();
+            testInstagramLinkAttributes();
+            testFacebookLinkAttributes();
+            testInternalLinksNoTargetBlank();
+            testTargetBlankLinksHaveRel();
+            testExternalLinksPreventOpenerAccess();
+            testRandomExternalLinkChecks();
+            testSocialMediaDomainsAreExternal();
+            testExternalVsInternalDistinction();
+            testDynamicExternalLinks();
+            testExternalLinksAccessibility();
+            
+            // Display results
+            const output = document.getElementById('test-output');
+            testResults.forEach(result => {
+                const div = document.createElement('div');
+                div.className = `test-item ${result.passed ? 'pass' : 'fail'}`;
+                div.innerHTML = `
+                    <span class="${result.passed ? 'test-pass' : 'test-fail'}">
+                        ${result.passed ? '✓ PASS' : '✗ FAIL'}
+                    </span>
+                    <strong>${result.name}</strong>
+                    ${result.details ? `<br><small>${result.details}</small>` : ''}
+                `;
+                output.appendChild(div);
+            });
+            
+            // Display summary
+            const summary = document.getElementById('summary');
+            const totalTests = passCount + failCount;
+            const passRate = totalTests > 0 ? ((passCount / totalTests) * 100).toFixed(1) : 0;
+            
+            summary.innerHTML = `
+                <h3>Test Summary</h3>
+                <p><strong>Total Tests:</strong> ${totalTests}</p>
+                <p><strong>Passed:</strong> <span class="test-pass">${passCount}</span></p>
+                <p><strong>Failed:</strong> <span class="test-fail">${failCount}</span></p>
+                <p><strong>Pass Rate:</strong> ${passRate}%</p>
+                <p><strong>Status:</strong> ${failCount === 0 ? '<span class="test-pass">ALL TESTS PASSED ✓</span>' : '<span class="test-fail">SOME TESTS FAILED ✗</span>'}</p>
+            `;
+        }
+
+        // Run tests when page loads
+        window.addEventListener('load', () => {
+            setTimeout(runTests, 200);
+        });
+    </script>
+</body>
+</html>

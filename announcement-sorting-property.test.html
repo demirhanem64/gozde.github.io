@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Property Test: Announcement Sorting</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #f0fdfa;
+        }
+        
+        h1 {
+            color: #0891b2;
+            border-bottom: 3px solid #f97316;
+            padding-bottom: 10px;
+        }
+        
+        .test-section {
+            background: white;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .test-result {
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 5px;
+            border-left: 4px solid;
+        }
+        
+        .test-result.pass {
+            background: #d1fae5;
+            border-color: #10b981;
+            color: #065f46;
+        }
+        
+        .test-result.fail {
+            background: #fee2e2;
+            border-color: #ef4444;
+            color: #991b1b;
+        }
+        
+        .test-result.running {
+            background: #fef3c7;
+            border-color: #f59e0b;
+            color: #92400e;
+        }
+        
+        .test-name {
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        
+        .test-details {
+            font-size: 0.9em;
+            margin-top: 5px;
+            font-family: 'Courier New', monospace;
+        }
+        
+        .summary {
+            background: #0891b2;
+            color: white;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+            text-align: center;
+        }
+        
+        .summary.fail {
+            background: #ef4444;
+        }
+        
+        .property-info {
+            background: #fff7ed;
+            border-left: 4px solid #f97316;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+        
+        .property-info h3 {
+            margin-top: 0;
+            color: #ea580c;
+        }
+        
+        code {
+            background: #f1f5f9;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+        }
+    </style>
+</head>
+<body>
+    <h1>🧪 Property-Based Test: Announcement Sorting</h1>
+    
+    <div class="property-info">
+        <h3>Property 5: Announcement Sorting Invariant</h3>
+        <p><strong>Feature:</strong> portfolio-improvements</p>
+        <p><strong>Validates:</strong> Requirements 3.3</p>
+        <p><strong>Property Statement:</strong> <em>For any</em> list of announcements, they should always be sorted by date in descending order (newest first).</p>
+    </div>
+    
+    <div id="test-results"></div>
+    
+    <div id="summary" class="summary" style="display: none;">
+        <h2 id="summary-text"></h2>
+        <p id="summary-details"></p>
+    </div>
+
+    <script src="../js/announcements.js"></script>
+    <script>
+        // Simple property-based testing framework
+        class PropertyTest {
+            constructor() {
+                this.results = [];
+                this.numRuns = 100;
+            }
+            
+            assert(testName, propertyFn, options = {}) {
+                const runs = options.numRuns || this.numRuns;
+                
+                try {
+                    for (let i = 0; i < runs; i++) {
+                        propertyFn(i);
+                    }
+                    this.results.push({ name: testName, passed: true, runs });
+                    return true;
+                } catch (error) {
+                    this.results.push({ 
+                        name: testName, 
+                        passed: false, 
+                        error: error.message,
+                        runs 
+                    });
+                    return false;
+                }
+            }
+            
+            expect(actual) {
+                return {
+                    toBe(expected) {
+                        if (actual !== expected) {
+                            throw new Error(`Expected ${JSON.stringify(expected)}, got ${JSON.stringify(actual)}`);
+                        }
+                    },
+                    toEqual(expected) {
+                        if (JSON.stringify(actual) !== JSON.stringify(expected)) {
+                            throw new Error(`Expected ${JSON.stringify(expected)}, got ${JSON.stringify(actual)}`);
+                        }
+                    },
+                    toBeGreaterThanOrEqual(expected) {
+                        if (actual < expected) {
+                            throw new Error(`Expected ${actual} to be >= ${expected}`);
+                        }
+                    }
+                };
+            }
+        }
+        
+        // Random data generators
+        function randomString(minLength, maxLength) {
+            const length = Math.floor(Math.random() * (maxLength - minLength + 1)) + minLength;
+            const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789 ';
+            let result = '';
+            for (let i = 0; i < length; i++) {
+                result += chars.charAt(Math.floor(Math.random() * chars.length));
+            }
+            return result.trim() || 'default';
+        }
+        
+        function randomDate() {
+            const start = new Date('2020-01-01');
+            const end = new Date('2030-12-31');
+            const date = new Date(start.getTime() + Math.random() * (end.getTime() - start.getTime()));
+            return date.toISOString().split('T')[0];
+        }
+        
+        function randomTime() {
+            const hours = Math.floor(Math.random() * 24);
+            const minutes = Math.floor(Math.random() * 60);
+            return `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}`;
+        }
+        
+        function generateRandomAnnouncement() {
+            return {
+                title: randomString(5, 200),
+                date: randomDate(),
+                time: randomTime(),
+                summary: randomString(5, 150),
+                content: randomString(10, 1000),
+                isActive: Math.random() > 0.5
+            };
+        }
+        
+        // Test runner
+        async function runTests() {
+            const resultsDiv = document.getElementById('test-results');
+            const pt = new PropertyTest();
+            
+            // Test 1: Announcements are always sorted by date descending (newest first)
+            resultsDiv.innerHTML += createTestResult(
+                'Test 1: Announcements are always sorted by date descending (newest first)',
+                null,
+                'Running 100 iterations...'
+            );
+            
+            const test1Passed = pt.assert(
+                'Announcements are always sorted by date descending (newest first)',
+                (iteration) => {
+                    // Clear localStorage
+                    localStorage.clear();
+                    
+                    // Create manager and add multiple announcements
+                    const manager = new AnnouncementManager();
+                    const numAnnouncements = Math.floor(Math.random() * 14) + 2; // 2-15 announcements
+                    
+                    for (let i = 0; i < numAnnouncements; i++) {
+                        const announcementData = generateRandomAnnouncement();
+                        manager.create(announcementData);
+                    }
+                    
+                    // Get sorted announcements
+                    const sortedAnnouncements = manager.getSortedByDate();
+                    
+                    // Verify sorting order (newest first)
+                    for (let i = 0; i < sortedAnnouncements.length - 1; i++) {
+                        const current = sortedAnnouncements[i];
+                        const next = sortedAnnouncements[i + 1];
+                        
+                        const currentDateTime = `${current.date} ${current.time}`;
+                        const nextDateTime = `${next.date} ${next.time}`;
+                        
+                        // Current should be >= next (newer or equal)
+                        pt.expect(currentDateTime >= nextDateTime).toBe(true);
+                    }
+                    
+                    // Verify sorting is stable - calling again should give same order
+                    const sortedAgain = manager.getSortedByDate();
+                    pt.expect(sortedAgain.length).toBe(sortedAnnouncements.length);
+                    
+                    for (let i = 0; i < sortedAnnouncements.length; i++) {
+                        pt.expect(sortedAgain[i].id).toBe(sortedAnnouncements[i].id);
+                    }
+                }
+            );
+            
+            updateTestResult(0, test1Passed, pt.results[0]);
+            
+            // Test 2: Sorting is maintained after adding new announcements
+            resultsDiv.innerHTML += createTestResult(
+                'Test 2: Sorting is maintained after adding new announcements',
+                null,
+                'Running 100 iterations...'
+            );
+            
+            const test2Passed = pt.assert(
+                'Sorting is maintained after adding new announcements',
+                (iteration) => {
+                    // Clear localStorage
+                    localStorage.clear();
+                    
+                    // Create manager and add initial announcements
+                    const manager = new AnnouncementManager();
+                    const numInitial = Math.floor(Math.random() * 8) + 3; // 3-10 announcements
+                    
+                    for (let i = 0; i < numInitial; i++) {
+                        const announcementData = generateRandomAnnouncement();
+                        manager.create(announcementData);
+                    }
+                    
+                    // Add a new announcement
+                    const newAnnouncement = generateRandomAnnouncement();
+                    manager.create(newAnnouncement);
+                    
+                    // Get sorted announcements
+                    const sortedAnnouncements = manager.getSortedByDate();
+                    
+                    // Verify sorting order is still maintained
+                    for (let i = 0; i < sortedAnnouncements.length - 1; i++) {
+                        const current = sortedAnnouncements[i];
+                        const next = sortedAnnouncements[i + 1];
+                        
+                        const currentDateTime = `${current.date} ${current.time}`;
+                        const nextDateTime = `${next.date} ${next.time}`;
+                        
+                        pt.expect(currentDateTime >= nextDateTime).toBe(true);
+                    }
+                }
+            );
+            
+            updateTestResult(1, test2Passed, pt.results[1]);
+            
+            // Test 3: Sorting handles announcements with same date but different times
+            resultsDiv.innerHTML += createTestResult(
+                'Test 3: Sorting handles announcements with same date but different times',
+                null,
+                'Running 100 iterations...'
+            );
+            
+            const test3Passed = pt.assert(
+                'Sorting handles announcements with same date but different times',
+                (iteration) => {
+                    // Clear localStorage
+                    localStorage.clear();
+                    
+                    // Create manager
+                    const manager = new AnnouncementManager();
+                    
+                    // Generate a common date
+                    const commonDate = randomDate();
+                    const numAnnouncements = Math.floor(Math.random() * 6) + 3; // 3-8 announcements
+                    
+                    // Create announcements with same date but different times
+                    for (let i = 0; i < numAnnouncements; i++) {
+                        const time = randomTime();
+                        manager.create({
+                            title: `Announcement ${iteration}_${i}`,
+                            date: commonDate,
+                            time: time,
+                            summary: `Summary ${i}`,
+                            content: `Content ${i}`,
+                            isActive: true
+                        });
+                    }
+                    
+                    // Get sorted announcements
+                    const sortedAnnouncements = manager.getSortedByDate();
+                    
+                    // Verify time-based sorting when dates are equal
+                    for (let i = 0; i < sortedAnnouncements.length - 1; i++) {
+                        const current = sortedAnnouncements[i];
+                        const next = sortedAnnouncements[i + 1];
+                        
+                        // Since dates are the same, check time ordering
+                        if (current.date === next.date) {
+                            pt.expect(current.time >= next.time).toBe(true);
+                        }
+                    }
+                }
+            );
+            
+            updateTestResult(2, test3Passed, pt.results[2]);
+            
+            // Test 4: Empty list returns empty sorted list
+            resultsDiv.innerHTML += createTestResult(
+                'Test 4: Empty list returns empty sorted list',
+                null,
+                'Running...'
+            );
+            
+            const test4Passed = pt.assert(
+                'Empty list returns empty sorted list',
+                (iteration) => {
+                    localStorage.clear();
+                    const manager = new AnnouncementManager();
+                    const sorted = manager.getSortedByDate();
+                    
+                    pt.expect(sorted.length).toBe(0);
+                    pt.expect(sorted).toEqual([]);
+                },
+                { numRuns: 1 }
+            );
+            
+            updateTestResult(3, test4Passed, pt.results[3]);
+            
+            // Test 5: Single announcement returns list with one item
+            resultsDiv.innerHTML += createTestResult(
+                'Test 5: Single announcement returns list with one item',
+                null,
+                'Running 100 iterations...'
+            );
+            
+            const test5Passed = pt.assert(
+                'Single announcement returns list with one item',
+                (iteration) => {
+                    localStorage.clear();
+                    const manager = new AnnouncementManager();
+                    const announcementData = generateRandomAnnouncement();
+                    const result = manager.create(announcementData);
+                    
+                    pt.expect(result.success).toBe(true);
+                    
+                    const sorted = manager.getSortedByDate();
+                    pt.expect(sorted.length).toBe(1);
+                    pt.expect(sorted[0].id).toBe(result.data.id);
+                }
+            );
+            
+            updateTestResult(4, test5Passed, pt.results[4]);
+            
+            // Test 6: Sorting does not modify original announcements array
+            resultsDiv.innerHTML += createTestResult(
+                'Test 6: Sorting does not modify original announcements array',
+                null,
+                'Running 100 iterations...'
+            );
+            
+            const test6Passed = pt.assert(
+                'Sorting does not modify original announcements array',
+                (iteration) => {
+                    localStorage.clear();
+                    const manager = new AnnouncementManager();
+                    const numAnnouncements = Math.floor(Math.random() * 8) + 3; // 3-10 announcements
+                    
+                    for (let i = 0; i < numAnnouncements; i++) {
+                        const announcementData = generateRandomAnnouncement();
+                        manager.create(announcementData);
+                    }
+                    
+                    // Get original order
+                    const originalOrder = manager.getAll().map(a => a.id);
+                    
+                    // Get sorted
+                    manager.getSortedByDate();
+                    
+                    // Get original order again
+                    const afterSortOrder = manager.getAll().map(a => a.id);
+                    
+                    // Original order should not be modified by sorting
+                    pt.expect(afterSortOrder).toEqual(originalOrder);
+                }
+            );
+            
+            updateTestResult(5, test6Passed, pt.results[5]);
+            
+            // Show summary
+            const totalTests = pt.results.length;
+            const passedTests = pt.results.filter(r => r.passed).length;
+            showSummary(passedTests === totalTests, passedTests, totalTests);
+        }
+        
+        function createTestResult(name, passed, details) {
+            const status = passed === null ? 'running' : (passed ? 'pass' : 'fail');
+            const icon = passed === null ? '⏳' : (passed ? '✅' : '❌');
+            
+            return `
+                <div class="test-section">
+                    <div class="test-result ${status}">
+                        <div class="test-name">${icon} ${name}</div>
+                        <div class="test-details">${details}</div>
+                    </div>
+                </div>
+            `;
+        }
+        
+        function updateTestResult(index, passed, result) {
+            const sections = document.querySelectorAll('.test-section');
+            const section = sections[index];
+            const testResult = section.querySelector('.test-result');
+            
+            testResult.className = `test-result ${passed ? 'pass' : 'fail'}`;
+            
+            const icon = passed ? '✅' : '❌';
+            const testName = testResult.querySelector('.test-name');
+            testName.innerHTML = testName.innerHTML.replace(/^[⏳✅❌]/, icon);
+            
+            const details = passed 
+                ? `PASSED - ${result.runs} iterations completed successfully`
+                : `FAILED - ${result.error}`;
+            
+            testResult.querySelector('.test-details').textContent = details;
+        }
+        
+        function showSummary(allPassed, passed, total) {
+            const summaryDiv = document.getElementById('summary');
+            const summaryText = document.getElementById('summary-text');
+            const summaryDetails = document.getElementById('summary-details');
+            
+            summaryDiv.style.display = 'block';
+            summaryDiv.className = allPassed ? 'summary' : 'summary fail';
+            
+            if (allPassed) {
+                summaryText.textContent = '🎉 All Tests Passed!';
+                summaryDetails.textContent = `${passed} out of ${total} property tests passed`;
+            } else {
+                summaryText.textContent = '❌ Some Tests Failed';
+                summaryDetails.textContent = `${passed} out of ${total} property tests passed`;
+            }
+        }
+        
+        // Run tests when page loads
+        window.addEventListener('DOMContentLoaded', runTests);
+    </script>
+</body>
+</html>

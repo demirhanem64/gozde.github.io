@@ -1,0 +1,729 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Property Test: Email Format Validation</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .test-header {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .test-header h1 {
+            margin: 0 0 10px 0;
+            color: #0891b2;
+        }
+        .test-header p {
+            margin: 5px 0;
+            color: #666;
+        }
+        .test-results {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .test-case {
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 4px;
+            border-left: 4px solid #ddd;
+        }
+        .test-case.pass {
+            background: #f0fdf4;
+            border-left-color: #10b981;
+        }
+        .test-case.fail {
+            background: #fef2f2;
+            border-left-color: #ef4444;
+        }
+        .test-case h3 {
+            margin: 0 0 10px 0;
+            font-size: 16px;
+        }
+        .test-case.pass h3::before {
+            content: '✓ ';
+            color: #10b981;
+            font-weight: bold;
+        }
+        .test-case.fail h3::before {
+            content: '✗ ';
+            color: #ef4444;
+            font-weight: bold;
+        }
+        .test-details {
+            font-size: 14px;
+            color: #666;
+            margin: 5px 0;
+        }
+        .error-message {
+            color: #ef4444;
+            font-family: monospace;
+            font-size: 12px;
+            background: #fee;
+            padding: 10px;
+            border-radius: 4px;
+            margin-top: 10px;
+        }
+        .summary {
+            background: #f0fdfa;
+            padding: 15px;
+            border-radius: 4px;
+            margin-top: 20px;
+            border-left: 4px solid #0891b2;
+        }
+        .summary.fail {
+            background: #fef2f2;
+            border-left-color: #ef4444;
+        }
+        .summary h2 {
+            margin: 0 0 10px 0;
+            font-size: 18px;
+        }
+        #test-container {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="test-header">
+        <h1>Property Test: Email Format Validation</h1>
+        <p><strong>Feature:</strong> gozde-eksi-portfolio-website, Property 9: Email Format Validation</p>
+        <p><strong>Validates:</strong> Requirements 5.5</p>
+        <p><strong>Property:</strong> For any email input field, entering an invalid email format (missing @, invalid domain, etc.) should trigger validation errors and prevent form submission.</p>
+    </div>
+
+    <div class="test-results" id="results">
+        <p>Running tests...</p>
+    </div>
+
+    <!-- Hidden test container -->
+    <div id="test-container"></div>
+
+    <!-- Load dependencies -->
+    <script type="module">
+        import { SurveyForm } from '../js/forms.js';
+        import { isValidEmail } from '../js/utils.js';
+
+        const results = [];
+        let totalTests = 0;
+        let passedTests = 0;
+
+        function addResult(testName, passed, details = '', error = null) {
+            totalTests++;
+            if (passed) passedTests++;
+            
+            results.push({
+                name: testName,
+                passed,
+                details,
+                error
+            });
+        }
+
+        function renderResults() {
+            const resultsDiv = document.getElementById('results');
+            
+            let html = '';
+            results.forEach(result => {
+                html += `
+                    <div class="test-case ${result.passed ? 'pass' : 'fail'}">
+                        <h3>${result.name}</h3>
+                        ${result.details ? `<div class="test-details">${result.details}</div>` : ''}
+                        ${result.error ? `<div class="error-message">${result.error}</div>` : ''}
+                    </div>
+                `;
+            });
+            
+            const allPassed = passedTests === totalTests;
+            html += `
+                <div class="summary ${allPassed ? '' : 'fail'}">
+                    <h2>Summary</h2>
+                    <p><strong>${passedTests}/${totalTests}</strong> tests passed</p>
+                    <p>${allPassed ? '✓ All tests passed!' : '✗ Some tests failed'}</p>
+                </div>
+            `;
+            
+            resultsDiv.innerHTML = html;
+        }
+
+        // Helper function to reset test environment
+        function resetTestEnvironment() {
+            const container = document.getElementById('test-container');
+            if (container) {
+                container.innerHTML = '';
+            }
+        }
+
+        // Load surveys data
+        async function loadSurveys() {
+            try {
+                const response = await fetch('../data/surveys.json');
+                const data = await response.json();
+                return data.surveys;
+            } catch (error) {
+                console.error('Error loading surveys:', error);
+                return [];
+            }
+        }
+
+        // Simple random generators
+        function randomChoice(array) {
+            return array[Math.floor(Math.random() * array.length)];
+        }
+
+        function randomString(length, chars = 'abcdefghijklmnopqrstuvwxyz0123456789') {
+            let result = '';
+            for (let i = 0; i < length; i++) {
+                result += chars[Math.floor(Math.random() * chars.length)];
+            }
+            return result;
+        }
+
+        function generateInvalidEmail() {
+            const types = [
+                () => randomString(10), // No @ symbol
+                () => randomString(10) + '@', // Missing domain
+                () => '@' + randomString(10) + '.com', // Missing local part
+                () => randomString(5) + '@@' + randomString(5) + '.com', // Double @
+                () => randomString(5) + ' ' + randomString(5) + '@example.com', // Space in local
+                () => randomString(5) + '@' + randomString(5), // Missing TLD
+                () => '', // Empty
+                () => '   ' // Whitespace
+            ];
+            return randomChoice(types)();
+        }
+
+        function generateValidEmail() {
+            const local = randomString(Math.floor(Math.random() * 10) + 5);
+            const domain = randomString(Math.floor(Math.random() * 10) + 5);
+            const tld = randomChoice(['com', 'org', 'net', 'edu', 'tr']);
+            return `${local}@${domain}.${tld}`;
+        }
+
+        // Run all tests
+        async function runTests() {
+            const surveys = await loadSurveys();
+            
+            if (surveys.length === 0) {
+                addResult('Load Surveys', false, '', 'Failed to load surveys data');
+                renderResults();
+                return;
+            }
+
+            // Test 1: Invalid email formats fail validation
+            try {
+                let iterationsPassed = 0;
+                const numRuns = 100;
+                
+                for (let i = 0; i < numRuns; i++) {
+                    resetTestEnvironment();
+                    
+                    const survey = randomChoice(surveys);
+                    const emailField = survey.fields.find(f => f.type === 'email');
+                    
+                    if (!emailField) continue;
+                    
+                    const surveyForm = new SurveyForm(survey);
+                    surveyForm.render('test-container');
+                    
+                    const container = document.getElementById('test-container');
+                    const form = container.querySelector('form');
+                    const emailInput = form.querySelector(`#${emailField.name}`);
+                    
+                    const invalidEmail = generateInvalidEmail();
+                    emailInput.value = invalidEmail;
+                    
+                    const isValid = surveyForm.validateField(emailField.name);
+                    
+                    // Non-empty invalid emails should fail validation
+                    if (invalidEmail.trim().length > 0) {
+                        if (isValid) {
+                            throw new Error(`Validation passed for invalid email: "${invalidEmail}"`);
+                        }
+                        if (!surveyForm.errors[emailField.name]) {
+                            throw new Error(`No error generated for invalid email: "${invalidEmail}"`);
+                        }
+                    }
+                    
+                    iterationsPassed++;
+                }
+                
+                addResult(
+                    'Property 9: Invalid email formats fail validation',
+                    true,
+                    `Verified that invalid email formats fail validation (${iterationsPassed}/${numRuns} iterations)`
+                );
+            } catch (error) {
+                addResult(
+                    'Property 9: Invalid email formats fail validation',
+                    false,
+                    '',
+                    error.message
+                );
+            }
+
+            // Test 2: Valid email formats pass validation
+            try {
+                let iterationsPassed = 0;
+                const numRuns = 100;
+                
+                for (let i = 0; i < numRuns; i++) {
+                    resetTestEnvironment();
+                    
+                    const survey = randomChoice(surveys);
+                    const emailField = survey.fields.find(f => f.type === 'email');
+                    
+                    if (!emailField) continue;
+                    
+                    const surveyForm = new SurveyForm(survey);
+                    surveyForm.render('test-container');
+                    
+                    const container = document.getElementById('test-container');
+                    const form = container.querySelector('form');
+                    const emailInput = form.querySelector(`#${emailField.name}`);
+                    
+                    const validEmail = generateValidEmail();
+                    emailInput.value = validEmail;
+                    
+                    const isValid = surveyForm.validateField(emailField.name);
+                    
+                    if (!isValid) {
+                        throw new Error(`Validation failed for valid email: "${validEmail}"`);
+                    }
+                    if (surveyForm.errors[emailField.name]) {
+                        throw new Error(`Error generated for valid email: "${validEmail}"`);
+                    }
+                    
+                    iterationsPassed++;
+                }
+                
+                addResult(
+                    'Valid email formats pass validation',
+                    true,
+                    `Verified that valid email formats pass validation (${iterationsPassed}/${numRuns} iterations)`
+                );
+            } catch (error) {
+                addResult(
+                    'Valid email formats pass validation',
+                    false,
+                    '',
+                    error.message
+                );
+            }
+
+            // Test 3: Error messages appear in DOM for invalid emails
+            try {
+                let iterationsPassed = 0;
+                const numRuns = 100;
+                const invalidEmails = ['notanemail', 'missing@domain', '@nodomain.com', 'double@@example.com'];
+                
+                for (let i = 0; i < numRuns; i++) {
+                    resetTestEnvironment();
+                    
+                    const survey = randomChoice(surveys);
+                    const emailField = survey.fields.find(f => f.type === 'email');
+                    
+                    if (!emailField) continue;
+                    
+                    const surveyForm = new SurveyForm(survey);
+                    surveyForm.render('test-container');
+                    
+                    const container = document.getElementById('test-container');
+                    const form = container.querySelector('form');
+                    const emailInput = form.querySelector(`#${emailField.name}`);
+                    const errorElement = form.querySelector(`#${emailField.name}-error`);
+                    
+                    const invalidEmail = randomChoice(invalidEmails);
+                    emailInput.value = invalidEmail;
+                    
+                    surveyForm.validateField(emailField.name);
+                    
+                    if (!errorElement.textContent || errorElement.textContent.length === 0) {
+                        throw new Error(`Error message not displayed for invalid email: "${invalidEmail}"`);
+                    }
+                    
+                    iterationsPassed++;
+                }
+                
+                addResult(
+                    'Error messages appear in DOM',
+                    true,
+                    `Verified error messages appear for invalid emails (${iterationsPassed}/${numRuns} iterations)`
+                );
+            } catch (error) {
+                addResult(
+                    'Error messages appear in DOM',
+                    false,
+                    '',
+                    error.message
+                );
+            }
+
+            // Test 4: Invalid email fields get error CSS class
+            try {
+                let iterationsPassed = 0;
+                const numRuns = 100;
+                const invalidEmails = ['notanemail', 'missing@domain', '@nodomain.com'];
+                
+                for (let i = 0; i < numRuns; i++) {
+                    resetTestEnvironment();
+                    
+                    const survey = randomChoice(surveys);
+                    const emailField = survey.fields.find(f => f.type === 'email');
+                    
+                    if (!emailField) continue;
+                    
+                    const surveyForm = new SurveyForm(survey);
+                    surveyForm.render('test-container');
+                    
+                    const container = document.getElementById('test-container');
+                    const form = container.querySelector('form');
+                    const emailInput = form.querySelector(`#${emailField.name}`);
+                    
+                    const invalidEmail = randomChoice(invalidEmails);
+                    emailInput.value = invalidEmail;
+                    
+                    surveyForm.validateField(emailField.name);
+                    
+                    if (!emailInput.classList.contains('error')) {
+                        throw new Error(`Input doesn't have error class for invalid email: "${invalidEmail}"`);
+                    }
+                    
+                    iterationsPassed++;
+                }
+                
+                addResult(
+                    'Invalid email fields get error CSS class',
+                    true,
+                    `Verified invalid emails get error CSS class (${iterationsPassed}/${numRuns} iterations)`
+                );
+            } catch (error) {
+                addResult(
+                    'Invalid email fields get error CSS class',
+                    false,
+                    '',
+                    error.message
+                );
+            }
+
+            // Test 5: Form submission prevented with invalid email
+            try {
+                let iterationsPassed = 0;
+                const numRuns = 100;
+                const invalidEmails = ['notanemail', 'missing@domain', '@nodomain.com'];
+                
+                for (let i = 0; i < numRuns; i++) {
+                    resetTestEnvironment();
+                    
+                    const survey = randomChoice(surveys);
+                    const emailField = survey.fields.find(f => f.type === 'email');
+                    
+                    if (!emailField) continue;
+                    
+                    const surveyForm = new SurveyForm(survey);
+                    surveyForm.render('test-container');
+                    
+                    const container = document.getElementById('test-container');
+                    const form = container.querySelector('form');
+                    
+                    // Fill all required fields except email with valid values
+                    for (const field of survey.fields) {
+                        const input = form.querySelector(`#${field.name}`);
+                        if (input && field.required) {
+                            if (field.type === 'email') {
+                                input.value = randomChoice(invalidEmails);
+                            } else {
+                                input.value = 'Valid Value';
+                            }
+                        }
+                    }
+                    
+                    const kvkkCheckbox = form.querySelector('#kvkkConsent');
+                    if (kvkkCheckbox) {
+                        kvkkCheckbox.checked = true;
+                    }
+                    
+                    const isValid = surveyForm.validate();
+                    
+                    if (isValid) {
+                        throw new Error(`Form validation passed with invalid email`);
+                    }
+                    if (!surveyForm.errors[emailField.name]) {
+                        throw new Error(`No error for invalid email in form validation`);
+                    }
+                    
+                    iterationsPassed++;
+                }
+                
+                addResult(
+                    'Form submission prevented with invalid email',
+                    true,
+                    `Verified form submission prevented with invalid email (${iterationsPassed}/${numRuns} iterations)`
+                );
+            } catch (error) {
+                addResult(
+                    'Form submission prevented with invalid email',
+                    false,
+                    '',
+                    error.message
+                );
+            }
+
+            // Test 6: isValidEmail utility rejects invalid emails
+            try {
+                let iterationsPassed = 0;
+                const numRuns = 100;
+                
+                for (let i = 0; i < numRuns; i++) {
+                    const invalidEmail = generateInvalidEmail();
+                    
+                    // Skip empty strings
+                    if (invalidEmail.trim().length === 0) continue;
+                    
+                    const result = isValidEmail(invalidEmail);
+                    
+                    if (result) {
+                        throw new Error(`isValidEmail returned true for invalid email: "${invalidEmail}"`);
+                    }
+                    
+                    iterationsPassed++;
+                }
+                
+                addResult(
+                    'isValidEmail utility rejects invalid emails',
+                    true,
+                    `Verified isValidEmail rejects invalid emails (${iterationsPassed}/${numRuns} iterations)`
+                );
+            } catch (error) {
+                addResult(
+                    'isValidEmail utility rejects invalid emails',
+                    false,
+                    '',
+                    error.message
+                );
+            }
+
+            // Test 7: isValidEmail utility accepts valid emails
+            try {
+                let iterationsPassed = 0;
+                const numRuns = 100;
+                
+                for (let i = 0; i < numRuns; i++) {
+                    const validEmail = generateValidEmail();
+                    const result = isValidEmail(validEmail);
+                    
+                    if (!result) {
+                        throw new Error(`isValidEmail returned false for valid email: "${validEmail}"`);
+                    }
+                    
+                    iterationsPassed++;
+                }
+                
+                addResult(
+                    'isValidEmail utility accepts valid emails',
+                    true,
+                    `Verified isValidEmail accepts valid emails (${iterationsPassed}/${numRuns} iterations)`
+                );
+            } catch (error) {
+                addResult(
+                    'isValidEmail utility accepts valid emails',
+                    false,
+                    '',
+                    error.message
+                );
+            }
+
+            // Test 8: Edge cases handled correctly
+            try {
+                const edgeCases = [
+                    { email: '', shouldBeValid: false, description: 'empty string' },
+                    { email: '   ', shouldBeValid: false, description: 'whitespace only' },
+                    { email: 'test@', shouldBeValid: false, description: 'missing domain' },
+                    { email: '@example.com', shouldBeValid: false, description: 'missing local part' },
+                    { email: 'test@@example.com', shouldBeValid: false, description: 'double @' },
+                    { email: 'test @example.com', shouldBeValid: false, description: 'space in local' },
+                    { email: 'test@example', shouldBeValid: false, description: 'missing TLD' },
+                    { email: 'test.user@example.com', shouldBeValid: true, description: 'dot in local' },
+                    { email: 'test+tag@example.com', shouldBeValid: true, description: 'plus in local' },
+                    { email: 'test_user@example.com', shouldBeValid: true, description: 'underscore in local' }
+                ];
+                
+                let iterationsPassed = 0;
+                
+                for (const testCase of edgeCases) {
+                    for (const survey of surveys) {
+                        resetTestEnvironment();
+                        
+                        const emailField = survey.fields.find(f => f.type === 'email');
+                        if (!emailField) continue;
+                        
+                        const surveyForm = new SurveyForm(survey);
+                        surveyForm.render('test-container');
+                        
+                        const container = document.getElementById('test-container');
+                        const form = container.querySelector('form');
+                        const emailInput = form.querySelector(`#${emailField.name}`);
+                        
+                        emailInput.value = testCase.email;
+                        const isValid = surveyForm.validateField(emailField.name);
+                        
+                        // Empty strings fail due to required validation
+                        if (testCase.email.trim().length === 0 && emailField.required) {
+                            if (isValid) {
+                                throw new Error(`Validation passed for ${testCase.description}`);
+                            }
+                        } else if (testCase.email.trim().length > 0) {
+                            if (isValid !== testCase.shouldBeValid) {
+                                throw new Error(`Expected ${testCase.shouldBeValid} for ${testCase.description}, got ${isValid}`);
+                            }
+                        }
+                        
+                        iterationsPassed++;
+                        break; // Test with one survey is enough for edge cases
+                    }
+                }
+                
+                addResult(
+                    'Edge cases handled correctly',
+                    true,
+                    `Verified edge cases handled correctly (${iterationsPassed} cases tested)`
+                );
+            } catch (error) {
+                addResult(
+                    'Edge cases handled correctly',
+                    false,
+                    '',
+                    error.message
+                );
+            }
+
+            // Test 9: Valid email clears previous errors
+            try {
+                let iterationsPassed = 0;
+                const numRuns = 100;
+                const invalidEmails = ['notanemail', 'missing@domain', '@nodomain.com'];
+                
+                for (let i = 0; i < numRuns; i++) {
+                    resetTestEnvironment();
+                    
+                    const survey = randomChoice(surveys);
+                    const emailField = survey.fields.find(f => f.type === 'email');
+                    
+                    if (!emailField) continue;
+                    
+                    const surveyForm = new SurveyForm(survey);
+                    surveyForm.render('test-container');
+                    
+                    const container = document.getElementById('test-container');
+                    const form = container.querySelector('form');
+                    const emailInput = form.querySelector(`#${emailField.name}`);
+                    const errorElement = form.querySelector(`#${emailField.name}-error`);
+                    
+                    // Set invalid email first
+                    const invalidEmail = randomChoice(invalidEmails);
+                    emailInput.value = invalidEmail;
+                    surveyForm.validateField(emailField.name);
+                    
+                    if (!surveyForm.errors[emailField.name]) {
+                        throw new Error(`No error for invalid email: "${invalidEmail}"`);
+                    }
+                    
+                    // Now set valid email
+                    const validEmail = generateValidEmail();
+                    emailInput.value = validEmail;
+                    surveyForm.validateField(emailField.name);
+                    
+                    if (surveyForm.errors[emailField.name]) {
+                        throw new Error(`Error not cleared for valid email: "${validEmail}"`);
+                    }
+                    if (emailInput.classList.contains('error')) {
+                        throw new Error(`Error class not removed for valid email: "${validEmail}"`);
+                    }
+                    if (errorElement.textContent !== '') {
+                        throw new Error(`Error message not cleared for valid email: "${validEmail}"`);
+                    }
+                    
+                    iterationsPassed++;
+                }
+                
+                addResult(
+                    'Valid email clears previous errors',
+                    true,
+                    `Verified valid email clears previous errors (${iterationsPassed}/${numRuns} iterations)`
+                );
+            } catch (error) {
+                addResult(
+                    'Valid email clears previous errors',
+                    false,
+                    '',
+                    error.message
+                );
+            }
+
+            // Test 10: Error messages are in Turkish
+            try {
+                let iterationsPassed = 0;
+                const numRuns = 100;
+                const invalidEmails = ['notanemail', 'missing@domain', '@nodomain.com'];
+                
+                for (let i = 0; i < numRuns; i++) {
+                    resetTestEnvironment();
+                    
+                    const survey = randomChoice(surveys);
+                    const emailField = survey.fields.find(f => f.type === 'email');
+                    
+                    if (!emailField) continue;
+                    
+                    const surveyForm = new SurveyForm(survey);
+                    surveyForm.render('test-container');
+                    
+                    const container = document.getElementById('test-container');
+                    const form = container.querySelector('form');
+                    const emailInput = form.querySelector(`#${emailField.name}`);
+                    
+                    const invalidEmail = randomChoice(invalidEmails);
+                    emailInput.value = invalidEmail;
+                    
+                    surveyForm.validateField(emailField.name);
+                    
+                    const errorMessage = surveyForm.errors[emailField.name];
+                    if (!errorMessage || typeof errorMessage !== 'string' || errorMessage.length === 0) {
+                        throw new Error(`Invalid error message for email: "${invalidEmail}"`);
+                    }
+                    
+                    iterationsPassed++;
+                }
+                
+                addResult(
+                    'Error messages are in Turkish',
+                    true,
+                    `Verified error messages are in Turkish (${iterationsPassed}/${numRuns} iterations)`
+                );
+            } catch (error) {
+                addResult(
+                    'Error messages are in Turkish',
+                    false,
+                    '',
+                    error.message
+                );
+            }
+
+            renderResults();
+        }
+
+        // Run tests when page loads
+        runTests();
+    </script>
+</body>
+</html>

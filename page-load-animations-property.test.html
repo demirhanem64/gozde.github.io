@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Property Test: Page Load Animations</title>
+    
+    <!-- Load CSS files -->
+    <link rel="stylesheet" href="../css/variables.css">
+    <link rel="stylesheet" href="../css/base.css">
+    <link rel="stylesheet" href="../css/components.css">
+    <link rel="stylesheet" href="../css/layout.css">
+    <link rel="stylesheet" href="../css/animations.css">
+    
+    <style>
+        body {
+            font-family: monospace;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .test-results {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+        .test-pass {
+            color: #10b981;
+            font-weight: bold;
+        }
+        .test-fail {
+            color: #ef4444;
+            font-weight: bold;
+        }
+        .test-item {
+            margin: 10px 0;
+            padding: 10px;
+            border-left: 3px solid #ccc;
+        }
+        .test-item.pass {
+            border-left-color: #10b981;
+            background: #f0fdf4;
+        }
+        .test-item.fail {
+            border-left-color: #ef4444;
+            background: #fef2f2;
+        }
+        h1 {
+            color: #0f172a;
+        }
+        .summary {
+            margin-top: 20px;
+            padding: 15px;
+            background: #f0fdfa;
+            border-radius: 4px;
+        }
+        .test-app {
+            margin-top: 20px;
+            border: 2px solid #0891b2;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+    </style>
+</head>
+<body>
+    <div class="test-results">
+        <h1>🧪 Property-Based Test: Page Load Animations</h1>
+        <p><strong>Feature:</strong> gozde-eksi-portfolio-website, Property 19: Page Load Animations</p>
+        <p><strong>Validates:</strong> Requirements 9.1</p>
+        <p><strong>Property:</strong> For any page load or section render, main content elements should have fade-in or entrance animations applied via CSS classes or inline styles.</p>
+        <hr>
+        <div id="test-output"></div>
+        <div id="summary" class="summary"></div>
+    </div>
+
+    <!-- Test Application - Embedded version of the main site -->
+    <div class="test-app">
+        <nav id="main-navigation" class="navigation" role="navigation" aria-label="Ana navigasyon">
+            <div class="nav-container">
+                <div class="nav-brand">
+                    <h1 class="logo">Gözde Ekşi</h1>
+                </div>
+                <ul class="nav-menu">
+                    <li><a href="#anasayfa" class="nav-link active">Anasayfa</a></li>
+                    <li><a href="#anketler" class="nav-link">Anketler</a></li>
+                    <li><a href="#hakkimda" class="nav-link">Hakkımda</a></li>
+                </ul>
+            </div>
+        </nav>
+
+        <main id="main-content">
+            <section id="anasayfa" class="page-section active">
+                <div class="container">
+                    <div class="hero-section scroll-reveal">
+                        <h2>Hoş Geldiniz</h2>
+                        <p class="hero-subtitle">İstinye Üniversitesi İlk ve Acil Yardım Bölümü</p>
+                    </div>
+                </div>
+            </section>
+
+            <section id="anketler" class="page-section">
+                <div class="container">
+                    <h2>Anketler</h2>
+                    <div class="scroll-reveal">
+                        <p>Anket içeriği</p>
+                    </div>
+                </div>
+            </section>
+
+            <section id="hakkimda" class="page-section">
+                <div class="container">
+                    <div class="bio-hero scroll-reveal">
+                        <h2>Hakkımda</h2>
+                        <div class="bio-title">
+                            <h3 class="position-title">Öğretim Görevlisi & Bölüm Başkanı</h3>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script type="module">
+        /**
+         * Property-Based Test: Page Load Animations
+         * Feature: gozde-eksi-portfolio-website, Property 19: Page Load Animations
+         * 
+         * For any page load or section render, main content elements should have 
+         * fade-in or entrance animations applied via CSS classes or inline styles.
+         */
+
+        // Animation-related CSS classes
+        const ANIMATION_CLASSES = [
+            'fade-in',
+            'slide-in-left',
+            'slide-in-right',
+            'scale-in',
+            'scroll-reveal',
+            'revealed'
+        ];
+
+        // Test runner
+        const testResults = [];
+        let passCount = 0;
+        let failCount = 0;
+        let animationController;
+
+        function logTest(name, passed, details = '') {
+            testResults.push({ name, passed, details });
+            if (passed) {
+                passCount++;
+            } else {
+                failCount++;
+            }
+        }
+
+        // Check if element has animation applied
+        function hasAnimation(element) {
+            // Check for animation CSS classes
+            const hasAnimationClass = ANIMATION_CLASSES.some(className => 
+                element.classList.contains(className)
+            );
+            
+            if (hasAnimationClass) {
+                return true;
+            }
+            
+            // Check for inline animation styles
+            const inlineStyle = element.getAttribute('style');
+            if (inlineStyle && (
+                inlineStyle.includes('animation') || 
+                inlineStyle.includes('transition') ||
+                inlineStyle.includes('opacity')
+            )) {
+                return true;
+            }
+            
+            // Check computed styles for animation
+            const computedStyle = window.getComputedStyle(element);
+            const animationName = computedStyle.animationName;
+            const animationDuration = computedStyle.animationDuration;
+            
+            // If animation is defined and has duration > 0
+            if (animationName && animationName !== 'none' && 
+                animationDuration && parseFloat(animationDuration) > 0) {
+                return true;
+            }
+            
+            return false;
+        }
+
+        // Initialize AnimationController
+        async function initAnimationController() {
+            // Import and initialize the animation controller
+            const module = await import('../js/animations.js');
+            // The controller should auto-initialize on DOMContentLoaded
+            // Wait a bit for initialization
+            await new Promise(resolve => setTimeout(resolve, 300));
+            animationController = window.animationController;
+        }
+
+        // Test 1: Navigation has animation on page load
+        function testNavigationHasAnimation() {
+            const navigation = document.querySelector('.navigation');
+            const hasAnim = hasAnimation(navigation);
+            
+            logTest('Navigation has animation on page load', hasAnim, 
+                hasAnim ? '' : 'Navigation element does not have animation class or styles');
+        }
+
+        // Test 2: Hero sections have animations
+        function testHeroSectionsHaveAnimations() {
+            const heroSections = document.querySelectorAll('.hero-section, .bio-hero');
+            let allHaveAnimations = true;
+            let details = '';
+            
+            if (heroSections.length === 0) {
+                logTest('Hero sections have animations', false, 'No hero sections found');
+                return;
+            }
+            
+            heroSections.forEach((hero, index) => {
+                if (!hasAnimation(hero)) {
+                    allHaveAnimations = false;
+                    details += `Hero section ${index} missing animation; `;
+                }
+            });
+            
+            logTest('Hero sections have animations', allHaveAnimations, details);
+        }
+
+        // Test 3: Scroll-reveal elements exist
+        function testScrollRevealElementsExist() {
+            const scrollRevealElements = document.querySelectorAll('.scroll-reveal');
+            const exists = scrollRevealElements.length > 0;
+            
+            logTest('Scroll-reveal elements exist', exists, 
+                exists ? `Found ${scrollRevealElements.length} scroll-reveal elements` : 'No scroll-reveal elements found');
+        }
+
+        // Test 4: Fade-in animation CSS is defined
+        function testFadeInAnimationDefined() {
+            const testElement = document.createElement('div');
+            testElement.className = 'fade-in';
+            document.body.appendChild(testElement);
+            
+            const computedStyle = window.getComputedStyle(testElement);
+            const animationName = computedStyle.animationName;
+            const animationDuration = computedStyle.animationDuration;
+            
+            const isDefined = animationName !== 'none' && parseFloat(animationDuration) > 0;
+            
+            document.body.removeChild(testElement);
+            
+            logTest('Fade-in animation CSS is defined', isDefined, 
+                isDefined ? `Animation: ${animationName}, Duration: ${animationDuration}` : 'Fade-in animation not properly defined');
+        }
+
+        // Test 5: All animation classes have CSS definitions
+        function testAllAnimationClassesDefined() {
+            const classesToTest = ['fade-in', 'slide-in-left', 'slide-in-right', 'scale-in'];
+            let allDefined = true;
+            let details = '';
+            
+            classesToTest.forEach(className => {
+                const testElement = document.createElement('div');
+                testElement.className = className;
+                document.body.appendChild(testElement);
+                
+                const computedStyle = window.getComputedStyle(testElement);
+                const animationName = computedStyle.animationName;
+                const animationDuration = computedStyle.animationDuration;
+                const transitionDuration = computedStyle.transitionDuration;
+                
+                const hasAnimation = animationName !== 'none' && parseFloat(animationDuration) > 0;
+                const hasTransition = parseFloat(transitionDuration) > 0;
+                
+                if (!hasAnimation && !hasTransition) {
+                    allDefined = false;
+                    details += `${className} not defined; `;
+                }
+                
+                document.body.removeChild(testElement);
+            });
+            
+            logTest('All animation classes have CSS definitions', allDefined, details);
+        }
+
+        // Test 6: Animation delays work correctly
+        function testAnimationDelays() {
+            const delayClasses = ['animate-delay-1', 'animate-delay-2', 'animate-delay-3'];
+            let allWork = true;
+            let details = '';
+            
+            delayClasses.forEach(delayClass => {
+                const testElement = document.createElement('div');
+                testElement.className = `fade-in ${delayClass}`;
+                document.body.appendChild(testElement);
+                
+                const computedStyle = window.getComputedStyle(testElement);
+                const animationDelay = computedStyle.animationDelay;
+                
+                if (parseFloat(animationDelay) <= 0) {
+                    allWork = false;
+                    details += `${delayClass} has no delay; `;
+                }
+                
+                document.body.removeChild(testElement);
+            });
+            
+            logTest('Animation delays work correctly', allWork, details);
+        }
+
+        // Test 7: Property test - random element animation checks
+        function testRandomElementAnimations() {
+            const selectors = ['.hero-section', '.bio-hero', '.navigation', '.scroll-reveal'];
+            const iterations = 100;
+            let failures = [];
+            
+            for (let i = 0; i < iterations; i++) {
+                // Pick random selector
+                const randomSelector = selectors[Math.floor(Math.random() * selectors.length)];
+                const elements = document.querySelectorAll(randomSelector);
+                
+                if (elements.length > 0) {
+                    // Pick random element
+                    const randomElement = elements[Math.floor(Math.random() * elements.length)];
+                    
+                    if (!hasAnimation(randomElement)) {
+                        failures.push(`Iteration ${i}: ${randomSelector} element missing animation`);
+                    }
+                }
+            }
+            
+            const passed = failures.length === 0;
+            logTest(`Property test: ${iterations} random element animation checks`, passed, 
+                failures.length > 0 ? failures.slice(0, 5).join('; ') : '');
+        }
+
+        // Test 8: Animation durations are reasonable
+        function testAnimationDurationsReasonable() {
+            const animClasses = ['fade-in', 'slide-in-left', 'scale-in'];
+            let allReasonable = true;
+            let details = '';
+            
+            animClasses.forEach(animClass => {
+                const testElement = document.createElement('div');
+                testElement.className = animClass;
+                document.body.appendChild(testElement);
+                
+                const computedStyle = window.getComputedStyle(testElement);
+                const animationDuration = parseFloat(computedStyle.animationDuration);
+                
+                // Duration should be between 0.1s and 2s
+                if (animationDuration < 0.1 || animationDuration > 2) {
+                    allReasonable = false;
+                    details += `${animClass} duration ${animationDuration}s is unreasonable; `;
+                }
+                
+                document.body.removeChild(testElement);
+            });
+            
+            logTest('Animation durations are reasonable (0.1s - 2s)', allReasonable, details);
+        }
+
+        // Test 9: Active page sections have animations
+        function testActivePageSectionsHaveAnimations() {
+            const activeSections = document.querySelectorAll('.page-section.active');
+            let allHaveAnimations = true;
+            let details = '';
+            
+            if (activeSections.length === 0) {
+                logTest('Active page sections have animations', false, 'No active sections found');
+                return;
+            }
+            
+            activeSections.forEach(section => {
+                const animatedElements = section.querySelectorAll('.hero-section, .bio-hero, .scroll-reveal');
+                
+                if (animatedElements.length === 0) {
+                    allHaveAnimations = false;
+                    details += `Section ${section.id} has no animated elements; `;
+                } else {
+                    animatedElements.forEach(element => {
+                        if (!hasAnimation(element)) {
+                            allHaveAnimations = false;
+                            details += `Element in ${section.id} missing animation; `;
+                        }
+                    });
+                }
+            });
+            
+            logTest('Active page sections have animations', allHaveAnimations, details);
+        }
+
+        // Test 10: AnimationController exists and initialized
+        function testAnimationControllerExists() {
+            const exists = animationController !== undefined && animationController !== null;
+            
+            logTest('AnimationController exists and initialized', exists, 
+                exists ? 'AnimationController found' : 'AnimationController not initialized');
+        }
+
+        // Test 11: AnimationController has required methods
+        function testAnimationControllerMethods() {
+            if (!animationController) {
+                logTest('AnimationController has required methods', false, 'AnimationController not found');
+                return;
+            }
+            
+            const requiredMethods = ['fadeIn', 'slideIn', 'scaleIn', 'initPageLoadAnimations'];
+            let allMethodsExist = true;
+            let details = '';
+            
+            requiredMethods.forEach(method => {
+                if (typeof animationController[method] !== 'function') {
+                    allMethodsExist = false;
+                    details += `Method ${method} not found; `;
+                }
+            });
+            
+            logTest('AnimationController has required methods', allMethodsExist, details);
+        }
+
+        // Test 12: Multiple animation classes can coexist
+        function testMultipleAnimationClasses() {
+            const testElement = document.createElement('div');
+            testElement.className = 'fade-in animate-delay-1';
+            document.body.appendChild(testElement);
+            
+            const computedStyle = window.getComputedStyle(testElement);
+            const animationName = computedStyle.animationName;
+            const animationDelay = computedStyle.animationDelay;
+            
+            const bothApplied = animationName !== 'none' && parseFloat(animationDelay) > 0;
+            
+            document.body.removeChild(testElement);
+            
+            logTest('Multiple animation classes can coexist', bothApplied, 
+                bothApplied ? 'Both animation and delay applied' : 'Animation or delay not applied');
+        }
+
+        // Run all tests
+        async function runTests() {
+            await initAnimationController();
+            
+            // Run tests in sequence
+            testNavigationHasAnimation();
+            testHeroSectionsHaveAnimations();
+            testScrollRevealElementsExist();
+            testFadeInAnimationDefined();
+            testAllAnimationClassesDefined();
+            testAnimationDelays();
+            testRandomElementAnimations();
+            testAnimationDurationsReasonable();
+            testActivePageSectionsHaveAnimations();
+            testAnimationControllerExists();
+            testAnimationControllerMethods();
+            testMultipleAnimationClasses();
+            
+            // Display results
+            const output = document.getElementById('test-output');
+            testResults.forEach(result => {
+                const div = document.createElement('div');
+                div.className = `test-item ${result.passed ? 'pass' : 'fail'}`;
+                div.innerHTML = `
+                    <span class="${result.passed ? 'test-pass' : 'test-fail'}">
+                        ${result.passed ? '✓ PASS' : '✗ FAIL'}
+                    </span>
+                    <strong>${result.name}</strong>
+                    ${result.details ? `<br><small>${result.details}</small>` : ''}
+                `;
+                output.appendChild(div);
+            });
+            
+            // Display summary
+            const summary = document.getElementById('summary');
+            const totalTests = passCount + failCount;
+            const passRate = ((passCount / totalTests) * 100).toFixed(1);
+            
+            summary.innerHTML = `
+                <h3>Test Summary</h3>
+                <p><strong>Total Tests:</strong> ${totalTests}</p>
+                <p><strong>Passed:</strong> <span class="test-pass">${passCount}</span></p>
+                <p><strong>Failed:</strong> <span class="test-fail">${failCount}</span></p>
+                <p><strong>Pass Rate:</strong> ${passRate}%</p>
+                <p><strong>Status:</strong> ${failCount === 0 ? '<span class="test-pass">ALL TESTS PASSED ✓</span>' : '<span class="test-fail">SOME TESTS FAILED ✗</span>'}</p>
+            `;
+        }
+
+        // Run tests when page loads
+        window.addEventListener('load', () => {
+            setTimeout(runTests, 500);
+        });
+    </script>
+</body>
+</html>

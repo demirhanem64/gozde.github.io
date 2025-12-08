@@ -1,0 +1,506 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Property Test: Form Field Labeling</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .test-header {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .test-header h1 {
+            margin: 0 0 10px 0;
+            color: #0891b2;
+        }
+        .test-header p {
+            margin: 5px 0;
+            color: #666;
+        }
+        .test-results {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .test-case {
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 4px;
+            border-left: 4px solid #ddd;
+        }
+        .test-case.pass {
+            background: #f0fdf4;
+            border-left-color: #10b981;
+        }
+        .test-case.fail {
+            background: #fef2f2;
+            border-left-color: #ef4444;
+        }
+        .test-case h3 {
+            margin: 0 0 10px 0;
+            font-size: 16px;
+        }
+        .test-case.pass h3::before {
+            content: '✓ ';
+            color: #10b981;
+            font-weight: bold;
+        }
+        .test-case.fail h3::before {
+            content: '✗ ';
+            color: #ef4444;
+            font-weight: bold;
+        }
+        .test-details {
+            font-size: 14px;
+            color: #666;
+            margin: 5px 0;
+        }
+        .error-message {
+            color: #ef4444;
+            font-family: monospace;
+            font-size: 12px;
+            background: #fee;
+            padding: 10px;
+            border-radius: 4px;
+            margin-top: 10px;
+        }
+        .summary {
+            background: #f0fdfa;
+            padding: 15px;
+            border-radius: 4px;
+            margin-top: 20px;
+            border-left: 4px solid #0891b2;
+        }
+        .summary.fail {
+            background: #fef2f2;
+            border-left-color: #ef4444;
+        }
+        .summary h2 {
+            margin: 0 0 10px 0;
+            font-size: 18px;
+        }
+        #test-container {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="test-header">
+        <h1>Property Test: Form Field Labeling</h1>
+        <p><strong>Feature:</strong> gozde-eksi-portfolio-website, Property 7: Form Field Labeling</p>
+        <p><strong>Validates:</strong> Requirements 5.3</p>
+        <p><strong>Property:</strong> For any input field in a survey form, the field should have either a &lt;label&gt; element with matching `for` attribute or a `placeholder` attribute providing user guidance.</p>
+    </div>
+
+    <div class="test-results" id="results">
+        <p>Running tests...</p>
+    </div>
+
+    <!-- Hidden test container -->
+    <div id="test-container"></div>
+
+    <!-- Load dependencies -->
+    <script type="module">
+        import { SurveyForm } from '../js/forms.js';
+
+        const results = [];
+        let totalTests = 0;
+        let passedTests = 0;
+
+        function addResult(testName, passed, details = '', error = null) {
+            totalTests++;
+            if (passed) passedTests++;
+            
+            results.push({
+                name: testName,
+                passed,
+                details,
+                error
+            });
+        }
+
+        function renderResults() {
+            const resultsDiv = document.getElementById('results');
+            
+            let html = '';
+            results.forEach(result => {
+                html += `
+                    <div class="test-case ${result.passed ? 'pass' : 'fail'}">
+                        <h3>${result.name}</h3>
+                        ${result.details ? `<div class="test-details">${result.details}</div>` : ''}
+                        ${result.error ? `<div class="error-message">${result.error}</div>` : ''}
+                    </div>
+                `;
+            });
+            
+            const allPassed = passedTests === totalTests;
+            html += `
+                <div class="summary ${allPassed ? '' : 'fail'}">
+                    <h2>Summary</h2>
+                    <p><strong>${passedTests}/${totalTests}</strong> tests passed</p>
+                    <p>${allPassed ? '✓ All tests passed!' : '✗ Some tests failed'}</p>
+                </div>
+            `;
+            
+            resultsDiv.innerHTML = html;
+        }
+
+        // Helper function to reset test environment
+        function resetTestEnvironment() {
+            const container = document.getElementById('test-container');
+            if (container) {
+                container.innerHTML = '';
+            }
+        }
+
+        // Load surveys data
+        async function loadSurveys() {
+            try {
+                const response = await fetch('../data/surveys.json');
+                const data = await response.json();
+                return data.surveys;
+            } catch (error) {
+                console.error('Error loading surveys:', error);
+                return [];
+            }
+        }
+
+        // Run all tests
+        async function runTests() {
+            const surveys = await loadSurveys();
+            
+            if (surveys.length === 0) {
+                addResult('Load Surveys', false, '', 'Failed to load surveys data');
+                renderResults();
+                return;
+            }
+
+            // Test 1: All input fields have labels or placeholders
+            try {
+                let iterationsPassed = 0;
+                const numRuns = Math.min(100, surveys.length * 34);
+                
+                for (let i = 0; i < numRuns; i++) {
+                    resetTestEnvironment();
+                    
+                    // Pick a random survey
+                    const survey = surveys[Math.floor(Math.random() * surveys.length)];
+                    
+                    // Render the form
+                    const surveyForm = new SurveyForm(survey);
+                    surveyForm.render('test-container');
+                    
+                    const container = document.getElementById('test-container');
+                    const form = container.querySelector('form');
+                    
+                    if (!form) {
+                        throw new Error(`Form not rendered for survey ${survey.id}`);
+                    }
+                    
+                    // Get all input fields (excluding submit buttons)
+                    const inputs = form.querySelectorAll('input[type="text"], input[type="email"], input[type="checkbox"]');
+                    
+                    // Each input must have either a label or placeholder
+                    for (const input of inputs) {
+                        const inputId = input.getAttribute('id');
+                        const placeholder = input.getAttribute('placeholder');
+                        
+                        // Check for label with matching 'for' attribute
+                        let hasLabel = false;
+                        if (inputId) {
+                            const label = form.querySelector(`label[for="${inputId}"]`);
+                            hasLabel = label !== null;
+                        }
+                        
+                        // Check for placeholder
+                        const hasPlaceholder = placeholder !== null && placeholder.trim() !== '';
+                        
+                        // At least one must be true
+                        if (!hasLabel && !hasPlaceholder) {
+                            throw new Error(`Input field ${inputId || 'unknown'} in survey ${survey.id} has neither label nor placeholder`);
+                        }
+                    }
+                    
+                    iterationsPassed++;
+                }
+                
+                addResult(
+                    'Property 7: Form Field Labeling',
+                    true,
+                    `Verified that all input fields have either labels or placeholders (${iterationsPassed}/${numRuns} iterations)`
+                );
+            } catch (error) {
+                addResult(
+                    'Property 7: Form Field Labeling',
+                    false,
+                    '',
+                    error.message
+                );
+            }
+
+            // Test 2: All configured fields have labels matching their config
+            try {
+                let iterationsPassed = 0;
+                const numRuns = Math.min(100, surveys.length * 34);
+                
+                for (let i = 0; i < numRuns; i++) {
+                    resetTestEnvironment();
+                    
+                    const survey = surveys[Math.floor(Math.random() * surveys.length)];
+                    
+                    const surveyForm = new SurveyForm(survey);
+                    surveyForm.render('test-container');
+                    
+                    const container = document.getElementById('test-container');
+                    const form = container.querySelector('form');
+                    
+                    // Check each configured field
+                    for (const fieldConfig of survey.fields) {
+                        const input = form.querySelector(`#${fieldConfig.name}`);
+                        if (!input) {
+                            throw new Error(`Input field ${fieldConfig.name} not found in survey ${survey.id}`);
+                        }
+                        
+                        // Check for label
+                        const label = form.querySelector(`label[for="${fieldConfig.name}"]`);
+                        if (!label) {
+                            throw new Error(`Label not found for field ${fieldConfig.name} in survey ${survey.id}`);
+                        }
+                        
+                        // Label text should contain the configured label
+                        if (!label.textContent.includes(fieldConfig.label)) {
+                            throw new Error(`Label text mismatch for field ${fieldConfig.name} in survey ${survey.id}`);
+                        }
+                    }
+                    
+                    iterationsPassed++;
+                }
+                
+                addResult(
+                    'Configured fields have matching labels',
+                    true,
+                    `Verified all configured fields have labels matching their configuration (${iterationsPassed}/${numRuns} iterations)`
+                );
+            } catch (error) {
+                addResult(
+                    'Configured fields have matching labels',
+                    false,
+                    '',
+                    error.message
+                );
+            }
+
+            // Test 3: Fields with configured placeholders have them rendered
+            try {
+                let iterationsPassed = 0;
+                const numRuns = Math.min(100, surveys.length * 34);
+                
+                for (let i = 0; i < numRuns; i++) {
+                    resetTestEnvironment();
+                    
+                    const survey = surveys[Math.floor(Math.random() * surveys.length)];
+                    
+                    const surveyForm = new SurveyForm(survey);
+                    surveyForm.render('test-container');
+                    
+                    const container = document.getElementById('test-container');
+                    const form = container.querySelector('form');
+                    
+                    // Check each configured field that has a placeholder
+                    for (const fieldConfig of survey.fields) {
+                        if (fieldConfig.placeholder) {
+                            const input = form.querySelector(`#${fieldConfig.name}`);
+                            if (!input) {
+                                throw new Error(`Input field ${fieldConfig.name} not found`);
+                            }
+                            
+                            const placeholder = input.getAttribute('placeholder');
+                            if (placeholder !== fieldConfig.placeholder) {
+                                throw new Error(`Placeholder mismatch for field ${fieldConfig.name}: expected "${fieldConfig.placeholder}", got "${placeholder}"`);
+                            }
+                        }
+                    }
+                    
+                    iterationsPassed++;
+                }
+                
+                addResult(
+                    'Configured placeholders are rendered',
+                    true,
+                    `Verified fields with configured placeholders have them rendered correctly (${iterationsPassed}/${numRuns} iterations)`
+                );
+            } catch (error) {
+                addResult(
+                    'Configured placeholders are rendered',
+                    false,
+                    '',
+                    error.message
+                );
+            }
+
+            // Test 4: KVKK consent checkbox has an associated label
+            try {
+                let iterationsPassed = 0;
+                const numRuns = Math.min(100, surveys.length * 34);
+                
+                for (let i = 0; i < numRuns; i++) {
+                    resetTestEnvironment();
+                    
+                    const survey = surveys[Math.floor(Math.random() * surveys.length)];
+                    
+                    const surveyForm = new SurveyForm(survey);
+                    surveyForm.render('test-container');
+                    
+                    const container = document.getElementById('test-container');
+                    const form = container.querySelector('form');
+                    const kvkkCheckbox = form.querySelector('#kvkkConsent');
+                    
+                    if (!kvkkCheckbox) {
+                        throw new Error(`KVKK checkbox not found in survey ${survey.id}`);
+                    }
+                    
+                    // Check for label
+                    const label = form.querySelector('label[for="kvkkConsent"]');
+                    if (!label) {
+                        throw new Error(`Label not found for KVKK checkbox in survey ${survey.id}`);
+                    }
+                    
+                    // Label should contain KVKK text
+                    if (!label.textContent.includes('KVKK')) {
+                        throw new Error(`KVKK label doesn't contain 'KVKK' text in survey ${survey.id}`);
+                    }
+                    
+                    iterationsPassed++;
+                }
+                
+                addResult(
+                    'KVKK consent has label',
+                    true,
+                    `Verified KVKK consent checkbox has proper label (${iterationsPassed}/${numRuns} iterations)`
+                );
+            } catch (error) {
+                addResult(
+                    'KVKK consent has label',
+                    false,
+                    '',
+                    error.message
+                );
+            }
+
+            // Test 5: Label 'for' attributes match input 'id' attributes
+            try {
+                let iterationsPassed = 0;
+                const numRuns = Math.min(100, surveys.length * 34);
+                
+                for (let i = 0; i < numRuns; i++) {
+                    resetTestEnvironment();
+                    
+                    const survey = surveys[Math.floor(Math.random() * surveys.length)];
+                    
+                    const surveyForm = new SurveyForm(survey);
+                    surveyForm.render('test-container');
+                    
+                    const container = document.getElementById('test-container');
+                    const form = container.querySelector('form');
+                    const labels = form.querySelectorAll('label[for]');
+                    
+                    // For each label with a 'for' attribute
+                    for (const label of labels) {
+                        const forAttr = label.getAttribute('for');
+                        
+                        // There must be an input with matching id
+                        const input = form.querySelector(`#${forAttr}`);
+                        if (!input) {
+                            throw new Error(`No input found with id="${forAttr}" for label in survey ${survey.id}`);
+                        }
+                        
+                        // The input's id must match the label's for
+                        if (input.getAttribute('id') !== forAttr) {
+                            throw new Error(`Input id mismatch for label in survey ${survey.id}`);
+                        }
+                    }
+                    
+                    iterationsPassed++;
+                }
+                
+                addResult(
+                    'Label for attributes match input ids',
+                    true,
+                    `Verified label 'for' attributes match input 'id' attributes (${iterationsPassed}/${numRuns} iterations)`
+                );
+            } catch (error) {
+                addResult(
+                    'Label for attributes match input ids',
+                    false,
+                    '',
+                    error.message
+                );
+            }
+
+            // Test 6: Required fields have asterisk in labels
+            try {
+                let iterationsPassed = 0;
+                const numRuns = Math.min(100, surveys.length * 34);
+                
+                for (let i = 0; i < numRuns; i++) {
+                    resetTestEnvironment();
+                    
+                    const survey = surveys[Math.floor(Math.random() * surveys.length)];
+                    
+                    const surveyForm = new SurveyForm(survey);
+                    surveyForm.render('test-container');
+                    
+                    const container = document.getElementById('test-container');
+                    const form = container.querySelector('form');
+                    
+                    // Check each required field
+                    for (const fieldConfig of survey.fields) {
+                        if (fieldConfig.required) {
+                            const label = form.querySelector(`label[for="${fieldConfig.name}"]`);
+                            if (!label) {
+                                throw new Error(`Label not found for required field ${fieldConfig.name}`);
+                            }
+                            
+                            // Label should contain asterisk for required fields
+                            if (!label.textContent.includes('*')) {
+                                throw new Error(`Required field ${fieldConfig.name} label doesn't contain asterisk`);
+                            }
+                        }
+                    }
+                    
+                    iterationsPassed++;
+                }
+                
+                addResult(
+                    'Required fields have asterisk indicator',
+                    true,
+                    `Verified required fields have asterisk in their labels (${iterationsPassed}/${numRuns} iterations)`
+                );
+            } catch (error) {
+                addResult(
+                    'Required fields have asterisk indicator',
+                    false,
+                    '',
+                    error.message
+                );
+            }
+
+            renderResults();
+        }
+
+        // Run tests when page loads
+        runTests();
+    </script>
+</body>
+</html>

@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mobile Menu Test</title>
+    <link rel="stylesheet" href="../css/variables.css">
+    <link rel="stylesheet" href="../css/base.css">
+    <link rel="stylesheet" href="../css/components.css">
+    <link rel="stylesheet" href="../css/layout.css">
+    <link rel="stylesheet" href="../css/animations.css">
+    <link rel="stylesheet" href="../css/responsive.css">
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+        }
+        .test-info {
+            padding: 20px;
+            background: #f0f9ff;
+            margin: 20px;
+            border-radius: 8px;
+        }
+        .test-info h2 {
+            color: #0891b2;
+            margin-top: 0;
+        }
+        .test-info ul {
+            line-height: 1.8;
+        }
+        .viewport-indicator {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: #0891b2;
+            color: white;
+            padding: 10px 15px;
+            border-radius: 8px;
+            font-weight: bold;
+            z-index: 1000;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav id="main-navigation" class="navigation" role="navigation" aria-label="Ana navigasyon">
+        <div class="nav-container">
+            <div class="nav-brand">
+                <h1 class="logo">Gözde Ekşi</h1>
+            </div>
+            <button class="mobile-menu-toggle" aria-label="Menüyü aç/kapat" aria-expanded="false">
+                <span class="hamburger-icon"></span>
+            </button>
+            <ul class="nav-menu">
+                <li><a href="#anasayfa" class="nav-link active">Anasayfa</a></li>
+                <li><a href="#anketler" class="nav-link">Anketler</a></li>
+                <li><a href="#hakkimda" class="nav-link">Hakkımda</a></li>
+                <li><a href="#iletisim" class="nav-link">İletişim</a></li>
+                <li><a href="#universitem" class="nav-link">Üniversitem</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="test-info">
+        <h2>Mobile Menu Test Instructions</h2>
+        <p><strong>Test Requirements 2.4 and 1.4:</strong></p>
+        <ul>
+            <li><strong>Desktop (>768px):</strong> Navigation links should be visible horizontally, hamburger menu hidden</li>
+            <li><strong>Mobile (<768px):</strong> Hamburger menu should be visible, navigation links hidden until menu is opened</li>
+            <li><strong>Hamburger Click:</strong> Should toggle menu open/close with smooth animation</li>
+            <li><strong>X Animation:</strong> Hamburger should transform to X when menu is open</li>
+            <li><strong>Click Outside:</strong> Menu should close when clicking outside the navigation</li>
+            <li><strong>Link Click:</strong> Menu should close after clicking a navigation link on mobile</li>
+            <li><strong>Resize:</strong> Menu should close automatically when resizing from mobile to desktop</li>
+        </ul>
+        
+        <h3>How to Test:</h3>
+        <ol>
+            <li>Open browser DevTools (F12)</li>
+            <li>Toggle device toolbar (Ctrl+Shift+M or Cmd+Shift+M)</li>
+            <li>Test at different viewport widths: 375px (mobile), 768px (tablet), 1024px (desktop)</li>
+            <li>Verify all behaviors listed above</li>
+        </ol>
+    </div>
+
+    <main id="main-content">
+        <section id="anasayfa" class="page-section active">
+            <div class="container">
+                <h2>Anasayfa</h2>
+                <p>Click outside the navigation to test menu closing behavior.</p>
+            </div>
+        </section>
+        <section id="anketler" class="page-section">
+            <div class="container">
+                <h2>Anketler</h2>
+            </div>
+        </section>
+        <section id="hakkimda" class="page-section">
+            <div class="container">
+                <h2>Hakkımda</h2>
+            </div>
+        </section>
+        <section id="iletisim" class="page-section">
+            <div class="container">
+                <h2>İletişim</h2>
+            </div>
+        </section>
+        <section id="universitem" class="page-section">
+            <div class="container">
+                <h2>Üniversitem</h2>
+            </div>
+        </section>
+    </main>
+
+    <div class="viewport-indicator">
+        Width: <span id="viewport-width"></span>px
+    </div>
+
+    <script type="module" src="../js/utils.js"></script>
+    <script type="module" src="../js/navigation.js"></script>
+    <script>
+        // Update viewport indicator
+        function updateViewportIndicator() {
+            document.getElementById('viewport-width').textContent = window.innerWidth;
+        }
+        updateViewportIndicator();
+        window.addEventListener('resize', updateViewportIndicator);
+    </script>
+</body>
+</html>
