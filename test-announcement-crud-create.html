@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Announcement CRUD Create Property Test</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 20px;
+      background: #f5f5f5;
+    }
+    .container {
+      background: white;
+      padding: 30px;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    h1 {
+      color: #333;
+      border-bottom: 3px solid #4CAF50;
+      padding-bottom: 10px;
+    }
+    .test-info {
+      background: #e3f2fd;
+      padding: 15px;
+      border-radius: 5px;
+      margin: 20px 0;
+      border-left: 4px solid #2196F3;
+    }
+    .test-result {
+      margin: 20px 0;
+      padding: 15px;
+      border-radius: 5px;
+    }
+    .test-result.pass {
+      background: #e8f5e9;
+      border-left: 4px solid #4CAF50;
+    }
+    .test-result.fail {
+      background: #ffebee;
+      border-left: 4px solid #f44336;
+    }
+    .test-result.running {
+      background: #fff3e0;
+      border-left: 4px solid #ff9800;
+    }
+    button {
+      background: #4CAF50;
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      font-size: 16px;
+      border-radius: 5px;
+      cursor: pointer;
+      margin: 10px 5px;
+    }
+    button:hover {
+      background: #45a049;
+    }
+    button:disabled {
+      background: #ccc;
+      cursor: not-allowed;
+    }
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 15px;
+      margin: 20px 0;
+    }
+    .stat-card {
+      background: #f9f9f9;
+      padding: 15px;
+      border-radius: 5px;
+      text-align: center;
+    }
+    .stat-value {
+      font-size: 32px;
+      font-weight: bold;
+      color: #4CAF50;
+    }
+    .stat-label {
+      color: #666;
+      margin-top: 5px;
+    }
+    .log {
+      background: #f5f5f5;
+      padding: 15px;
+      border-radius: 5px;
+      max-height: 400px;
+      overflow-y: auto;
+      font-family: 'Courier New', monospace;
+      font-size: 12px;
+      margin-top: 20px;
+    }
+    .log-entry {
+      margin: 5px 0;
+      padding: 5px;
+    }
+    .log-entry.success {
+      color: #4CAF50;
+    }
+    .log-entry.error {
+      color: #f44336;
+    }
+    .log-entry.info {
+      color: #2196F3;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>🧪 Property-Based Test: Announcement CRUD - Create</h1>
+    
+    <div class="test-info">
+      <strong>Feature:</strong> portfolio-improvements<br>
+      <strong>Property 10:</strong> CRUD operation - Create<br>
+      <strong>Validates:</strong> Requirements 7.3, 8.3<br>
+      <strong>Property:</strong> For any new announcement, after creation the item count should increase by one and the new item should appear in the list
+    </div>
+
+    <button id="runTest" onclick="runPropertyTest()">▶️ Run Property Test (100 iterations)</button>
+    <button id="runQuick" onclick="runPropertyTest(10)">⚡ Quick Test (10 iterations)</button>
+    <button onclick="clearResults()">🗑️ Clear Results</button>
+
+    <div id="testResult" class="test-result" style="display:none;"></div>
+
+    <div class="stats" id="stats" style="display:none;">
+      <div class="stat-card">
+        <div class="stat-value" id="totalRuns">0</div>
+        <div class="stat-label">Total Runs</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value" id="passedRuns">0</div>
+        <div class="stat-label">Passed</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value" id="failedRuns">0</div>
+        <div class="stat-label">Failed</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value" id="duration">0</div>
+        <div class="stat-label">Duration (ms)</div>
+      </div>
+    </div>
+
+    <div id="log" class="log" style="display:none;"></div>
+  </div>
+
+  <script src="js/announcements.js"></script>
+  <script>
+    let testLog = [];
+
+    function log(message, type = 'info') {
+      testLog.push({ message, type, timestamp: new Date().toISOString() });
+      updateLogDisplay();
+    }
+
+    function updateLogDisplay() {
+      const logDiv = document.getElementById('log');
+      logDiv.style.display = 'block';
+      logDiv.innerHTML = testLog.map(entry => 
+        `<div class="log-entry ${entry.type}">[${entry.timestamp.split('T')[1].split('.')[0]}] ${entry.message}</div>`
+      ).join('');
+      logDiv.scrollTop = logDiv.scrollHeight;
+    }
+
+    function clearResults() {
+      testLog = [];
+      document.getElementById('testResult').style.display = 'none';
+      document.getElementById('stats').style.display = 'none';
+      document.getElementById('log').style.display = 'none';
+      document.getElementById('totalRuns').textContent = '0';
+      document.getElementById('passedRuns').textContent = '0';
+      document.getElementById('failedRuns').textContent = '0';
+      document.getElementById('duration').textContent = '0';
+    }
+
+    // Simple property-based testing utilities
+    function randomInt(min, max) {
+      return Math.floor(Math.random() * (max - min + 1)) + min;
+    }
+
+    function randomDate() {
+      const start = new Date('2020-01-01');
+      const end = new Date('2030-12-31');
+      const date = new Date(start.getTime() + Math.random() * (end.getTime() - start.getTime()));
+      return date.toISOString().split('T')[0];
+    }
+
+    function randomTime() {
+      const h = randomInt(0, 23);
+      const m = randomInt(0, 59);
+      return `${String(h).padStart(2, '0')}:${String(m).padStart(2, '0')}`;
+    }
+
+    function randomString(minLength, maxLength) {
+      const length = randomInt(minLength, maxLength);
+      const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789 ';
+      let result = '';
+      for (let i = 0; i < length; i++) {
+        result += chars.charAt(Math.floor(Math.random() * chars.length));
+      }
+      return result.trim() || 'a'; // Ensure non-empty
+    }
+
+    function generateValidAnnouncement() {
+      return {
+        title: randomString(5, 200),
+        date: randomDate(),
+        time: randomTime(),
+        summary: randomString(5, 150),
+        content: randomString(10, 1000),
+        isActive: Math.random() > 0.5
+      };
+    }
+
+    function generateInvalidAnnouncement() {
+      const invalidTypes = [
+        { title: '', date: randomDate(), time: randomTime(), summary: randomString(5, 150), content: randomString(10, 1000) },
+        { title: randomString(5, 200), date: 'invalid-date', time: randomTime(), summary: randomString(5, 150), content: randomString(10, 1000) },
+        { title: randomString(5, 200), date: randomDate(), time: 'invalid-time', summary: randomString(5, 150), content: randomString(10, 1000) },
+        { title: randomString(5, 200), date: randomDate(), time: randomTime(), summary: '', content: randomString(10, 1000) },
+        { title: randomString(5, 200), date: randomDate(), time: randomTime(), summary: randomString(5, 150), content: '' }
+      ];
+      return invalidTypes[randomInt(0, invalidTypes.length - 1)];
+    }
+
+    async function runPropertyTest(numRuns = 100) {
+      const runButton = document.getElementById('runTest');
+      const quickButton = document.getElementById('runQuick');
+      runButton.disabled = true;
+      quickButton.disabled = true;
+
+      clearResults();
+      
+      const resultDiv = document.getElementById('testResult');
+      resultDiv.className = 'test-result running';
+      resultDiv.style.display = 'block';
+      resultDiv.innerHTML = `<strong>⏳ Running ${numRuns} property test iterations...</strong>`;
+
+      document.getElementById('stats').style.display = 'grid';
+
+      const startTime = Date.now();
+      let passed = 0;
+      let failed = 0;
+      const failures = [];
+
+      log(`Starting property test with ${numRuns} iterations`, 'info');
+
+      for (let i = 0; i < numRuns; i++) {
+        try {
+          // Test 1: Valid announcement creation
+          localStorage.clear();
+          const manager = new AnnouncementManager();
+
+          // Add some initial announcements
+          const initialCount = randomInt(0, 5);
+          for (let j = 0; j < initialCount; j++) {
+            manager.create(generateValidAnnouncement());
+          }
+
+          const beforeCount = manager.getAll().length;
+          const beforeIds = new Set(manager.getAll().map(a => a.id));
+
+          // Create new announcement
+          const newAnnouncement = generateValidAnnouncement();
+          const result = manager.create(newAnnouncement);
+
+          // Verify properties
+          if (!result.success) {
+            throw new Error(`Create failed: ${result.errors.join(', ')}`);
+          }
+
+          const afterCount = manager.getAll().length;
+          if (afterCount !== beforeCount + 1) {
+            throw new Error(`Count mismatch: expected ${beforeCount + 1}, got ${afterCount}`);
+          }
+
+          const newItem = manager.getById(result.data.id);
+          if (!newItem) {
+            throw new Error('New item not found in list');
+          }
+
+          if (newItem.title.trim() !== newAnnouncement.title.trim()) {
+            throw new Error('Title mismatch');
+          }
+
+          if (beforeIds.has(result.data.id)) {
+            throw new Error('ID not unique');
+          }
+
+          // Verify all initial items still present
+          for (const id of beforeIds) {
+            if (!manager.getById(id)) {
+              throw new Error('Initial item lost');
+            }
+          }
+
+          passed++;
+          if (i % 10 === 0) {
+            log(`✓ Iteration ${i + 1}: Valid creation test passed`, 'success');
+          }
+
+        } catch (error) {
+          failed++;
+          failures.push({ iteration: i + 1, error: error.message });
+          log(`✗ Iteration ${i + 1}: ${error.message}`, 'error');
+        }
+
+        // Update stats
+        document.getElementById('totalRuns').textContent = i + 1;
+        document.getElementById('passedRuns').textContent = passed;
+        document.getElementById('failedRuns').textContent = failed;
+
+        // Allow UI to update
+        if (i % 10 === 0) {
+          await new Promise(resolve => setTimeout(resolve, 0));
+        }
+      }
+
+      // Test invalid announcements
+      log('Testing invalid announcement handling...', 'info');
+      for (let i = 0; i < Math.min(20, numRuns / 5); i++) {
+        try {
+          localStorage.clear();
+          const manager = new AnnouncementManager();
+          const beforeCount = manager.getAll().length;
+
+          const invalidAnnouncement = generateInvalidAnnouncement();
+          const result = manager.create(invalidAnnouncement);
+
+          if (result.success) {
+            throw new Error('Invalid announcement was accepted');
+          }
+
+          const afterCount = manager.getAll().length;
+          if (afterCount !== beforeCount) {
+            throw new Error('Count changed for invalid announcement');
+          }
+
+          passed++;
+          if (i % 5 === 0) {
+            log(`✓ Invalid test ${i + 1}: Correctly rejected`, 'success');
+          }
+
+        } catch (error) {
+          failed++;
+          failures.push({ iteration: `invalid-${i + 1}`, error: error.message });
+          log(`✗ Invalid test ${i + 1}: ${error.message}`, 'error');
+        }
+      }
+
+      const duration = Date.now() - startTime;
+      document.getElementById('duration').textContent = duration;
+
+      // Display results
+      if (failed === 0) {
+        resultDiv.className = 'test-result pass';
+        resultDiv.innerHTML = `
+          <strong>✅ All tests passed!</strong><br>
+          ${passed} iterations completed successfully in ${duration}ms<br>
+          Average: ${(duration / passed).toFixed(2)}ms per iteration
+        `;
+        log(`✅ All ${passed} tests passed!`, 'success');
+      } else {
+        resultDiv.className = 'test-result fail';
+        resultDiv.innerHTML = `
+          <strong>❌ Some tests failed</strong><br>
+          Passed: ${passed}<br>
+          Failed: ${failed}<br>
+          Duration: ${duration}ms<br>
+          <details style="margin-top: 10px;">
+            <summary>View failures</summary>
+            <pre style="margin-top: 10px; background: #fff; padding: 10px; border-radius: 3px;">${
+              failures.map(f => `Iteration ${f.iteration}: ${f.error}`).join('\n')
+            }</pre>
+          </details>
+        `;
+        log(`❌ ${failed} tests failed`, 'error');
+      }
+
+      runButton.disabled = false;
+      quickButton.disabled = false;
+    }
+  </script>
+</body>
+</html>

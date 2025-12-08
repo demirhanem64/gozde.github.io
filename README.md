@@ -8,6 +8,7 @@ Modern, KVKK uyumlu akademik portfolio ve öğrenci etkileşim platformu.
 - [Özellikler](#özellikler)
 - [Teknoloji Stack](#teknoloji-stack)
 - [Kurulum](#kurulum)
+- [Google Sheets Duyuru Entegrasyonu](#google-sheets-duyuru-entegrasyonu)
 - [Deployment](#deployment)
 - [Webhook Konfigürasyonu](#webhook-konfigürasyonu)
 - [Anket Yönetimi](#anket-yönetimi)
@@ -33,11 +34,21 @@ Bu proje, İstinye Üniversitesi İlk ve Acil Yardım Bölümü öğretim görev
 
 ### Sayfa Yapısı
 
-1. **Anasayfa**: Hoş geldiniz mesajı ve genel bilgiler
+1. **Anasayfa**: Hoş geldiniz mesajı, duyurular ve genel bilgiler
 2. **Anketler**: Dinamik anket sistemi ile öğrenci geri bildirimi
 3. **Hakkımda**: Akademik geçmiş ve uzmanlık alanları
 4. **İletişim**: İletişim bilgileri ve sosyal medya linkleri
 5. **Üniversitem**: İstinye Üniversitesi ve bölüm bilgileri
+
+### Duyuru Sistemi
+
+- Google Sheets tabanlı duyuru yönetimi
+- Kod değiştirmeden içerik güncelleme
+- 5 dakikalık akıllı önbellekleme sistemi
+- Otomatik tarih sıralama (en yeni önce)
+- "Yeni" rozeti (son 7 gün içindeki duyurular)
+- Responsive grid layout (desktop 3 sütun, tablet 2 sütun, mobil 1 sütun)
+- Popup modal ile detaylı görüntüleme
 
 ### Anket Sistemi
 
@@ -78,20 +89,25 @@ gozdeeksi.com.tr/
 │   ├── accessibility.css     # Erişilebilirlik stilleri
 │   └── browser-compat.css    # Tarayıcı uyumluluğu
 ├── js/
-│   ├── navigation.js         # Sayfa navigasyonu
-│   ├── animations.js         # Animasyon kontrolü
-│   ├── forms.js              # Form yönetimi
-│   ├── webhook.js            # Webhook entegrasyonu
-│   ├── accessibility.js      # Erişilebilirlik özellikleri
-│   └── utils.js              # Yardımcı fonksiyonlar
+│   ├── navigation.js                # Sayfa navigasyonu
+│   ├── animations.js                # Animasyon kontrolü
+│   ├── announcements.js             # Duyuru yönetimi
+│   ├── google-sheets-integration.js # Google Sheets entegrasyonu
+│   ├── forms.js                     # Form yönetimi
+│   ├── webhook.js                   # Webhook entegrasyonu
+│   ├── accessibility.js             # Erişilebilirlik özellikleri
+│   └── utils.js                     # Yardımcı fonksiyonlar
 ├── assets/
 │   ├── images/               # Görseller
 │   └── icons/                # İkonlar ve favicon
 ├── data/
 │   └── surveys.json          # Anket konfigürasyonları
-├── tests/                    # Test dosyaları
-├── __tests__/                # Jest unit testleri
-└── README.md                 # Bu dosya
+├── tests/                                    # Test dosyaları
+├── __tests__/                                # Jest unit testleri
+├── GOOGLE-SHEETS-DUYURU-ENTEGRASYONU.md     # Google Sheets detaylı kılavuz
+├── GOOGLE-SHEETS-KURULUM-OZET.md            # Google Sheets hızlı kurulum
+├── GOOGLE-SHEETS-SABLON.md                  # Google Sheets şablon ve örnekler
+└── README.md                                 # Bu dosya
 ```
 
 ## 🔧 Kurulum
@@ -139,6 +155,49 @@ npm run test:pbt
 # Belirli bir test dosyasını çalıştır
 npm test -- forms.test.js
 ```
+
+## 📊 Google Sheets Duyuru Entegrasyonu
+
+Site, duyuruları Google Sheets'ten otomatik olarak çeker. Bu sayede kod değiştirmeden içerik yönetimi yapabilirsiniz.
+
+### Hızlı Başlangıç
+
+1. **Google Sheets'i Açın**: [Duyuru Sheets'i](https://docs.google.com/spreadsheets/d/1FXAumUTfYi0Q4XInTnF4oext2YobLw2rm3DoNsQHwJ0/edit)
+
+2. **Duyuru Ekleyin**: Yeni satır ekleyip aşağıdaki sütunları doldurun:
+   - **Başlık**: Duyuru başlığı (max 200 karakter)
+   - **Tarih**: DD/MM/YYYY formatında (örn: 15/01/2025)
+   - **Saat**: HH:MM formatında (örn: 09:00)
+   - **Özet**: Kısa özet (max 150 karakter)
+   - **İçerik**: Detaylı açıklama
+   - **Aktif**: "Evet" veya "Hayır"
+
+3. **Kaydedin**: Değişiklikler 5 dakika içinde sitede görünür!
+
+### Özellikler
+
+- ✅ **Otomatik Senkronizasyon**: 5 dakikalık cache ile performans optimizasyonu
+- ✅ **Aktif/Pasif Kontrol**: Duyuruları gizleyebilir veya gösterebilirsiniz
+- ✅ **Hata Yönetimi**: API hatalarında cache veya fallback data kullanılır
+- ✅ **Tarih Sıralama**: En yeni duyurular otomatik olarak önce gösterilir
+- ✅ **"Yeni" Rozeti**: Son 7 gün içindeki duyurular otomatik işaretlenir
+
+### Detaylı Dokümantasyon
+
+Daha fazla bilgi için:
+- **[GOOGLE-SHEETS-DUYURU-ENTEGRASYONU.md](GOOGLE-SHEETS-DUYURU-ENTEGRASYONU.md)**: Detaylı kullanım kılavuzu
+- **[GOOGLE-SHEETS-KURULUM-OZET.md](GOOGLE-SHEETS-KURULUM-OZET.md)**: Hızlı kurulum özeti
+- **[GOOGLE-SHEETS-SABLON.md](GOOGLE-SHEETS-SABLON.md)**: Sheets şablonu ve örnekler
+
+### Sorun Giderme
+
+**Duyurular görünmüyor?**
+1. Google Sheets'in herkese açık olduğunu kontrol edin
+2. Tarayıcı konsolunda (F12) hata mesajlarını inceleyin
+3. Cache'i temizleyin: `localStorage.clear(); location.reload();`
+
+**Değişiklikler görünmüyor?**
+- 5 dakika bekleyin (cache süresi) veya manuel cache temizleyin
 
 ## 📦 Deployment
 

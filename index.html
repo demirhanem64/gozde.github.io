@@ -116,10 +116,10 @@
                             <!-- Profile Photo - Large, left-aligned -->
                             <div style="width: 350px; height: 450px; border-radius: 20px; overflow: hidden; border: 6px solid white; box-shadow: 0 25px 60px rgba(8,145,178,0.4); background: linear-gradient(135deg, #0891b2, #06b6d4);">
                                 <!-- Real photo will go here -->
-                                <img src="assets/images/gozde-eksi.jpg" 
+                                <img src="assets/images/gozde-eksi.jpeg" 
                                      alt="Öğr. Gör. Gözde Ekşi" 
                                      style="width: 100%; height: 100%; object-fit: cover;"
-                                     onerror="this.style.display='none'; this.parentElement.innerHTML='<div style=\'display:flex;align-items:center;justify-content:center;height:100%;color:white;font-size:1.5rem;text-align:center;padding:2rem;\'>Öğr. Gör.<br>Gözde Ekşi<br><br>📸<br><br>Fotoğraf Yükleniyor...</div>'">
+                                     onerror="this.style.display='none'; this.parentElement.innerHTML='<div style=\'display:flex;align-items:center;justify-content:center;height:100%;color:white;font-size:1.5rem;text-align:center;padding:2rem;\'>Öğr. Gör.<br>Gözde Ekşi<br><br>📸<br><br>Fotoğraf yüklenemedi</div>'">
                             </div>
                         </div>
                         
@@ -205,6 +205,20 @@
                         <p style="color: #64748b; line-height: 1.6;">Öğrencilerinizle kolayca iletişime geçin</p>
                     </div>
                 </div>
+
+                <!-- Announcements Section -->
+                <section id="announcements-section" class="announcements-section scroll-reveal" style="margin-top: 3rem;">
+                    <div class="announcements-header" style="text-align: center; margin-bottom: 2rem;">
+                        <div style="display: inline-flex; align-items: center; gap: 0.75rem; background: linear-gradient(135deg, #f0fdfa, #fff7ed); padding: 1rem 2rem; border-radius: 20px; box-shadow: 0 4px 12px rgba(8,145,178,0.1);">
+                            <span style="font-size: 2rem;">📢</span>
+                            <h2 style="margin: 0; background: linear-gradient(135deg, #0891b2, #f97316); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; font-size: 2rem;">Duyurular</h2>
+                        </div>
+                    </div>
+                    
+                    <div id="announcements-container" class="announcements-container">
+                        <!-- Announcement cards will be dynamically rendered here -->
+                    </div>
+                </section>
             </div>
         </section>
 
@@ -401,7 +415,7 @@
                 <div class="bio-hero scroll-reveal">
                     <div style="text-align: center; margin-bottom: 2rem;">
                         <div style="width: 200px; height: 200px; margin: 0 auto; border-radius: 50%; overflow: hidden; border: 5px solid white; box-shadow: 0 15px 40px rgba(8,145,178,0.3); background: linear-gradient(135deg, #0891b2, #06b6d4);">
-                            <img src="assets/images/gozde-eksi.jpg" alt="Gözde Ekşi" style="width: 100%; height: 100%; object-fit: cover;" onerror="this.style.display='none'">
+                            <img src="assets/images/gozde-eksi.jpeg" alt="Gözde Ekşi" style="width: 100%; height: 100%; object-fit: cover;" onerror="this.style.display='none'; this.parentElement.innerHTML='<div style=\'display:flex;align-items:center;justify-content:center;height:100%;color:white;font-size:1.2rem;text-align:center;padding:1rem;\'>Gözde Ekşi<br><br>📸<br><br>Fotoğraf yüklenemedi</div>'">
                         </div>
                     </div>
                     <h2 id="hakkimda-heading">Hakkımda</h2>
@@ -1181,10 +1195,12 @@
                             <label style="display: block; color: #0e7490; font-weight: 600; margin-bottom: 0.5rem;">Mesajınız *</label>
                             <textarea name="message" required rows="5" style="width: 100%; padding: 0.75rem; border: 2px solid #e2e8f0; border-radius: 10px; resize: vertical;"></textarea>
                         </div>
-                        <div style="margin-bottom: 1rem; padding: 1rem; background: #f0fdfa; border-radius: 10px;">
+                        <div style="margin-bottom: 1rem; padding: 1rem; background: #f0fdfa; border-radius: 10px; border-left: 4px solid #0891b2;">
                             <label style="display: flex; align-items: start; cursor: pointer;">
-                                <input type="checkbox" name="kvkkConsent" required style="margin-right: 0.75rem; margin-top: 0.25rem; width: 18px; height: 18px;">
-                                <span style="color: #0e7490; font-size: 0.9rem;"><strong>KVKK:</strong> Kişisel verilerimin işlenmesini kabul ediyorum.</span>
+                                <input type="checkbox" name="kvkkConsent" required style="margin-right: 0.75rem; margin-top: 0.25rem; width: 18px; height: 18px; cursor: pointer;">
+                                <span style="color: #0e7490; font-size: 0.9rem; line-height: 1.6;">
+                                    <strong>KVKK Aydınlatma Metni:</strong> Kişisel verileriniz, eğitim kalitesini artırmak amacıyla toplanmakta ve işlenmektedir. Verileriniz güvenli bir şekilde saklanacak ve üçüncü şahıslarla paylaşılmayacaktır. Bu formu göndererek kişisel verilerinizin işlenmesini kabul etmiş olursunuz.
+                                </span>
                             </label>
                         </div>
                         <button type="submit" style="width: 100%; background: linear-gradient(135deg, #0891b2, #f97316); color: white; border: none; padding: 1rem; border-radius: 10px; font-size: 1.1rem; font-weight: 600; cursor: pointer;">Gönder</button>
@@ -1236,6 +1252,12 @@
             }
         }
     </script>
+    
+    <!-- Google Sheets Integration Script -->
+    <script src="js/google-sheets-integration.js"></script>
+    
+    <!-- Announcements Script -->
+    <script src="js/announcements.js"></script>
     
     <style>
         @keyframes fadeIn {
@@ -1728,5 +1750,21 @@
             opacity: 0.95;
         }
     </style>
+
+    <!-- Announcement Popup Modal -->
+    <div id="announcement-popup-backdrop" class="announcement-popup-backdrop hidden" aria-hidden="true"></div>
+    <div id="announcement-popup" class="announcement-popup hidden" role="dialog" aria-modal="true" aria-labelledby="popup-title">
+        <div class="announcement-popup-content">
+            <button id="popup-close-btn" class="announcement-popup-close" aria-label="Kapat">
+                <span aria-hidden="true">&times;</span>
+            </button>
+            <h2 id="popup-title" class="announcement-popup-title"></h2>
+            <div class="announcement-popup-meta">
+                <span id="popup-date" class="announcement-popup-date"></span>
+                <span id="popup-time" class="announcement-popup-time"></span>
+            </div>
+            <div id="popup-content" class="announcement-popup-body"></div>
+        </div>
+    </div>
 </body>
 </html>
