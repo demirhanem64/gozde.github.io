@@ -2027,33 +2027,33 @@
             
             // Create modal content
             const modalContent = document.createElement('div');
-            modalContent.style.cssText = 'background: white; border-radius: 20px; padding: 2.5rem; max-width: 700px; width: 100%; max-height: 90vh; overflow-y: auto; box-shadow: 0 20px 60px rgba(0,0,0,0.3); position: relative;';
+            modalContent.style.cssText = 'background: white; border-radius: 12px; padding: 1rem; max-width: 480px; width: 100%; max-height: 80vh; overflow-y: auto; box-shadow: 0 15px 40px rgba(0,0,0,0.25); position: relative;';
             
             let contentHTML = `
-                <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 2rem;">
-                    <div style="flex: 1; padding-right: 2rem;">
-                        <h3 style="color: #0891b2; font-size: 1.8rem; margin: 0; line-height: 1.3;">${title}</h3>
+                <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 0.85rem;">
+                    <div style="flex: 1; padding-right: 0.75rem;">
+                        <h3 style="color: #0891b2; font-size: 1.1rem; margin: 0; line-height: 1.3; font-weight: 700;">${title}</h3>
                     </div>
-                    <div style="display: flex; gap: 1rem; align-items: center;">
+                    <div style="display: flex; gap: 0.5rem; align-items: center;">
                         <div style="background: ${isActive ? 'linear-gradient(135deg, #10b981, #34d399)' : 'linear-gradient(135deg, #94a3b8, #cbd5e1)'}; 
                                     color: white; 
-                                    padding: 0.5rem 1rem; 
-                                    border-radius: 20px; 
-                                    font-size: 0.85rem; 
+                                    padding: 0.25rem 0.6rem; 
+                                    border-radius: 12px; 
+                                    font-size: 0.7rem; 
                                     font-weight: 600;
                                     display: flex;
                                     align-items: center;
-                                    gap: 0.5rem;
-                                    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+                                    gap: 0.25rem;
+                                    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
                                     white-space: nowrap;">
-                            <span style="font-size: 1.2rem;">${isActive ? '✅' : '⏸️'}</span>
+                            <span style="font-size: 0.85rem;">${isActive ? '✅' : '⏸️'}</span>
                             ${isActive ? 'Aktif' : 'Pasif'}
                         </div>
-                        <button onclick="closeAnnouncementPopup()" style="background: none; border: none; font-size: 2rem; cursor: pointer; color: #64748b; line-height: 1; padding: 0;" aria-label="Kapat">&times;</button>
+                        <button onclick="closeAnnouncementPopup()" style="background: none; border: none; font-size: 1.5rem; cursor: pointer; color: #64748b; line-height: 1; padding: 0;" aria-label="Kapat">&times;</button>
                     </div>
                 </div>
                 
-                <div style="display: grid; gap: 1.5rem;">
+                <div style="display: grid; gap: 0.65rem;">
             `;
             
             // Add all details (skip first one as it's the title)
@@ -2076,11 +2076,11 @@
                     }
                     
                     contentHTML += `
-                        <div style="background: linear-gradient(135deg, #f0fdfa, #fff7ed); padding: 1.5rem; border-radius: 12px; border-left: 4px solid #0891b2; margin-bottom: 0;">
-                            <div style="color: #0891b2; font-weight: 700; font-size: 0.85rem; margin-bottom: 0.75rem; text-transform: uppercase; letter-spacing: 1px; display: block;">
+                        <div style="background: linear-gradient(135deg, #f0fdfa, #fff7ed); padding: 0.7rem; border-radius: 8px; border-left: 2.5px solid #0891b2; margin-bottom: 0;">
+                            <div style="color: #0891b2; font-weight: 700; font-size: 0.68rem; margin-bottom: 0.35rem; text-transform: uppercase; letter-spacing: 0.3px; display: block;">
                                 ${displayKey}
                             </div>
-                            <div style="color: #0f172a; font-size: 1.1rem; line-height: 1.6; white-space: pre-wrap; font-weight: 400; display: block;">
+                            <div style="color: #0f172a; font-size: 0.88rem; line-height: 1.5; white-space: pre-wrap; font-weight: 400; display: block;">
                                 ${displayValue}
                             </div>
                         </div>
@@ -2091,7 +2091,7 @@
             contentHTML += `
                 </div>
                 
-                <button onclick="closeAnnouncementPopup()" style="margin-top: 2rem; width: 100%; background: linear-gradient(135deg, #0891b2, #f97316); color: white; border: none; padding: 1rem; border-radius: 12px; font-weight: 600; font-size: 1.1rem; cursor: pointer; transition: transform 0.2s;" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform='translateY(0)'">
+                <button onclick="closeAnnouncementPopup()" style="margin-top: 0.85rem; width: 100%; background: linear-gradient(135deg, #0891b2, #f97316); color: white; border: none; padding: 0.6rem; border-radius: 8px; font-weight: 600; font-size: 0.88rem; cursor: pointer; transition: transform 0.2s;" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform='translateY(0)'">
                     Kapat
                 </button>
             `;
