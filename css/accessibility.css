@@ -1,0 +1,478 @@
+/**
+ * Accessibility Styles
+ * WCAG 2.1 AA Compliance
+ * Keyboard Navigation, Focus Indicators, ARIA Support
+ */
+
+/* ===================================
+   FOCUS INDICATORS
+   =================================== */
+
+/* Enhanced focus visible for keyboard navigation */
+*:focus-visible {
+    outline: 3px solid var(--color-orange);
+    outline-offset: 3px;
+    border-radius: 2px;
+}
+
+/* Button focus states */
+.btn:focus-visible {
+    outline: 3px solid var(--color-orange);
+    outline-offset: 3px;
+    box-shadow: 0 0 0 6px rgba(249, 115, 22, 0.2);
+}
+
+/* Navigation link focus states */
+.nav-link:focus-visible {
+    outline: 3px solid var(--color-orange);
+    outline-offset: 2px;
+    background-color: rgba(249, 115, 22, 0.1);
+    border-radius: var(--radius-sm);
+}
+
+/* Form input focus states */
+.form-input:focus-visible,
+.form-checkbox input[type="checkbox"]:focus-visible {
+    outline: 3px solid var(--color-orange);
+    outline-offset: 2px;
+    border-color: var(--color-turquoise);
+    box-shadow: 0 0 0 4px rgba(249, 115, 22, 0.15);
+}
+
+/* Card focus states for keyboard navigation */
+.card:focus-visible,
+.survey-card:focus-visible {
+    outline: 3px solid var(--color-orange);
+    outline-offset: 4px;
+    box-shadow: 0 0 0 7px rgba(249, 115, 22, 0.15);
+}
+
+/* Link focus states */
+a:focus-visible {
+    outline: 3px solid var(--color-orange);
+    outline-offset: 3px;
+    border-radius: 2px;
+    background-color: rgba(249, 115, 22, 0.05);
+}
+
+/* Social link focus states */
+.social-link:focus-visible {
+    outline: 3px solid var(--color-orange);
+    outline-offset: 3px;
+    box-shadow: 0 0 0 6px rgba(249, 115, 22, 0.15);
+}
+
+/* University link focus states */
+.university-link:focus-visible {
+    outline: 3px solid var(--color-orange);
+    outline-offset: 3px;
+    box-shadow: 0 0 0 6px rgba(249, 115, 22, 0.2);
+}
+
+/* Mobile menu toggle focus */
+.mobile-menu-toggle:focus-visible {
+    outline: 3px solid var(--color-orange);
+    outline-offset: 3px;
+    background-color: rgba(249, 115, 22, 0.1);
+    border-radius: var(--radius-sm);
+}
+
+/* Popup close button focus */
+.popup-close-btn:focus-visible,
+.popup-retry-btn:focus-visible {
+    outline: 3px solid var(--color-orange);
+    outline-offset: 3px;
+    box-shadow: 0 0 0 6px rgba(249, 115, 22, 0.2);
+}
+
+/* ===================================
+   KEYBOARD NAVIGATION SUPPORT
+   =================================== */
+
+/* Make cards keyboard focusable */
+.card,
+.survey-card,
+.contact-card,
+.info-card {
+    position: relative;
+}
+
+/* Keyboard activation styles */
+.card:focus,
+.survey-card:focus {
+    transform: translateY(-4px) scale(1.02);
+    box-shadow: 0 12px 28px rgba(0, 0, 0, 0.15);
+}
+
+/* Skip to main content link */
+.skip-to-main {
+    position: absolute;
+    top: -100px;
+    left: 0;
+    background-color: var(--color-orange);
+    color: var(--color-white);
+    padding: var(--spacing-md) var(--spacing-lg);
+    text-decoration: none;
+    font-weight: var(--font-weight-bold);
+    z-index: var(--z-index-modal);
+    border-radius: 0 0 var(--radius-md) 0;
+    transition: top var(--transition-fast);
+}
+
+.skip-to-main:focus {
+    top: 0;
+    outline: 3px solid var(--color-turquoise);
+    outline-offset: 3px;
+}
+
+/* ===================================
+   SCREEN READER SUPPORT
+   =================================== */
+
+/* Screen reader only text */
+.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border-width: 0;
+}
+
+/* Screen reader only but focusable */
+.sr-only-focusable:focus,
+.sr-only-focusable:active {
+    position: static;
+    width: auto;
+    height: auto;
+    overflow: visible;
+    clip: auto;
+    white-space: normal;
+}
+
+/* ===================================
+   HIGH CONTRAST MODE SUPPORT
+   =================================== */
+
+@media (prefers-contrast: high) {
+    /* Increase border thickness */
+    .btn,
+    .card,
+    .form-input {
+        border-width: 3px;
+    }
+    
+    /* Stronger focus indicators */
+    *:focus-visible {
+        outline-width: 4px;
+        outline-offset: 4px;
+    }
+    
+    /* Higher contrast text */
+    body {
+        color: #000000;
+    }
+    
+    .card-description,
+    .contact-value,
+    .info-text {
+        color: #1a1a1a;
+    }
+}
+
+/* ===================================
+   REDUCED MOTION SUPPORT
+   =================================== */
+
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+    }
+    
+    /* Disable transform animations */
+    .card:hover,
+    .survey-card:hover,
+    .btn:hover,
+    .expertise-item:hover {
+        transform: none !important;
+    }
+    
+    /* Keep essential visual feedback */
+    .btn:hover {
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+    }
+}
+
+/* ===================================
+   TOUCH TARGET SIZES
+   =================================== */
+
+/* Ensure minimum touch target size of 44x44px (WCAG 2.1 Level AAA) */
+.btn,
+.nav-link,
+.mobile-menu-toggle,
+.form-checkbox input[type="checkbox"],
+.social-link,
+.university-link {
+    min-height: 44px;
+    min-width: 44px;
+}
+
+/* Checkbox larger touch target */
+.form-checkbox input[type="checkbox"] {
+    width: 24px;
+    height: 24px;
+    cursor: pointer;
+}
+
+/* Mobile menu toggle touch target */
+.mobile-menu-toggle {
+    padding: var(--spacing-md);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* ===================================
+   COLOR CONTRAST ENHANCEMENTS
+   =================================== */
+
+/* Ensure WCAG AA contrast ratios (4.5:1 for normal text, 3:1 for large text) */
+
+/* Enhanced text contrast */
+.card-description {
+    color: #4a5568; /* Darker for better contrast */
+}
+
+.contact-value,
+.info-text,
+.bio-text {
+    color: #2d3748; /* Darker for better contrast */
+}
+
+/* Form label contrast */
+.form-label {
+    color: #1a202c; /* Darker for better readability */
+}
+
+/* Error message contrast */
+.form-error {
+    color: #c53030; /* Darker red for better contrast */
+    font-weight: var(--font-weight-medium);
+}
+
+/* Success message contrast */
+.alert-success {
+    background-color: #c6f6d5;
+    color: #22543d;
+}
+
+/* ===================================
+   ARIA LIVE REGIONS
+   =================================== */
+
+/* Style for live regions */
+[aria-live="polite"],
+[aria-live="assertive"] {
+    position: relative;
+}
+
+/* Status messages */
+.status-message {
+    padding: var(--spacing-md);
+    border-radius: var(--radius-md);
+    margin-bottom: var(--spacing-md);
+    font-weight: var(--font-weight-medium);
+}
+
+.status-message[role="status"] {
+    background-color: #e6fffa;
+    color: #234e52;
+    border-left: 4px solid var(--color-turquoise);
+}
+
+.status-message[role="alert"] {
+    background-color: #fff5f5;
+    color: #742a2a;
+    border-left: 4px solid var(--color-error);
+}
+
+/* ===================================
+   KEYBOARD NAVIGATION INDICATORS
+   =================================== */
+
+/* Show keyboard navigation mode */
+body.keyboard-navigation *:focus {
+    outline: 3px solid var(--color-orange);
+    outline-offset: 3px;
+}
+
+/* Hide focus outline for mouse users */
+body:not(.keyboard-navigation) *:focus:not(:focus-visible) {
+    outline: none;
+}
+
+/* ===================================
+   FORM ACCESSIBILITY
+   =================================== */
+
+/* Required field indicator */
+.form-label .required-indicator {
+    color: var(--color-error);
+    font-weight: var(--font-weight-bold);
+    margin-left: var(--spacing-xs);
+}
+
+/* Form field descriptions */
+.form-description-text {
+    font-size: var(--font-size-sm);
+    color: #4a5568;
+    margin-top: var(--spacing-xs);
+    display: block;
+}
+
+/* Invalid field styling */
+.form-input[aria-invalid="true"] {
+    border-color: var(--color-error);
+    background-color: #fff5f5;
+}
+
+.form-input[aria-invalid="true"]:focus {
+    box-shadow: 0 0 0 4px rgba(197, 48, 48, 0.15);
+}
+
+/* Valid field styling */
+.form-input[aria-invalid="false"]:not(:placeholder-shown) {
+    border-color: var(--color-success);
+}
+
+/* ===================================
+   LOADING STATES
+   =================================== */
+
+/* Loading indicator accessibility */
+.loading-spinner[role="status"] {
+    position: relative;
+}
+
+.loading-spinner::after {
+    content: "Loading...";
+    position: absolute;
+    left: -9999px;
+}
+
+/* ===================================
+   MODAL/POPUP ACCESSIBILITY
+   =================================== */
+
+/* Trap focus within modal */
+.popup[role="dialog"] {
+    position: fixed;
+}
+
+/* Modal backdrop */
+.popup-backdrop[aria-hidden="false"] {
+    display: block;
+}
+
+.popup-backdrop[aria-hidden="true"] {
+    display: none;
+}
+
+/* ===================================
+   RESPONSIVE TEXT SIZING
+   =================================== */
+
+/* Support text zoom up to 200% */
+@media (min-width: 320px) {
+    html {
+        font-size: 16px;
+    }
+}
+
+/* Ensure text doesn't overflow containers when zoomed */
+.card-title,
+.popup-title,
+.form-label {
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+}
+
+/* ===================================
+   LINK ACCESSIBILITY
+   =================================== */
+
+/* External link indicator */
+a[target="_blank"]::after {
+    content: " ↗";
+    font-size: 0.85em;
+    vertical-align: super;
+    margin-left: 2px;
+}
+
+/* Remove indicator from social links (already have icons) */
+.social-link[target="_blank"]::after,
+.university-link[target="_blank"]::after {
+    content: none;
+}
+
+/* Link underline on focus for clarity */
+a:focus-visible {
+    text-decoration: underline;
+    text-decoration-thickness: 2px;
+    text-underline-offset: 3px;
+}
+
+/* ===================================
+   TABLE ACCESSIBILITY (if needed)
+   =================================== */
+
+/* Responsive table wrapper */
+.table-wrapper {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+}
+
+/* Table focus */
+table:focus {
+    outline: 3px solid var(--color-orange);
+    outline-offset: 3px;
+}
+
+/* ===================================
+   PRINT STYLES
+   =================================== */
+
+@media print {
+    /* Remove interactive elements */
+    .mobile-menu-toggle,
+    .popup,
+    .popup-backdrop {
+        display: none !important;
+    }
+    
+    /* Ensure good contrast */
+    body {
+        color: #000;
+        background: #fff;
+    }
+    
+    /* Show link URLs */
+    a[href]::after {
+        content: " (" attr(href) ")";
+        font-size: 0.8em;
+    }
+    
+    /* Remove URL from navigation links */
+    .nav-link[href]::after {
+        content: none;
+    }
+}

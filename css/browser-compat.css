@@ -1,0 +1,441 @@
+/**
+ * Browser Compatibility Fixes
+ * Fallbacks and polyfills for cross-browser support
+ */
+
+/* ============================================
+   CSS GRID GAP FALLBACKS
+   For Safari < 12 and older browsers
+   ============================================ */
+
+/* Grid utilities */
+.grid {
+    grid-gap: var(--spacing-lg); /* Fallback */
+}
+
+.gap-sm {
+    grid-gap: var(--spacing-sm); /* Fallback */
+}
+
+.gap-md {
+    grid-gap: var(--spacing-md); /* Fallback */
+}
+
+.gap-lg {
+    grid-gap: var(--spacing-lg); /* Fallback */
+}
+
+/* Survey list */
+.survey-list {
+    grid-gap: var(--spacing-lg); /* Fallback */
+}
+
+/* Contact grid */
+.contact-grid {
+    grid-gap: var(--spacing-xl); /* Fallback */
+}
+
+/* Educational tools grid */
+.educational-tools-grid {
+    grid-gap: var(--spacing-xl); /* Fallback */
+}
+
+/* Campus grid */
+.campus-grid {
+    grid-gap: var(--spacing-lg); /* Fallback */
+}
+
+/* ============================================
+   FLEXBOX GAP FALLBACKS
+   For older browsers that don't support gap in flexbox
+   ============================================ */
+
+/* Alternative approach using margins for flex gap */
+@supports not (gap: 1rem) {
+    .nav-menu {
+        margin-left: calc(var(--spacing-lg) / -2);
+        margin-right: calc(var(--spacing-lg) / -2);
+    }
+    
+    .nav-menu > * {
+        margin-left: calc(var(--spacing-lg) / 2);
+        margin-right: calc(var(--spacing-lg) / 2);
+    }
+    
+    .popup-footer {
+        margin-left: calc(var(--spacing-md) / -2);
+        margin-right: calc(var(--spacing-md) / -2);
+    }
+    
+    .popup-footer > * {
+        margin-left: calc(var(--spacing-md) / 2);
+        margin-right: calc(var(--spacing-md) / 2);
+    }
+}
+
+/* ============================================
+   SMOOTH SCROLL FALLBACK
+   For browsers that don't support scroll-behavior
+   ============================================ */
+
+/* Handled by JavaScript fallback in navigation.js */
+
+/* ============================================
+   WEBKIT PREFIXES
+   For older Safari versions
+   ============================================ */
+
+/* Appearance */
+input[type="checkbox"],
+input[type="radio"] {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+}
+
+/* Transform */
+.card,
+.survey-card,
+.contact-card,
+.btn {
+    -webkit-transform: translateY(0);
+    -moz-transform: translateY(0);
+    -ms-transform: translateY(0);
+    transform: translateY(0);
+}
+
+/* Transition */
+.btn,
+.nav-link,
+.card {
+    -webkit-transition: all var(--transition-fast);
+    -moz-transition: all var(--transition-fast);
+    -ms-transition: all var(--transition-fast);
+    transition: all var(--transition-fast);
+}
+
+/* ============================================
+   SAFE AREA INSETS
+   For notched devices (iPhone X and newer)
+   ============================================ */
+
+@supports (padding: max(0px)) {
+    body {
+        padding-left: env(safe-area-inset-left);
+        padding-right: env(safe-area-inset-right);
+    }
+    
+    .navigation {
+        padding-left: max(var(--spacing-lg), env(safe-area-inset-left));
+        padding-right: max(var(--spacing-lg), env(safe-area-inset-right));
+    }
+    
+    .container {
+        padding-left: max(var(--spacing-lg), env(safe-area-inset-left));
+        padding-right: max(var(--spacing-lg), env(safe-area-inset-right));
+    }
+}
+
+/* ============================================
+   OBJECT-FIT FALLBACK
+   For IE11 and older browsers
+   ============================================ */
+
+@supports not (object-fit: cover) {
+    img {
+        width: 100%;
+        height: auto;
+    }
+}
+
+/* ============================================
+   CSS CUSTOM PROPERTIES FALLBACK
+   For IE11 (if needed)
+   ============================================ */
+
+/* Note: IE11 is not officially supported, but here are static fallbacks */
+@media all and (-ms-high-contrast: none), (-ms-high-contrast: active) {
+    /* IE11 specific styles */
+    body {
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        color: #0f172a;
+        background-color: #f0fdfa;
+    }
+    
+    .btn-primary {
+        background-color: #0891b2;
+        color: #ffffff;
+    }
+    
+    .btn-secondary {
+        background-color: #f97316;
+        color: #ffffff;
+    }
+}
+
+/* ============================================
+   POSITION: STICKY FALLBACK
+   For older browsers
+   ============================================ */
+
+@supports not (position: sticky) {
+    .navigation {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        z-index: 1020;
+    }
+    
+    body {
+        padding-top: 70px; /* Height of navigation */
+    }
+}
+
+/* ============================================
+   BACKDROP-FILTER FALLBACK
+   For Firefox and older browsers
+   ============================================ */
+
+@supports not (backdrop-filter: blur(10px)) {
+    .popup-backdrop {
+        background-color: rgba(0, 0, 0, 0.7); /* Solid fallback */
+    }
+}
+
+/* ============================================
+   ASPECT-RATIO FALLBACK
+   For older browsers
+   ============================================ */
+
+@supports not (aspect-ratio: 1 / 1) {
+    /* Use padding-bottom technique for aspect ratio */
+    .aspect-ratio-box {
+        position: relative;
+        padding-bottom: 100%; /* 1:1 aspect ratio */
+    }
+    
+    .aspect-ratio-box > * {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+    }
+}
+
+/* ============================================
+   CLAMP() FALLBACK
+   For older browsers
+   ============================================ */
+
+@supports not (font-size: clamp(1rem, 2vw, 2rem)) {
+    /* Use media queries instead of clamp */
+    h1 {
+        font-size: 2.25rem;
+    }
+    
+    @media (min-width: 768px) {
+        h1 {
+            font-size: 2.5rem;
+        }
+    }
+    
+    @media (min-width: 1024px) {
+        h1 {
+            font-size: 3rem;
+        }
+    }
+}
+
+/* ============================================
+   INTERSECTION OBSERVER FALLBACK
+   Handled by JavaScript in animations.js
+   ============================================ */
+
+/* Ensure elements are visible if IntersectionObserver is not supported */
+.no-intersection-observer .scroll-reveal {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* ============================================
+   FETCH API FALLBACK
+   Handled by JavaScript in webhook.js
+   ============================================ */
+
+/* No CSS needed - JavaScript handles XMLHttpRequest fallback */
+
+/* ============================================
+   CSS GRID FALLBACK
+   For browsers that don't support CSS Grid
+   ============================================ */
+
+@supports not (display: grid) {
+    .survey-list,
+    .contact-grid,
+    .educational-tools-grid {
+        display: flex;
+        flex-wrap: wrap;
+    }
+    
+    .survey-list > *,
+    .contact-grid > *,
+    .educational-tools-grid > * {
+        flex: 1 1 300px;
+        margin: 0.5rem;
+    }
+}
+
+/* ============================================
+   FLEXBOX FALLBACK
+   For very old browsers (IE9)
+   ============================================ */
+
+@supports not (display: flex) {
+    .flex,
+    .nav-menu {
+        display: block;
+    }
+    
+    .nav-menu > * {
+        display: inline-block;
+        margin-right: 1rem;
+    }
+}
+
+/* ============================================
+   PRINT STYLES
+   Ensure compatibility across browsers
+   ============================================ */
+
+@media print {
+    /* Force background colors to print */
+    * {
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+    }
+    
+    /* Avoid page breaks inside elements */
+    .card,
+    .survey-card,
+    .contact-card {
+        page-break-inside: avoid;
+        break-inside: avoid;
+    }
+}
+
+/* ============================================
+   HIGH CONTRAST MODE
+   For Windows High Contrast Mode
+   ============================================ */
+
+@media (prefers-contrast: high) {
+    .btn,
+    .card,
+    .form-input {
+        border: 2px solid currentColor;
+    }
+    
+    .nav-link.active {
+        border: 3px solid currentColor;
+    }
+}
+
+/* ============================================
+   REDUCED MOTION
+   Already handled in base.css, but reinforced here
+   ============================================ */
+
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+    }
+}
+
+/* ============================================
+   FORCED COLORS MODE
+   For Windows High Contrast Mode
+   ============================================ */
+
+@media (forced-colors: active) {
+    .btn {
+        border: 2px solid ButtonText;
+    }
+    
+    .btn:hover {
+        border-color: Highlight;
+    }
+    
+    .form-input {
+        border: 1px solid ButtonText;
+    }
+    
+    .card {
+        border: 1px solid CanvasText;
+    }
+}
+
+/* ============================================
+   BROWSER-SPECIFIC HACKS (Use sparingly)
+   ============================================ */
+
+/* Safari-specific fixes */
+@supports (-webkit-appearance: none) {
+    /* Safari-specific styles if needed */
+}
+
+/* Firefox-specific fixes */
+@-moz-document url-prefix() {
+    /* Firefox-specific styles if needed */
+}
+
+/* Edge-specific fixes (old Edge) */
+@supports (-ms-ime-align: auto) {
+    /* Old Edge-specific styles if needed */
+}
+
+/* ============================================
+   TOUCH DEVICE OPTIMIZATIONS
+   ============================================ */
+
+@media (hover: none) and (pointer: coarse) {
+    /* Disable hover effects on touch devices */
+    .card:hover,
+    .btn:hover,
+    .nav-link:hover {
+        transform: none;
+    }
+    
+    /* Add active states for touch feedback */
+    .card:active,
+    .btn:active {
+        transform: scale(0.98);
+        opacity: 0.9;
+    }
+}
+
+/* ============================================
+   ORIENTATION CHANGES
+   ============================================ */
+
+@media (orientation: landscape) and (max-height: 500px) {
+    /* Optimize for landscape on small screens */
+    .popup {
+        max-height: 90vh;
+        overflow-y: auto;
+    }
+    
+    .hero-section {
+        padding: var(--spacing-md) 0;
+    }
+}
+
+/* ============================================
+   END OF BROWSER COMPATIBILITY FIXES
+   ============================================ */

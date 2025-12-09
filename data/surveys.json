@@ -1,0 +1,142 @@
+{
+  "surveys": [
+    {
+      "id": "gozdeanket1",
+      "title": "Ders Değerlendirme Anketi",
+      "description": "Derslerin kalitesini değerlendirmek için görüşlerinizi paylaşın",
+      "webhookUrl": "https://demirhanem.com.tr/webhook/gozdeanket1",
+      "fields": [
+        {
+          "name": "firstName",
+          "type": "text",
+          "label": "Ad",
+          "required": true,
+          "placeholder": "Adınızı giriniz",
+          "validation": {
+            "minLength": 2
+          }
+        },
+        {
+          "name": "lastName",
+          "type": "text",
+          "label": "Soyad",
+          "required": true,
+          "placeholder": "Soyadınızı giriniz",
+          "validation": {
+            "minLength": 2
+          }
+        },
+        {
+          "name": "departmentClass",
+          "type": "text",
+          "label": "Bölüm - Sınıf",
+          "required": true,
+          "placeholder": "Örn: İlk ve Acil Yardım - 2. Sınıf"
+        },
+        {
+          "name": "email",
+          "type": "email",
+          "label": "E-posta",
+          "required": true,
+          "placeholder": "ornek@email.com",
+          "validation": {
+            "pattern": "email"
+          }
+        }
+      ],
+      "customQuestions": []
+    },
+    {
+      "id": "gozdeanket2",
+      "title": "Öğrenci Memnuniyet Anketi",
+      "description": "Eğitim süreciniz hakkında görüşlerinizi öğrenmek istiyoruz",
+      "webhookUrl": "https://demirhanem.com.tr/webhook/gozdeanket2",
+      "fields": [
+        {
+          "name": "firstName",
+          "type": "text",
+          "label": "Ad",
+          "required": true,
+          "placeholder": "Adınızı giriniz",
+          "validation": {
+            "minLength": 2
+          }
+        },
+        {
+          "name": "lastName",
+          "type": "text",
+          "label": "Soyad",
+          "required": true,
+          "placeholder": "Soyadınızı giriniz",
+          "validation": {
+            "minLength": 2
+          }
+        },
+        {
+          "name": "departmentClass",
+          "type": "text",
+          "label": "Bölüm - Sınıf",
+          "required": true,
+          "placeholder": "Örn: İlk ve Acil Yardım - 2. Sınıf"
+        },
+        {
+          "name": "email",
+          "type": "email",
+          "label": "E-posta",
+          "required": true,
+          "placeholder": "ornek@email.com",
+          "validation": {
+            "pattern": "email"
+          }
+        }
+      ],
+      "customQuestions": []
+    },
+    {
+      "id": "gozdeanket3",
+      "title": "Kurs Geri Bildirim Anketi",
+      "description": "Kurs içeriği ve sunumu hakkındaki düşüncelerinizi paylaşın",
+      "webhookUrl": "https://demirhanem.com.tr/webhook/gozdeanket3",
+      "fields": [
+        {
+          "name": "firstName",
+          "type": "text",
+          "label": "Ad",
+          "required": true,
+          "placeholder": "Adınızı giriniz",
+          "validation": {
+            "minLength": 2
+          }
+        },
+        {
+          "name": "lastName",
+          "type": "text",
+          "label": "Soyad",
+          "required": true,
+          "placeholder": "Soyadınızı giriniz",
+          "validation": {
+            "minLength": 2
+          }
+        },
+        {
+          "name": "departmentClass",
+          "type": "text",
+          "label": "Bölüm - Sınıf",
+          "required": true,
+          "placeholder": "Örn: İlk ve Acil Yardım - 2. Sınıf"
+        },
+        {
+          "name": "email",
+          "type": "email",
+          "label": "E-posta",
+          "required": true,
+          "placeholder": "ornek@email.com",
+          "validation": {
+            "pattern": "email"
+          }
+        }
+      ],
+      "customQuestions": []
+    }
+  ]
+}

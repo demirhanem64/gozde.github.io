@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="200" height="200">
+  <!-- Graduation Cap (Kep) -->
+  <g id="graduation-cap">
+    <!-- Cap base -->
+    <path d="M100 60 L40 80 L100 100 L160 80 Z" fill="#0891b2" stroke="#0e7490" stroke-width="2"/>
+    <!-- Cap top -->
+    <polygon points="40,80 40,95 100,115 160,95 160,80" fill="#06b6d4" stroke="#0e7490" stroke-width="2"/>
+    <!-- Tassel -->
+    <line x1="160" y1="80" x2="175" y2="65" stroke="#f97316" stroke-width="3"/>
+    <circle cx="175" cy="62" r="5" fill="#ea580c"/>
+  </g>
+  
+  <!-- Stethoscope -->
+  <g id="stethoscope">
+    <!-- Left earpiece -->
+    <path d="M70 110 Q65 115 65 125" stroke="#0891b2" stroke-width="4" fill="none" stroke-linecap="round"/>
+    <!-- Right earpiece -->
+    <path d="M130 110 Q135 115 135 125" stroke="#0891b2" stroke-width="4" fill="none" stroke-linecap="round"/>
+    <!-- Connecting tube -->
+    <path d="M65 125 Q65 140 80 145 L120 145 Q135 140 135 125" stroke="#0891b2" stroke-width="4" fill="none"/>
+    <!-- Main tube -->
+    <path d="M100 145 L100 165 Q100 175 90 180" stroke="#06b6d4" stroke-width="5" fill="none" stroke-linecap="round"/>
+    <!-- Chest piece (diaphragm) -->
+    <circle cx="85" cy="185" r="12" fill="#f97316" stroke="#ea580c" stroke-width="2"/>
+    <circle cx="85" cy="185" r="8" fill="#fb923c" stroke="#ea580c" stroke-width="1"/>
+    <!-- Small detail circle in chest piece -->
+    <circle cx="85" cy="185" r="4" fill="#fff7ed"/>
+  </g>
+  
+  <!-- Medical cross accent -->
+  <g id="cross-accent" opacity="0.3">
+    <rect x="95" y="125" width="10" height="25" fill="#10b981" rx="2"/>
+    <rect x="90" y="130" width="20" height="10" fill="#10b981" rx="2"/>
+  </g>
+</svg>
