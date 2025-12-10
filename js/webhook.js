@@ -90,24 +90,28 @@ class WebhookService {
      * @returns {Object} Formatted payload
      */
     buildPayload(surveyId, formData) {
-        return {
+        const payload = {
             surveyId: surveyId || 'unknown',
             timestamp: formatDate(),
-            responses: {
-                firstName: formData.firstName || '',
-                lastName: formData.lastName || '',
-                departmentClass: formData.departmentClass || '',
-                email: formData.email || ''
-            },
-            // Comprehensive data including question titles and answers
-            detailedResponses: formData.detailedResponse || [],
-            // Fallback for raw data
-            rawData: formData,
-
-            kvkkConsent: formData.kvkkConsent || false,
+            submissionId: generateId(),
             userAgent: navigator.userAgent,
-            submissionId: generateId()
+            kvkkConsent: formData.kvkkConsent || false
         };
+
+        // Flatten detailed responses: specific headers become top-level keys
+        // Example: "Adınız": "Ahmet"
+        if (formData.detailedResponse && Array.isArray(formData.detailedResponse)) {
+            formData.detailedResponse.forEach(item => {
+                // Use the question label as the key
+                // Encode key if necessary or keep as is? JSON allows generic keys.
+                // Keeping as is matches user request for "separate" data.
+                if (item.question && item.name !== 'kvkkConsent') {
+                    payload[item.question] = item.answer;
+                }
+            });
+        }
+
+        return payload;
     }
 
     /**

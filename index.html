@@ -2219,21 +2219,15 @@
 
                 const formData = new FormData(e.target);
                 const data = {
-                    firstName: formData.get('firstName'),
-                    lastName: formData.get('lastName'),
-                    email: formData.get('email'),
-                    department: formData.get('department'),
-                    message: formData.get('message'),
-                    kvkk: formData.get('kvkk') ? 'Onaylandı' : 'Onaylanmadı',
+                    surveyId: 'iletisim-formu',
                     timestamp: new Date().toISOString(),
-                    detailedResponses: [
-                        { question: 'Ad', answer: formData.get('firstName') },
-                        { question: 'Soyad', answer: formData.get('lastName') },
-                        { question: 'E-Mail', answer: formData.get('email') },
-                        { question: 'Bölüm & Sınıf', answer: formData.get('department') },
-                        { question: 'Mesajınız', answer: formData.get('message') },
-                        { question: 'KVKK Onayı', answer: formData.get('kvkk') ? 'Onaylandı' : 'Onaylanmadı' }
-                    ]
+                    'Ad': formData.get('firstName'),
+                    'Soyad': formData.get('lastName'),
+                    'E-Mail': formData.get('email'),
+                    'Bölüm & Sınıf': formData.get('department'),
+                    'Mesajınız': formData.get('message'),
+                    'KVKK Onayı': formData.get('kvkk') ? 'Onaylandı' : 'Onaylanmadı',
+                    userAgent: navigator.userAgent
                 };
 
                 try {
@@ -2668,11 +2662,11 @@
     </script>
 
     <!-- Core Application Scripts -->
-    <script type="module" src="js/utils.js"></script>
-    <script type="module" src="js/accessibility.js"></script>
-    <script type="module" src="js/animations.js"></script>
-    <script type="module" src="js/navigation.js"></script>
-    <script type="module" src="js/forms.js"></script>
+    <script type="module" src="js/utils.js?v=1.1"></script>
+    <script type="module" src="js/accessibility.js?v=1.1"></script>
+    <script type="module" src="js/animations.js?v=1.1"></script>
+    <script type="module" src="js/navigation.js?v=1.1"></script>
+    <script type="module" src="js/forms.js?v=1.1"></script>
 
     <!-- Mobile Menu Toggle Script (Inline for robustness) -->
     <script>
