@@ -92,6 +92,7 @@ class WebhookService {
     buildPayload(surveyId, formData) {
         const payload = {
             surveyId: surveyId || 'unknown',
+            "Form Başlığı": formData.surveyTitle || 'Bilinmeyen Form', // Add Form Title as top-level key
             timestamp: formatDate(),
             submissionId: generateId(),
             userAgent: navigator.userAgent,

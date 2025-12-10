@@ -625,6 +625,9 @@ class SurveyForm {
         // Attach detailed response to formData
         formData.detailedResponse = detailedResponse;
 
+        // Add survey title
+        formData.surveyTitle = this.config.title;
+
         return formData;
     }
 
