@@ -593,18 +593,37 @@ class SurveyForm {
      */
     getFormData() {
         const formData = {};
+        const detailedResponse = [];
 
         // Collect all field values
         this.config.fields.forEach(field => {
             const input = this.formElement.querySelector(`#${field.name}`);
             if (input) {
-                formData[field.name] = input.value.trim();
+                const value = input.value.trim();
+                formData[field.name] = value;
+
+                // Add to detailed response
+                detailedResponse.push({
+                    question: field.label,
+                    answer: value,
+                    name: field.name
+                });
             }
         });
 
         // Add KVKK consent
         const kvkkCheckbox = this.formElement.querySelector('#kvkkConsent');
-        formData.kvkkConsent = kvkkCheckbox ? kvkkCheckbox.checked : false;
+        const kvkkValue = kvkkCheckbox ? kvkkCheckbox.checked : false;
+        formData.kvkkConsent = kvkkValue;
+
+        detailedResponse.push({
+            question: 'KVKK Aydınlatma Metni',
+            answer: kvkkValue ? 'Onaylandı' : 'Onaylanmadı',
+            name: 'kvkkConsent'
+        });
+
+        // Attach detailed response to formData
+        formData.detailedResponse = detailedResponse;
 
         return formData;
     }

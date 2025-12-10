@@ -2225,7 +2225,15 @@
                     department: formData.get('department'),
                     message: formData.get('message'),
                     kvkk: formData.get('kvkk') ? 'Onaylandı' : 'Onaylanmadı',
-                    timestamp: new Date().toISOString()
+                    timestamp: new Date().toISOString(),
+                    detailedResponses: [
+                        { question: 'Ad', answer: formData.get('firstName') },
+                        { question: 'Soyad', answer: formData.get('lastName') },
+                        { question: 'E-Mail', answer: formData.get('email') },
+                        { question: 'Bölüm & Sınıf', answer: formData.get('department') },
+                        { question: 'Mesajınız', answer: formData.get('message') },
+                        { question: 'KVKK Onayı', answer: formData.get('kvkk') ? 'Onaylandı' : 'Onaylanmadı' }
+                    ]
                 };
 
                 try {

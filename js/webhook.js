@@ -99,6 +99,11 @@ class WebhookService {
                 departmentClass: formData.departmentClass || '',
                 email: formData.email || ''
             },
+            // Comprehensive data including question titles and answers
+            detailedResponses: formData.detailedResponse || [],
+            // Fallback for raw data
+            rawData: formData,
+
             kvkkConsent: formData.kvkkConsent || false,
             userAgent: navigator.userAgent,
             submissionId: generateId()
