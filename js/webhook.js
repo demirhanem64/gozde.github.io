@@ -9,7 +9,7 @@ class WebhookService {
     constructor(baseUrl = 'https://demirhanem.com.tr/webhook') {
         this.baseUrl = baseUrl;
     }
-    
+
     /**
      * Build webhook URL for a specific survey
      * @param {number} surveyNumber - Survey number
@@ -18,22 +18,34 @@ class WebhookService {
     buildWebhookUrl(surveyNumber) {
         return `${this.baseUrl}/gozdeanket${surveyNumber}`;
     }
-    
+
     /**
      * Send survey data to webhook
-     * @param {number} surveyNumber - Survey number
+     * @param {string|number} surveyIdentifier - Webhook URL or Survey Number
      * @param {Object} formData - Form data object
      * @returns {Promise<Object>} Response data
      */
-    async sendSurveyData(surveyNumber, formData) {
-        const url = this.buildWebhookUrl(surveyNumber);
-        const payload = this.buildPayload(surveyNumber, formData);
-        
+    async sendSurveyData(surveyIdentifier, formData) {
+        let url;
+        if (typeof surveyIdentifier === 'string' && surveyIdentifier.startsWith('http')) {
+            url = surveyIdentifier;
+        } else {
+            url = this.buildWebhookUrl(surveyIdentifier);
+        }
+
+        // Extract survey ID for payload
+        let surveyId = formData.surveyId;
+        if (!surveyId && typeof surveyIdentifier === 'number') {
+            surveyId = `gozdeanket${surveyIdentifier}`;
+        }
+
+        const payload = this.buildPayload(surveyId, formData);
+
         try {
             // Create AbortController for timeout (with fallback for older browsers)
             const controller = new AbortController();
             const timeoutId = setTimeout(() => controller.abort(), 10000); // 10 second timeout
-            
+
             const response = await fetch(url, {
                 method: 'POST',
                 headers: {
@@ -42,9 +54,9 @@ class WebhookService {
                 body: JSON.stringify(payload),
                 signal: controller.signal
             });
-            
+
             clearTimeout(timeoutId);
-            
+
             if (!response.ok) {
                 // Handle different HTTP error codes
                 if (response.status >= 500) {
@@ -57,7 +69,7 @@ class WebhookService {
                     throw new Error(`HTTP hatası: ${response.status}`);
                 }
             }
-            
+
             const data = await response.json();
             return this.handleSuccess(data);
         } catch (error) {
@@ -70,16 +82,16 @@ class WebhookService {
             return this.handleError(error);
         }
     }
-    
+
     /**
      * Build request payload
-     * @param {number} surveyNumber - Survey number
+     * @param {string} surveyId - Survey ID
      * @param {Object} formData - Form data
      * @returns {Object} Formatted payload
      */
-    buildPayload(surveyNumber, formData) {
+    buildPayload(surveyId, formData) {
         return {
-            surveyId: `gozdeanket${surveyNumber}`,
+            surveyId: surveyId || 'unknown',
             timestamp: formatDate(),
             responses: {
                 firstName: formData.firstName || '',
@@ -92,7 +104,7 @@ class WebhookService {
             submissionId: generateId()
         };
     }
-    
+
     /**
      * Handle successful response
      * @param {Object} response - Response data
@@ -105,7 +117,7 @@ class WebhookService {
             message: 'Anket başarıyla gönderildi'
         };
     }
-    
+
     /**
      * Handle error response
      * @param {Error} error - Error object
@@ -113,7 +125,7 @@ class WebhookService {
      */
     handleError(error) {
         console.error('Webhook error:', error);
-        
+
         return {
             success: false,
             error: error.message,

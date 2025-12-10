@@ -61,6 +61,30 @@
     box-shadow: none;
 }
 
+.btn-active-submit {
+    background-color: var(--color-orange) !important;
+    color: white !important;
+    animation: btn-pulse 2s infinite;
+    box-shadow: 0 4px 15px rgba(249, 115, 22, 0.4) !important;
+}
+
+@keyframes btn-pulse {
+    0% {
+        transform: scale(1);
+        box-shadow: 0 4px 15px rgba(249, 115, 22, 0.4);
+    }
+
+    50% {
+        transform: scale(1.03);
+        box-shadow: 0 4px 20px rgba(249, 115, 22, 0.6);
+    }
+
+    100% {
+        transform: scale(1);
+        box-shadow: 0 4px 15px rgba(249, 115, 22, 0.4);
+    }
+}
+
 /* Cards */
 .card {
     background-color: var(--color-white);
@@ -94,9 +118,17 @@
 /* Survey Cards */
 .survey-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
     gap: var(--spacing-xl);
     margin-top: var(--spacing-xl);
+    width: 100%;
+}
+
+#anketler-heading {
+    text-align: center;
+    color: var(--color-turquoise-dark);
+    font-size: 2.5rem;
+    margin-bottom: 2rem;
 }
 
 .survey-card {
@@ -104,10 +136,16 @@
     flex-direction: column;
     align-items: center;
     text-align: center;
-    padding: var(--spacing-xl);
+    padding: 2rem;
+    /* Adjusted to match Education card padding */
+    min-height: 450px;
+    /* Slightly reduced but still large */
     cursor: pointer;
     border: 2px solid transparent;
     transition: all var(--transition-base);
+    background-color: var(--color-white);
+    border-radius: var(--radius-lg);
+    justify-content: space-between;
 }
 
 .survey-card:hover {
@@ -117,15 +155,15 @@
 }
 
 .survey-card-icon {
-    font-size: 3rem;
+    font-size: 4rem;
     margin-bottom: var(--spacing-md);
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 80px;
-    height: 80px;
-    background: linear-gradient(135deg, var(--color-turquoise) 0%, var(--color-turquoise-light) 100%);
-    border-radius: 50%;
+    /* Removed background circle for cleaner look */
+    background: transparent;
+    width: auto;
+    height: auto;
     transition: transform var(--transition-base);
 }
 
@@ -133,9 +171,30 @@
     transform: scale(1.1) rotate(5deg);
 }
 
+.survey-card .card-title {
+    color: #0891b2;
+    /* Teal color */
+    font-weight: 700;
+}
+
 .survey-select-btn {
-    margin-top: var(--spacing-md);
+    margin-top: var(--spacing-lg);
     width: 100%;
+    background: linear-gradient(90deg, #0e7490, #ea580c);
+    /* Teal to Orange gradient */
+    color: white;
+    border: none;
+    padding: var(--spacing-md);
+    border-radius: var(--radius-md);
+    font-weight: 600;
+    transition: all var(--transition-base);
+}
+
+.survey-select-btn:hover {
+    box-shadow: 0 4px 15px rgba(234, 88, 12, 0.4);
+    transform: translateY(-2px);
+    background: linear-gradient(90deg, #155e75, #c2410c);
+    /* Darker gradient on hover */
 }
 
 .survey-list {
@@ -361,6 +420,7 @@
         opacity: 0;
         transform: translate(-50%, -50%) scale(0.9);
     }
+
     to {
         opacity: 1;
         transform: translate(-50%, -50%) scale(1);
@@ -371,6 +431,7 @@
     from {
         opacity: 0;
     }
+
     to {
         opacity: 1;
     }
@@ -389,6 +450,7 @@
         opacity: 1;
         transform: translate(-50%, -50%) scale(1);
     }
+
     to {
         opacity: 0;
         transform: translate(-50%, -50%) scale(0.9);
@@ -399,6 +461,7 @@
     from {
         opacity: 1;
     }
+
     to {
         opacity: 0;
     }
@@ -412,9 +475,12 @@
 }
 
 @keyframes iconBounce {
-    0%, 100% {
+
+    0%,
+    100% {
         transform: scale(1);
     }
+
     50% {
         transform: scale(1.2);
     }
@@ -622,7 +688,7 @@
 
 .contact-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
     gap: var(--spacing-xl);
     margin-top: var(--spacing-2xl);
 }
@@ -730,6 +796,13 @@
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
+/* Styles for the new text wrapper in social links */
+.social-text {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
 .social-link.instagram {
     border-color: var(--color-background);
 }
@@ -769,6 +842,7 @@
     color: var(--color-text-light);
     font-size: var(--font-size-sm);
     margin-left: auto;
+    word-break: break-all;
 }
 
 /* University Section Components */

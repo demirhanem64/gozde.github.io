@@ -8,7 +8,7 @@ class AnimationController {
         this.observers = [];
         this.init();
     }
-    
+
     /**
      * Initialize animations
      */
@@ -18,7 +18,7 @@ class AnimationController {
         this.initHoverEffects();
         this.initClickAnimations();
     }
-    
+
     /**
      * Initialize page load animations
      * Apply fade-in animations to main content sections on page load
@@ -29,14 +29,14 @@ class AnimationController {
         mainSections.forEach((section, index) => {
             this.fadeIn(section, index * 100);
         });
-        
+
         // Add fade-in to navigation
         const nav = document.querySelector('.navigation');
         if (nav) {
             this.fadeIn(nav, 0);
         }
     }
-    
+
     /**
      * Initialize scroll-based animations using Intersection Observer
      */
@@ -46,7 +46,7 @@ class AnimationController {
             rootMargin: '0px',
             threshold: 0.1
         };
-        
+
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
@@ -54,16 +54,16 @@ class AnimationController {
                 }
             });
         }, observerOptions);
-        
+
         // Observe elements with scroll-reveal class
         this.observeElements('.scroll-reveal', observer);
-        
+
         this.observers.push(observer);
-        
+
         // Initialize card entrance animations
         this.initCardEntranceAnimations();
     }
-    
+
     /**
      * Initialize card entrance animations with staggered timing
      */
@@ -73,7 +73,7 @@ class AnimationController {
             rootMargin: '0px',
             threshold: 0.15
         };
-        
+
         const cardObserver = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
@@ -84,7 +84,7 @@ class AnimationController {
                 }
             });
         }, cardObserverOptions);
-        
+
         // Select all card elements
         const cardSelectors = [
             '.survey-card',
@@ -95,54 +95,59 @@ class AnimationController {
             '.campus-item',
             '.tool-card'
         ];
-        
+
         cardSelectors.forEach(selector => {
             const cards = document.querySelectorAll(selector);
             cards.forEach((card, index) => {
                 // Add staggered delay class
-                const staggerClass = `card-stagger-${(index % 8) + 1}`;
-                card.classList.add(staggerClass);
-                
+
+                // Contact cards should animate simultaneously (no stagger)
+                if (!selector.includes('contact-card')) {
+                    const staggerIndex = (index % 8) + 1;
+                    const staggerClass = `card-stagger-${staggerIndex}`;
+                    card.classList.add(staggerClass);
+                }
+
                 // Observe the card
                 cardObserver.observe(card);
             });
         });
-        
+
         this.observers.push(cardObserver);
     }
-    
+
     /**
      * Initialize hover effects
      */
     initHoverEffects() {
         // Hover effects are primarily handled by CSS
         // This method optimizes performance for hover animations
-        
+
         // Add will-change optimization for hover elements
         const hoverElements = document.querySelectorAll('.hover-lift, .hover-scale, .card, .btn, .survey-card, .contact-card, .info-card, .tool-card');
         hoverElements.forEach(element => {
             element.addEventListener('mouseenter', () => {
                 element.style.willChange = 'transform, box-shadow';
             });
-            
+
             element.addEventListener('mouseleave', () => {
                 element.style.willChange = 'auto';
             });
         });
-        
+
         // Add hover effects to interactive links
         const interactiveLinks = document.querySelectorAll('.social-link, .university-link, .expertise-item');
         interactiveLinks.forEach(link => {
             link.addEventListener('mouseenter', () => {
                 link.style.willChange = 'transform';
             });
-            
+
             link.addEventListener('mouseleave', () => {
                 link.style.willChange = 'auto';
             });
         });
     }
-    
+
     /**
      * Initialize click animations
      */
@@ -153,12 +158,12 @@ class AnimationController {
             if (!button.classList.contains('btn-ripple')) {
                 button.classList.add('btn-ripple');
             }
-            
+
             // Add click feedback
             button.addEventListener('click', (e) => {
                 // Don't add animation if button is disabled
                 if (button.disabled) return;
-                
+
                 // Add active state briefly
                 button.style.transform = 'translateY(0) scale(0.98)';
                 setTimeout(() => {
@@ -166,7 +171,7 @@ class AnimationController {
                 }, 150);
             });
         });
-        
+
         // Add click feedback to cards
         const clickableCards = document.querySelectorAll('.survey-card, .contact-card');
         clickableCards.forEach(card => {
@@ -177,7 +182,7 @@ class AnimationController {
                 }, 150);
             });
         });
-        
+
         // Add click feedback to links
         const interactiveLinks = document.querySelectorAll('.social-link, .university-link');
         interactiveLinks.forEach(link => {
@@ -189,7 +194,7 @@ class AnimationController {
             });
         });
     }
-    
+
     /**
      * Observe elements with a given selector
      * @param {string} selector - CSS selector
@@ -201,7 +206,7 @@ class AnimationController {
             observer.observe(element);
         });
     }
-    
+
     /**
      * Add fade-in animation to element
      * @param {HTMLElement} element - Element to animate
@@ -209,12 +214,12 @@ class AnimationController {
      */
     fadeIn(element, delay = 0) {
         if (!element) return;
-        
+
         setTimeout(() => {
             element.classList.add('fade-in');
         }, delay);
     }
-    
+
     /**
      * Add slide-in animation to element
      * @param {HTMLElement} element - Element to animate
@@ -223,12 +228,12 @@ class AnimationController {
      */
     slideIn(element, direction = 'left', delay = 0) {
         if (!element) return;
-        
+
         setTimeout(() => {
             element.classList.add(`slide-in-${direction}`);
         }, delay);
     }
-    
+
     /**
      * Add scale-in animation to element
      * @param {HTMLElement} element - Element to animate
@@ -236,25 +241,25 @@ class AnimationController {
      */
     scaleIn(element, delay = 0) {
         if (!element) return;
-        
+
         setTimeout(() => {
             element.classList.add('scale-in');
         }, delay);
     }
-    
+
     /**
      * Trigger shake animation (for errors)
      * @param {HTMLElement} element - Element to shake
      */
     shake(element) {
         if (!element) return;
-        
+
         element.classList.add('shake');
         setTimeout(() => {
             element.classList.remove('shake');
         }, 500);
     }
-    
+
     /**
      * Reinitialize animations for dynamically loaded content
      * Call this after adding new content to the page
@@ -262,7 +267,7 @@ class AnimationController {
     reinitialize() {
         this.initHoverEffects();
         this.initClickAnimations();
-        
+
         // Re-observe new scroll-reveal elements
         const newScrollElements = document.querySelectorAll('.scroll-reveal:not(.revealed)');
         if (newScrollElements.length > 0 && this.observers.length > 0) {
@@ -271,11 +276,11 @@ class AnimationController {
                 observer.observe(element);
             });
         }
-        
+
         // Re-initialize card entrance animations for new cards
         this.reinitializeCardAnimations();
     }
-    
+
     /**
      * Reinitialize card entrance animations for dynamically loaded cards
      */
@@ -285,7 +290,7 @@ class AnimationController {
             rootMargin: '0px',
             threshold: 0.15
         };
-        
+
         const cardObserver = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
@@ -294,7 +299,7 @@ class AnimationController {
                 }
             });
         }, cardObserverOptions);
-        
+
         // Select all card elements that haven't been animated yet
         const cardSelectors = [
             '.survey-card:not(.card-enter)',
@@ -305,24 +310,28 @@ class AnimationController {
             '.campus-item:not(.card-enter)',
             '.tool-card:not(.card-enter)'
         ];
-        
+
         cardSelectors.forEach(selector => {
             const cards = document.querySelectorAll(selector);
             cards.forEach((card, index) => {
                 // Add staggered delay class if not already present
                 if (!card.className.match(/card-stagger-\d/)) {
-                    const staggerClass = `card-stagger-${(index % 8) + 1}`;
-                    card.classList.add(staggerClass);
+                    // Contact cards should animate simultaneously (no stagger)
+                    if (!selector.includes('contact-card')) {
+                        const staggerIndex = (index % 8) + 1;
+                        const staggerClass = `card-stagger-${staggerIndex}`;
+                        card.classList.add(staggerClass);
+                    }
                 }
-                
+
                 // Observe the card
                 cardObserver.observe(card);
             });
         });
-        
+
         this.observers.push(cardObserver);
     }
-    
+
     /**
      * Cleanup observers
      */

@@ -58,12 +58,14 @@
 }
 
 .nav-link.active {
-    background-color: var(--color-turquoise);
+    background-color: var(--color-orange);
     color: var(--color-white);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(249, 115, 22, 0.3);
 }
 
 .nav-link.active:hover {
-    background-color: var(--color-turquoise-dark);
+    background-color: var(--color-orange-dark);
 }
 
 .mobile-menu-toggle {
@@ -170,7 +172,8 @@
 .survey-list {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-    grid-gap: var(--spacing-lg); /* Fallback for older browsers */
+    grid-gap: var(--spacing-lg);
+    /* Fallback for older browsers */
     gap: var(--spacing-lg);
     margin-bottom: var(--spacing-2xl);
 }
@@ -194,7 +197,7 @@
 
 /* Contact Content */
 .contact-content {
-    max-width: 600px;
+    max-width: 100%;
     margin: 0 auto;
 }
 

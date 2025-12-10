@@ -8,25 +8,31 @@
    DESKTOP OPTIMIZATIONS (> 1024px)
    ============================================ */
 @media (min-width: 1025px) {
+
     /* Container optimization for large screens */
     .container {
         padding: 0 var(--spacing-xl);
     }
-    
+
+    /* Ensure mobile menu is hidden on desktop */
+    .mobile-menu-toggle {
+        display: none !important;
+    }
+
     /* Enhanced hover effects for desktop */
     .card:hover {
         transform: translateY(-6px) scale(1.03);
     }
-    
+
     .survey-card:hover {
         transform: translateY(-6px) scale(1.03);
     }
-    
+
     /* Optimized grid layouts */
-    .survey-list {
-        grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    .survey-grid {
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
     }
-    
+
     .contact-grid {
         grid-template-columns: repeat(3, 1fr);
     }
@@ -36,82 +42,83 @@
    TABLET STYLES (768px - 1024px)
    ============================================ */
 @media (min-width: 768px) and (max-width: 1024px) {
+
     /* Container adjustments */
     .container {
         padding: 0 var(--spacing-md);
         max-width: 960px;
     }
-    
+
     /* Navigation adjustments */
     .nav-menu {
         gap: var(--spacing-md);
     }
-    
+
     .nav-link {
         padding: var(--spacing-sm) var(--spacing-md);
         font-size: var(--font-size-base);
     }
-    
+
     /* Hero section */
     .hero-section {
         padding: var(--spacing-2xl) 0;
     }
-    
+
     .hero-subtitle {
         font-size: var(--font-size-lg);
     }
-    
+
     /* Page sections */
     .page-section {
         padding: var(--spacing-2xl) 0;
     }
-    
+
     /* Grid adjustments */
     .grid-cols-3 {
         grid-template-columns: repeat(2, 1fr);
     }
-    
-    .survey-list {
+
+    .survey-grid {
         grid-template-columns: repeat(2, 1fr);
         gap: var(--spacing-lg);
     }
-    
+
     .contact-grid {
         grid-template-columns: repeat(2, 1fr);
     }
-    
+
     /* Form adjustments */
     .survey-form {
         padding: var(--spacing-xl);
     }
-    
+
     /* Touch-friendly buttons for tablet */
     .btn {
         min-height: 44px;
         padding: var(--spacing-sm) var(--spacing-lg);
     }
-    
+
     /* Touch-friendly form inputs */
     .form-input {
         min-height: 44px;
         padding: var(--spacing-sm) var(--spacing-md);
     }
-    
+
     /* Touch-friendly checkboxes */
     .form-checkbox input[type="checkbox"] {
         width: 1.5rem;
         height: 1.5rem;
     }
-    
+
     /* Bio section tablet adjustments */
     .bio-content {
         max-width: 700px;
     }
-    
+
     .expertise-list {
         gap: var(--spacing-md);
     }
-    
+
     /* Contact section tablet adjustments */
     .contact-content {
         max-width: 100%;
@@ -122,29 +129,30 @@
    TABLET AND BELOW (< 1024px)
    ============================================ */
 @media (max-width: 1024px) {
+
     /* Reduce spacing for smaller screens */
     .container {
         padding: 0 var(--spacing-md);
     }
-    
+
     .hero-section {
         padding: var(--spacing-2xl) 0;
     }
-    
+
     .page-section {
         padding: var(--spacing-2xl) 0;
     }
-    
+
     /* Simplify grid layouts */
     .grid-cols-3 {
         grid-template-columns: repeat(2, 1fr);
     }
-    
+
     /* Card adjustments */
     .card {
         padding: var(--spacing-lg);
     }
-    
+
     /* Popup adjustments */
     .popup {
         width: 85%;
@@ -156,37 +164,38 @@
    MOBILE STYLES (< 768px)
    ============================================ */
 @media (max-width: 768px) {
+
     /* Typography Adjustments for Mobile */
     h1 {
         font-size: var(--font-size-3xl);
         line-height: var(--line-height-tight);
     }
-    
+
     h2 {
         font-size: var(--font-size-2xl);
         line-height: var(--line-height-tight);
     }
-    
+
     h3 {
         font-size: var(--font-size-xl);
     }
-    
+
     h4 {
         font-size: var(--font-size-lg);
     }
-    
+
     /* Base text size for readability */
     body {
         font-size: var(--font-size-base);
     }
-    
+
     /* ========== NAVIGATION ========== */
     .mobile-menu-toggle {
         display: flex;
         min-width: 44px;
         min-height: 44px;
     }
-    
+
     .nav-menu {
         position: absolute;
         top: 100%;
@@ -202,13 +211,13 @@
         opacity: 0;
         transition: max-height var(--transition-base), opacity var(--transition-base);
     }
-    
+
     .nav-menu.active {
         max-height: 500px;
         opacity: 1;
         padding: var(--spacing-md);
     }
-    
+
     .nav-link {
         padding: var(--spacing-md);
         width: 100%;
@@ -221,118 +230,120 @@
         justify-content: center;
         font-size: var(--font-size-base);
     }
-    
+
     .nav-link:last-child {
         margin-bottom: 0;
     }
-    
+
     .nav-brand .logo {
         font-size: var(--font-size-xl);
     }
-    
+
     /* ========== CONTAINER & LAYOUT ========== */
     .container {
         padding: 0 var(--spacing-md);
     }
-    
+
     /* ========== HERO SECTION ========== */
     .hero-section {
         padding: var(--spacing-xl) 0;
     }
-    
+
     .hero-subtitle {
         font-size: var(--font-size-lg);
     }
-    
+
     /* ========== PAGE SECTIONS ========== */
     .page-section {
         padding: var(--spacing-xl) 0;
     }
-    
+
     /* ========== SURVEY COMPONENTS ========== */
-    .survey-list {
+    .survey-grid {
         grid-template-columns: 1fr;
         gap: var(--spacing-md);
     }
-    
+
     .survey-card {
         padding: var(--spacing-lg);
     }
-    
+
     .survey-card-icon {
         width: 70px;
         height: 70px;
         font-size: 2.5rem;
     }
-    
+
     .survey-form {
         padding: var(--spacing-lg);
     }
-    
+
     .survey-form h3 {
         font-size: var(--font-size-xl);
     }
-    
+
     /* ========== GRID UTILITIES ========== */
     .grid-cols-2,
     .grid-cols-3 {
         grid-template-columns: 1fr;
     }
-    
+
     /* ========== CARDS ========== */
     .card {
         padding: var(--spacing-md);
     }
-    
+
     /* Reduce hover effects on mobile (touch devices) */
     .card:hover {
         transform: translateY(-2px) scale(1.01);
     }
-    
+
     .survey-card:hover {
         transform: translateY(-2px) scale(1.01);
     }
-    
+
     /* ========== TOUCH-FRIENDLY BUTTONS ========== */
     .btn {
         padding: var(--spacing-md) var(--spacing-xl);
-        min-height: 48px; /* Increased from 44px for better touch targets */
+        min-height: 48px;
+        /* Increased from 44px for better touch targets */
         min-width: 48px;
         font-size: var(--font-size-base);
         font-weight: var(--font-weight-semibold);
     }
-    
+
     .btn-primary,
     .btn-secondary {
-        width: 100%; /* Full width buttons on mobile */
+        width: 100%;
+        /* Full width buttons on mobile */
     }
-    
+
     .survey-select-btn {
         min-height: 48px;
         padding: var(--spacing-md);
     }
-    
+
     .survey-back-btn {
         min-height: 48px;
         padding: var(--spacing-md) var(--spacing-lg);
     }
-    
+
     /* ========== TOUCH-FRIENDLY FORM INPUTS ========== */
     .form-input {
         padding: var(--spacing-md);
         font-size: var(--font-size-base);
         min-height: 48px;
     }
-    
+
     .form-label {
         font-size: var(--font-size-base);
         margin-bottom: var(--spacing-sm);
     }
-    
+
     .form-group {
         margin-bottom: var(--spacing-lg);
     }
-    
+
     /* ========== TOUCH-FRIENDLY CHECKBOXES ========== */
     .form-checkbox input[type="checkbox"] {
         width: 1.5rem;
@@ -340,63 +351,63 @@
         min-width: 24px;
         min-height: 24px;
     }
-    
+
     .kvkk-consent-label {
         font-size: var(--font-size-base);
         line-height: 1.6;
     }
-    
+
     .kvkk-consent-group {
         padding: var(--spacing-md);
     }
-    
+
     .kvkk-content {
         max-height: 250px;
         font-size: var(--font-size-sm);
     }
-    
+
     /* ========== POPUP/MODAL ========== */
     .popup {
         width: 92%;
         max-width: 400px;
         padding: var(--spacing-lg);
     }
-    
+
     .popup-title {
         font-size: var(--font-size-xl);
     }
-    
+
     .popup-message {
         font-size: var(--font-size-base);
     }
-    
+
     .popup-footer {
         flex-direction: column;
         gap: var(--spacing-sm);
     }
-    
+
     .popup-footer .btn {
         width: 100%;
         min-height: 48px;
     }
-    
+
     /* ========== FOOTER ========== */
     .site-footer {
         padding: var(--spacing-lg) 0;
         font-size: var(--font-size-sm);
     }
-    
+
     /* ========== TOUCH-FRIENDLY LINKS ========== */
     .social-link {
         min-height: 48px;
         padding: var(--spacing-md);
     }
-    
+
     .university-link {
         min-height: 48px;
         padding: var(--spacing-md);
     }
-    
+
     /* ========== SPACING ADJUSTMENTS ========== */
     .bio-content,
     .contact-content,
@@ -409,99 +420,102 @@
    SMALL MOBILE (< 480px)
    ============================================ */
 @media (max-width: 480px) {
+
     /* Typography for very small screens */
     h1 {
         font-size: var(--font-size-2xl);
         line-height: var(--line-height-tight);
     }
-    
+
     h2 {
         font-size: var(--font-size-xl);
         line-height: var(--line-height-tight);
     }
-    
+
     h3 {
         font-size: var(--font-size-lg);
     }
-    
+
     /* Navigation Brand */
     .nav-brand .logo {
         font-size: var(--font-size-lg);
     }
-    
+
     /* Container - tighter padding */
     .container {
         padding: 0 var(--spacing-sm);
     }
-    
+
     /* Spacing Adjustments */
     .page-section {
         padding: var(--spacing-lg) 0;
     }
-    
+
     .hero-section {
         padding: var(--spacing-lg) 0;
     }
-    
+
     /* Cards - more compact */
     .card {
         padding: var(--spacing-sm) var(--spacing-md);
     }
-    
+
     .survey-card {
         padding: var(--spacing-md);
     }
-    
+
     .survey-card-icon {
         width: 60px;
         height: 60px;
         font-size: 2rem;
     }
-    
+
     /* Forms - maintain touch targets */
     .survey-form {
         padding: var(--spacing-md);
     }
-    
+
     .form-input {
         padding: var(--spacing-sm) var(--spacing-md);
-        min-height: 48px; /* Maintain touch target */
+        min-height: 48px;
+        /* Maintain touch target */
     }
-    
+
     .btn {
         padding: var(--spacing-sm) var(--spacing-lg);
-        min-height: 48px; /* Maintain touch target */
+        min-height: 48px;
+        /* Maintain touch target */
         font-size: var(--font-size-base);
     }
-    
+
     /* Popup adjustments */
     .popup {
         width: 95%;
         padding: var(--spacing-md);
     }
-    
+
     .popup-title {
         font-size: var(--font-size-lg);
     }
-    
+
     .popup-message {
         font-size: var(--font-size-sm);
     }
-    
+
     /* KVKK content */
     .kvkk-consent-group {
         padding: var(--spacing-sm) var(--spacing-md);
     }
-    
+
     .kvkk-title {
         font-size: var(--font-size-lg);
     }
-    
+
     .kvkk-content {
         max-height: 200px;
         padding: var(--spacing-sm);
     }
-    
+
     .kvkk-paragraph {
         font-size: var(--font-size-xs);
     }
@@ -510,92 +524,92 @@
 /* ============================================
    UNIVERSITY SECTION RESPONSIVE STYLES
    ============================================ */
-   
+
 /* University Section - Mobile (< 768px) */
 @media (max-width: 768px) {
     .university-hero {
         padding: var(--spacing-lg) var(--spacing-md);
     }
-    
+
     .university-icon {
         font-size: 3rem;
     }
-    
+
     .university-title {
         font-size: var(--font-size-2xl);
         line-height: var(--line-height-tight);
     }
-    
+
     .university-tagline {
         font-size: var(--font-size-base);
     }
-    
+
     .info-card {
         padding: var(--spacing-md);
     }
-    
+
     /* Reduce hover effects on mobile */
     .info-card:hover {
         transform: translateY(-2px) scale(1.01);
     }
-    
+
     .info-card-header {
         flex-direction: column;
         align-items: center;
         text-align: center;
         gap: var(--spacing-sm);
     }
-    
+
     .info-icon {
         font-size: 2rem;
     }
-    
+
     .info-title {
         font-size: var(--font-size-lg);
     }
-    
+
     .info-text {
         font-size: var(--font-size-base);
         text-align: left;
     }
-    
+
     .department-features,
     .department-mission,
     .department-programs {
         padding: var(--spacing-md);
     }
-    
+
     .features-title,
     .mission-title,
     .programs-title {
         font-size: var(--font-size-base);
     }
-    
+
     .feature-item,
     .program-item {
         padding: var(--spacing-xs) var(--spacing-sm);
     }
-    
+
     .campus-grid {
         grid-template-columns: 1fr;
         gap: var(--spacing-md);
     }
-    
+
     /* Touch-friendly university links */
     .university-link {
         padding: var(--spacing-md);
         min-height: 48px;
     }
-    
+
     /* Reduce hover effects on mobile */
     .university-link:hover {
         transform: translateX(5px) scale(1.01);
     }
-    
+
     .link-icon {
         font-size: 1.25rem;
     }
-    
+
     .link-text {
         font-size: var(--font-size-base);
     }
@@ -606,56 +620,56 @@
     .university-hero {
         padding: var(--spacing-md);
     }
-    
+
     .university-icon {
         font-size: 2.5rem;
     }
-    
+
     .university-title {
         font-size: var(--font-size-xl);
     }
-    
+
     .university-tagline {
         font-size: var(--font-size-sm);
     }
-    
+
     .info-card {
         padding: var(--spacing-sm) var(--spacing-md);
     }
-    
+
     .info-icon {
         font-size: 1.75rem;
     }
-    
+
     .info-title {
         font-size: var(--font-size-base);
     }
-    
+
     .info-text {
         font-size: var(--font-size-sm);
     }
-    
+
     .department-features,
     .department-mission,
     .department-programs {
         padding: var(--spacing-sm) var(--spacing-md);
     }
-    
+
     .features-title,
     .mission-title,
     .programs-title {
         font-size: var(--font-size-sm);
     }
-    
+
     .feature-text,
     .program-name {
         font-size: var(--font-size-sm);
     }
-    
+
     .university-link {
         padding: var(--spacing-sm) var(--spacing-md);
     }
-    
+
     .link-text {
         font-size: var(--font-size-sm);
     }
@@ -669,20 +683,20 @@
         max-width: 1280px;
         padding: 0 var(--spacing-2xl);
     }
-    
-    .survey-list {
-        grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+
+    .survey-grid {
+        grid-template-columns: repeat(3, 1fr);
     }
-    
+
     .contact-grid {
         grid-template-columns: repeat(3, 1fr);
     }
-    
+
     /* Enhanced spacing for large screens */
     .page-section {
         padding: var(--spacing-3xl) 0;
     }
-    
+
     .hero-section {
         padding: var(--spacing-3xl) 0;
     }
@@ -690,17 +704,18 @@
 
 /* Print Styles */
 @media print {
+
     .navigation,
     .mobile-menu-toggle,
     .site-footer {
         display: none;
     }
-    
+
     .page-section {
         display: block !important;
         page-break-inside: avoid;
     }
-    
+
     body {
         background-color: white;
         color: black;
@@ -708,7 +723,8 @@
 }
 
 /* High DPI Displays */
-@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+@media (-webkit-min-device-pixel-ratio: 2),
+(min-resolution: 192dpi) {
     /* Optimize for retina displays if needed */
 }
 
@@ -719,29 +735,29 @@
     .hero-section {
         padding: var(--spacing-md) 0;
     }
-    
+
     .page-section {
         padding: var(--spacing-md) 0;
     }
-    
+
     .bio-hero,
     .contact-intro,
     .university-hero {
         padding: var(--spacing-md);
     }
-    
+
     /* Reduce vertical spacing in landscape */
     .bio-section,
     .info-card {
         margin-bottom: var(--spacing-md);
     }
-    
+
     /* Optimize popup for landscape */
     .popup {
         max-height: 80vh;
         overflow-y: auto;
     }
-    
+
     .kvkk-content {
         max-height: 150px;
     }
@@ -751,6 +767,7 @@
    TOUCH DEVICE OPTIMIZATIONS
    ============================================ */
 @media (hover: none) and (pointer: coarse) {
+
     /* Remove hover effects on touch devices */
     .card:hover,
     .survey-card:hover,
@@ -758,13 +775,13 @@
     .info-card:hover {
         transform: none;
     }
-    
+
     .expertise-item:hover,
     .social-link:hover,
     .university-link:hover {
         transform: none;
     }
-    
+
     /* Increase touch targets */
     .btn,
     .nav-link,
@@ -773,18 +790,18 @@
         min-height: 48px;
         min-width: 48px;
     }
-    
+
     /* Improve tap feedback with active states */
     .btn:active {
         transform: scale(0.98);
         opacity: 0.9;
     }
-    
+
     .card:active,
     .survey-card:active {
         transform: scale(0.99);
     }
-    
+
     .nav-link:active {
         background-color: var(--color-turquoise-light);
     }
@@ -793,35 +810,35 @@
 /* ============================================
    BIO/ABOUT SECTION RESPONSIVE STYLES
    ============================================ */
-   
+
 /* Bio Section - Mobile (< 768px) */
 @media (max-width: 768px) {
     .bio-hero {
         padding: var(--spacing-lg) var(--spacing-md);
     }
-    
+
     .position-title {
         font-size: var(--font-size-xl);
         line-height: var(--line-height-tight);
     }
-    
+
     .department-name {
         font-size: var(--font-size-lg);
     }
-    
+
     .university-name {
         font-size: var(--font-size-base);
     }
-    
+
     .bio-section {
         padding: var(--spacing-md);
         margin-bottom: var(--spacing-lg);
     }
-    
+
     .bio-section-title {
         font-size: var(--font-size-lg);
     }
-    
+
     .expertise-item {
         flex-direction: column;
         align-items: center;
@@ -829,21 +846,21 @@
         padding: var(--spacing-md);
         min-height: auto;
     }
-    
+
     /* Reduce hover effects on mobile */
     .expertise-item:hover {
         transform: translateX(0) scale(1.01);
     }
-    
+
     .expertise-icon {
         font-size: 2rem;
         margin-bottom: var(--spacing-sm);
     }
-    
+
     .expertise-details {
         text-align: center;
     }
-    
+
     .bio-text {
         text-align: left;
         font-size: var(--font-size-base);
@@ -855,43 +872,43 @@
     .bio-hero {
         padding: var(--spacing-md);
     }
-    
+
     .position-title {
         font-size: var(--font-size-lg);
     }
-    
+
     .department-name {
         font-size: var(--font-size-base);
     }
-    
+
     .university-name {
         font-size: var(--font-size-sm);
     }
-    
+
     .bio-section {
         padding: var(--spacing-sm) var(--spacing-md);
     }
-    
+
     .bio-section-title {
         font-size: var(--font-size-base);
     }
-    
+
     .expertise-item {
         padding: var(--spacing-sm) var(--spacing-md);
     }
-    
+
     .expertise-icon {
         font-size: 1.75rem;
     }
-    
+
     .expertise-details h5 {
         font-size: var(--font-size-base);
     }
-    
+
     .expertise-details p {
         font-size: var(--font-size-sm);
     }
-    
+
     .bio-text {
         font-size: var(--font-size-sm);
     }
@@ -900,82 +917,82 @@
 /* ============================================
    CONTACT SECTION RESPONSIVE STYLES
    ============================================ */
-   
+
 /* Contact Section - Mobile (< 768px) */
 @media (max-width: 768px) {
     .contact-intro {
         padding: var(--spacing-md);
     }
-    
+
     .contact-description {
         font-size: var(--font-size-base);
         line-height: 1.6;
     }
-    
+
     .contact-grid {
         grid-template-columns: 1fr;
         gap: var(--spacing-lg);
     }
-    
+
     .contact-card {
         padding: var(--spacing-lg);
     }
-    
+
     /* Reduce hover effects on mobile */
     .contact-card:hover {
         transform: translateY(-2px) scale(1.01);
     }
-    
+
     .contact-card-icon {
         width: 60px;
         height: 60px;
     }
-    
+
     .contact-card-icon .icon {
         font-size: 2rem;
     }
-    
+
     .contact-card-title {
         font-size: var(--font-size-lg);
     }
-    
+
     .contact-details {
         text-align: center;
     }
-    
+
     .contact-item {
         padding-bottom: var(--spacing-sm);
         margin-bottom: var(--spacing-sm);
     }
-    
+
     .contact-label {
         font-size: var(--font-size-sm);
     }
-    
+
     .contact-value {
         font-size: var(--font-size-base);
         word-break: break-word;
     }
-    
+
     /* Touch-friendly social links */
     .social-link {
         padding: var(--spacing-md);
         min-height: 48px;
     }
-    
+
     /* Reduce hover effects on mobile */
     .social-link:hover {
         transform: translateX(5px) scale(1.01);
     }
-    
+
     .social-icon {
         font-size: 1.75rem;
     }
-    
+
     .social-name {
         font-size: var(--font-size-base);
     }
-    
+
     .social-handle {
         font-size: var(--font-size-sm);
     }
@@ -986,49 +1003,49 @@
     .contact-intro {
         padding: var(--spacing-sm) var(--spacing-md);
     }
-    
+
     .contact-description {
         font-size: var(--font-size-sm);
     }
-    
+
     .contact-card {
         padding: var(--spacing-md);
     }
-    
+
     .contact-card-icon {
         width: 50px;
         height: 50px;
     }
-    
+
     .contact-card-icon .icon {
         font-size: 1.75rem;
     }
-    
+
     .contact-card-title {
         font-size: var(--font-size-base);
     }
-    
+
     .contact-label {
         font-size: var(--font-size-xs);
     }
-    
+
     .contact-value {
         font-size: var(--font-size-sm);
     }
-    
+
     .social-link {
         padding: var(--spacing-sm) var(--spacing-md);
         min-height: 48px;
     }
-    
+
     .social-icon {
         font-size: 1.5rem;
     }
-    
+
     .social-name {
         font-size: var(--font-size-sm);
     }
-    
+
     .social-handle {
         font-size: var(--font-size-xs);
     }
@@ -1040,12 +1057,13 @@
 
 /* High contrast mode support */
 @media (prefers-contrast: high) {
+
     .btn,
     .nav-link,
     .card {
         border: 2px solid currentColor;
     }
-    
+
     .form-input {
         border-width: 3px;
     }
@@ -1117,7 +1135,7 @@
     .text-center-mobile {
         text-align: center !important;
     }
-    
+
     .text-left-mobile {
         text-align: left !important;
     }
@@ -1127,17 +1145,41 @@
    RESPONSIVE SPACING UTILITIES
    ============================================ */
 @media (max-width: 768px) {
-    .mt-mobile-sm { margin-top: var(--spacing-sm) !important; }
-    .mt-mobile-md { margin-top: var(--spacing-md) !important; }
-    .mt-mobile-lg { margin-top: var(--spacing-lg) !important; }
-    
-    .mb-mobile-sm { margin-bottom: var(--spacing-sm) !important; }
-    .mb-mobile-md { margin-bottom: var(--spacing-md) !important; }
-    .mb-mobile-lg { margin-bottom: var(--spacing-lg) !important; }
-    
-    .p-mobile-sm { padding: var(--spacing-sm) !important; }
-    .p-mobile-md { padding: var(--spacing-md) !important; }
-    .p-mobile-lg { padding: var(--spacing-lg) !important; }
+    .mt-mobile-sm {
+        margin-top: var(--spacing-sm) !important;
+    }
+
+    .mt-mobile-md {
+        margin-top: var(--spacing-md) !important;
+    }
+
+    .mt-mobile-lg {
+        margin-top: var(--spacing-lg) !important;
+    }
+
+    .mb-mobile-sm {
+        margin-bottom: var(--spacing-sm) !important;
+    }
+
+    .mb-mobile-md {
+        margin-bottom: var(--spacing-md) !important;
+    }
+
+    .mb-mobile-lg {
+        margin-bottom: var(--spacing-lg) !important;
+    }
+
+    .p-mobile-sm {
+        padding: var(--spacing-sm) !important;
+    }
+
+    .p-mobile-md {
+        padding: var(--spacing-md) !important;
+    }
+
+    .p-mobile-lg {
+        padding: var(--spacing-lg) !important;
+    }
 }
 
 /* ============================================
@@ -1147,15 +1189,15 @@
     .flex-col-mobile {
         flex-direction: column !important;
     }
-    
+
     .flex-row-mobile {
         flex-direction: row !important;
     }
-    
+
     .items-center-mobile {
         align-items: center !important;
     }
-    
+
     .justify-center-mobile {
         justify-content: center !important;
     }
@@ -1170,12 +1212,12 @@
             padding-left: max(var(--spacing-md), env(safe-area-inset-left));
             padding-right: max(var(--spacing-md), env(safe-area-inset-right));
         }
-        
+
         .navigation {
             padding-left: env(safe-area-inset-left);
             padding-right: env(safe-area-inset-right);
         }
-        
+
         .site-footer {
             padding-bottom: max(var(--spacing-lg), env(safe-area-inset-bottom));
         }
@@ -1192,7 +1234,7 @@
         grid-template-columns: repeat(2, 1fr);
         gap: var(--spacing-lg);
     }
-    
+
     .tool-card {
         padding: var(--spacing-lg);
     }
@@ -1204,63 +1246,63 @@
         margin-top: var(--spacing-2xl);
         padding-top: var(--spacing-2xl);
     }
-    
+
     .tools-section-title {
         font-size: var(--font-size-xl);
     }
-    
+
     .tools-section-description {
         font-size: var(--font-size-base);
         padding: 0 var(--spacing-sm);
     }
-    
+
     .educational-tools-grid {
         grid-template-columns: 1fr;
         gap: var(--spacing-lg);
     }
-    
+
     .tool-card {
         padding: var(--spacing-md);
     }
-    
+
     /* Reduce hover effects on mobile */
     .tool-card:hover {
         transform: translateY(-2px) scale(1.01);
     }
-    
+
     .tool-card-header {
         flex-direction: row;
         align-items: center;
         gap: var(--spacing-sm);
     }
-    
+
     .tool-icon {
         font-size: 2rem;
     }
-    
+
     .tool-title {
         font-size: var(--font-size-lg);
     }
-    
+
     .tool-badge {
         position: absolute;
         top: var(--spacing-sm);
         right: var(--spacing-sm);
     }
-    
+
     .tool-description {
         font-size: var(--font-size-base);
         text-align: left;
     }
-    
+
     .tool-feature {
         padding: var(--spacing-xs) var(--spacing-sm);
     }
-    
+
     .tool-feature span:last-child {
         font-size: var(--font-size-sm);
     }
-    
+
     .tool-button {
         padding: var(--spacing-md);
         min-height: 48px;
@@ -1274,66 +1316,66 @@
         margin-top: var(--spacing-xl);
         padding-top: var(--spacing-xl);
     }
-    
+
     .tools-section-title {
         font-size: var(--font-size-lg);
     }
-    
+
     .tools-section-description {
         font-size: var(--font-size-sm);
     }
-    
+
     .educational-tools-grid {
         gap: var(--spacing-md);
     }
-    
+
     .tool-card {
         padding: var(--spacing-sm) var(--spacing-md);
     }
-    
+
     .tool-card-header {
         padding-bottom: var(--spacing-sm);
         margin-bottom: var(--spacing-sm);
     }
-    
+
     .tool-icon {
         font-size: 1.75rem;
     }
-    
+
     .tool-title {
         font-size: var(--font-size-base);
     }
-    
+
     .tool-badge {
         font-size: var(--font-size-xs);
         padding: 2px var(--spacing-xs);
     }
-    
+
     .tool-description {
         font-size: var(--font-size-sm);
     }
-    
+
     .tool-features {
         gap: var(--spacing-xs);
     }
-    
+
     .tool-feature {
         padding: var(--spacing-xs);
     }
-    
+
     .tool-feature .feature-icon {
         font-size: var(--font-size-sm);
     }
-    
+
     .tool-feature span:last-child {
         font-size: var(--font-size-xs);
     }
-    
+
     .tool-card-footer {
         margin-top: var(--spacing-md);
         padding-top: var(--spacing-md);
     }
-    
+
     .tool-button {
         padding: var(--spacing-sm) var(--spacing-md);
         font-size: var(--font-size-sm);
@@ -1345,16 +1387,16 @@
     .tool-card:hover {
         transform: none;
     }
-    
+
     .tool-card:active {
         transform: scale(0.99);
     }
-    
+
     .tool-feature:hover {
         transform: none;
         background-color: var(--color-background);
     }
-    
+
     .tool-button {
         min-height: 48px;
         min-width: 48px;

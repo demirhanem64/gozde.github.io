@@ -4,7 +4,9 @@
       "id": "gozdeanket1",
       "title": "Ders Değerlendirme Anketi",
       "description": "Derslerin kalitesini değerlendirmek için görüşlerinizi paylaşın",
-      "webhookUrl": "https://demirhanem.com.tr/webhook/gozdeanket1",
+      "webhookUrl": "https://demirhanem.com.tr/webhook/anket1",
+      "dynamic": true,
+      "sheetId": "1fETeP7ZoePBWn-wABd3t1XvNtGgkRKUfx4hlndHMU60",
       "fields": [
         {
           "name": "firstName",
@@ -50,7 +52,9 @@
       "id": "gozdeanket2",
       "title": "Öğrenci Memnuniyet Anketi",
       "description": "Eğitim süreciniz hakkında görüşlerinizi öğrenmek istiyoruz",
-      "webhookUrl": "https://demirhanem.com.tr/webhook/gozdeanket2",
+      "webhookUrl": "https://demirhanem.com.tr/webhook/anket2",
+      "dynamic": true,
+      "sheetId": "1sdTBCqGeFcwlj_fD_dNYcavle99d0s84rDI5cESg2gY",
       "fields": [
         {
           "name": "firstName",
@@ -96,7 +100,9 @@
       "id": "gozdeanket3",
       "title": "Kurs Geri Bildirim Anketi",
       "description": "Kurs içeriği ve sunumu hakkındaki düşüncelerinizi paylaşın",
-      "webhookUrl": "https://demirhanem.com.tr/webhook/gozdeanket3",
+      "webhookUrl": "https://demirhanem.com.tr/webhook/anket3",
+      "dynamic": true,
+      "sheetId": "11HMiqwEpgGH9rFVRXOMtl99fTjv3fnaVbAfXBmz2v4Q",
       "fields": [
         {
           "name": "firstName",
